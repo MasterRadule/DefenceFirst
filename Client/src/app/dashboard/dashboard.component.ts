@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,7 +9,11 @@ import {Component, OnInit} from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() {
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIcon(
+      'certificate',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/certificate.svg')
+    );
   }
 
   ngOnInit() {
