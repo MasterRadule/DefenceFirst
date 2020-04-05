@@ -7,13 +7,12 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {ToolbarModule} from './toolbar/toolbar.module';
 import {DashboardModule} from './dashboard/dashboard.module';
-import {CertificateListItemComponent} from './certificate-list/certificate-list/certificate-list-item/certificate-list-item.component';
-import { ModePipePipe } from './pipes/mode-pipe.pipe';
+import {CertificatesModule} from './certificates/certificates.module';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ModePipePipe
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +20,9 @@ import { ModePipePipe } from './pipes/mode-pipe.pipe';
     BrowserAnimationsModule,
     MatToolbarModule,
     ToolbarModule,
-    DashboardModule
+    DashboardModule,
+    CertificatesModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
