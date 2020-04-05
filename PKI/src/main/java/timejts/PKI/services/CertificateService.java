@@ -1,6 +1,10 @@
 package timejts.PKI.services;
 
 import org.apache.commons.io.FileUtils;
+import org.bouncycastle.asn1.x500.RDN;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.bouncycastle.asn1.x500.style.IETFUtils;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -9,13 +13,11 @@ import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import sun.security.pkcs10.PKCS10;
-import sun.security.x509.X500Name;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.Certificate;
@@ -25,7 +27,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 @Service
 public class CertificateService {
@@ -46,10 +47,10 @@ public class CertificateService {
     @Value("${server.ssl.key-alias}")
     private String alias;
 
-    public Object createNonCACertificate(String commonName, String caName) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, SignatureException, UnrecoverableKeyException, OperatorCreationException, ClassNotFoundException {
+    public Object createNonCACertificate(String commonName, String caName) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, SignatureException, UnrecoverableKeyException, OperatorCreationException, ClassNotFoundException, InvalidKeyException {
         String fileName = csrFolder + commonName + ".csr";
         byte[] csrData = FileUtils.readFileToByteArray(new File(fileName));
-        PKCS10 csr = new PKCS10(csrData);
+        JcaPKCS10CertificationRequest csr = new JcaPKCS10CertificationRequest(csrData);
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
         ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
 
@@ -58,17 +59,15 @@ public class CertificateService {
         Certificate cert = ks.getCertificate(caName);
         PrivateKey privKey = (PrivateKey) ks.getKey(alias, keyPassword.toCharArray());
         ContentSigner contentSigner = builder.build(privKey);
-        org.bouncycastle.asn1.x500.X500Name issuerName = new JcaX509CertificateHolder((X509Certificate) cert)
+        X500Name issuerName = new JcaX509CertificateHolder((X509Certificate) cert)
                 .getSubject();
 
-        BigInteger serialNumber = generateSerialNumber();
+        BigInteger serialNumber = new BigInteger(64, new SecureRandom());
         Date dt = new Date();
         LocalDateTime endLocalDate = LocalDateTime.from(dt.toInstant()).plusYears(2);
         Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
 
-        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, dt, endDate, org.bouncycastle.asn1.x500.X500Name
-                .getInstance(csr
-                        .getSubjectName()), csr.getSubjectPublicKeyInfo());
+        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, dt, endDate, csr.getSubject(), csr.getPublicKey());
 
         X509CertificateHolder certHolder = certGen.build(contentSigner);
 
@@ -81,32 +80,14 @@ public class CertificateService {
     }
 
     public String submitCSR(byte[] csrData) throws NoSuchAlgorithmException, SignatureException, IOException {
-        PKCS10 csr = new PKCS10(csrData);
-        X500Name subjectName = csr.getSubjectName();
-        String fileName = csrFolder + subjectName.getCommonName() + ".csr";
+        JcaPKCS10CertificationRequest csr = new JcaPKCS10CertificationRequest(csrData);
+        X500Name subjectName = csr.getSubject();
+        RDN[] rdns = subjectName.getRDNs(BCStyle.CN);
+        String commonName = IETFUtils.valueToString(rdns[0].getFirst().getValue());
+        String fileName = csrFolder + commonName + ".csr";
         FileUtils.writeByteArrayToFile(new File(fileName), csrData);
 
         return "Certificate signing request successfully submitted";
-    }
-
-    private BigInteger generateSerialNumber() throws IOException, ClassNotFoundException {
-        ArrayList<BigInteger> serialNumbersList = loadSerialNumbers();
-        Random rand = new Random();
-        boolean exist = true;
-        StringBuilder serialNumber;
-        BigInteger newSerNum = null;
-
-        while (exist) {
-            serialNumber = new StringBuilder();
-            for (int i = 0; i < 36; i++) {
-                serialNumber.append(rand.nextInt(10));
-            }
-            newSerNum = new BigInteger(serialNumber.toString());
-            if (!serialNumbersList.contains(newSerNum))
-                exist = false;
-        }
-
-        return newSerNum;
     }
 
     private ArrayList<BigInteger> loadSerialNumbers() throws IOException, ClassNotFoundException {
