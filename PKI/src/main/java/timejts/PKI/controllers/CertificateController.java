@@ -14,7 +14,7 @@ public class CertificateController {
     @Autowired
     CertificateService certificateService;
 
-    @PostMapping("/submit-csr")
+    @PostMapping("/csr")
     public ResponseEntity<Object> submitCSR(@RequestBody byte[] csrData) {
         try {
             return new ResponseEntity<>(certificateService.submitCSR(csrData), HttpStatus.OK);
@@ -23,16 +23,17 @@ public class CertificateController {
         }
     }
 
-    @PostMapping("/create-non-ca-certificate")
+    @PostMapping("/non-ca")
     public ResponseEntity<Object> createNonCACertificate(@RequestParam String commonName, @RequestParam String caName) {
         try {
-            return new ResponseEntity<>(certificateService.createNonCACertificate(commonName, caName), HttpStatus.CREATED);
+            return new ResponseEntity<>(certificateService
+                    .createNonCACertificate(commonName, caName), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/create-ca-certificate")
+    @PostMapping("/ca")
     public ResponseEntity<Object> createCACertificate(@RequestBody CertAuthorityDTO certAuth) {
         try {
             return new ResponseEntity<>(certificateService.createCACertificate(certAuth), HttpStatus.CREATED);
@@ -41,7 +42,7 @@ public class CertificateController {
         }
     }
 
-    @GetMapping("/certificate-signing-requests")
+    @GetMapping("/csr")
     public ResponseEntity<Object> getCertificateSigningRequests() {
         try {
             return new ResponseEntity<>(certificateService.getCertificateSigningRequests(), HttpStatus.OK);
@@ -50,19 +51,10 @@ public class CertificateController {
         }
     }
 
-    @GetMapping("/ca-certificates")
-    public ResponseEntity<Object> getCACertificates() {
+    @GetMapping
+    public ResponseEntity<Object> getCertificates(@RequestParam boolean ca) {
         try {
-            return new ResponseEntity<>(certificateService.getCACertificates(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/non-ca-certificates")
-    public ResponseEntity<Object> getNonCACertificates() {
-        try {
-            return new ResponseEntity<>(certificateService.getNonCACertificates(), HttpStatus.OK);
+            return new ResponseEntity<>(certificateService.getCertificates(ca), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

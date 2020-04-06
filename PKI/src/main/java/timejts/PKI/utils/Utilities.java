@@ -4,6 +4,7 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
+import org.springframework.beans.factory.annotation.Value;
 import timejts.PKI.dto.CertAuthorityDTO;
 import timejts.PKI.exceptions.CANotValidException;
 
@@ -23,7 +24,8 @@ import java.util.Date;
 
 public class Utilities {
 
-    private static String serialNumbers = "src/main/resources/static/keystore/serialNumbers.sn";
+    @Value("${serial-numbers-file}")
+    private static String serialNumbersFile;
 
     public static X500Name generateX500Name(CertAuthorityDTO certAuth) {
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
@@ -57,7 +59,7 @@ public class Utilities {
     }
 
     public static ArrayList<BigInteger> loadSerialNumbers() throws IOException, ClassNotFoundException {
-        FileInputStream fis = new FileInputStream(serialNumbers);
+        FileInputStream fis = new FileInputStream(serialNumbersFile);
         ObjectInputStream ois = new ObjectInputStream(fis);
 
         ArrayList<BigInteger> serialNums = (ArrayList<BigInteger>) ois.readObject();
@@ -70,10 +72,11 @@ public class Utilities {
     public static void saveSerialNumber(BigInteger newSerialNumber) throws IOException, ClassNotFoundException {
         ArrayList<BigInteger> serNumbers = loadSerialNumbers();
         serNumbers.add(newSerialNumber);
-        FileOutputStream fos = new FileOutputStream(serialNumbers);
+        FileOutputStream fos = new FileOutputStream(serialNumbersFile);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
 
         oos.writeObject(serNumbers);
+        oos.flush();
         oos.close();
     }
 

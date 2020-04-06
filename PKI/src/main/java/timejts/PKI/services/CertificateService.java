@@ -47,9 +47,14 @@ import static timejts.PKI.utils.Utilities.*;
 @Service
 public class CertificateService {
 
-    private static String csrFolder = "src/main/resources/static/csr/";
-    private static String caKeystore = "src/main/resources/static/keystore/ca.p12";
-    private static String nonCAKeystore = "src/main/resources/static/keystore/nonCA.p12";
+    @Value("${csr-folder}")
+    private String csrFolder;
+
+    @Value("${ca-keystore}")
+    private String caKeystore;
+
+    @Value("${non-ca-keystore}")
+    private String nonCAKeystore;
 
     @Value("${server.ssl.key-store}")
     private String keystorePath;
@@ -243,32 +248,24 @@ public class CertificateService {
         return csrs;
     }
 
-    public ArrayList<CertificateDTO> getCACertificates() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
+    public ArrayList<CertificateDTO> getCertificates(boolean ca) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-        String keyCA = "ca" + keystorePassword;
-        ks.load(new FileInputStream(caKeystore), keyCA.toCharArray());
+        String key;
+
+        if (ca) {
+            key = "ca" + keystorePassword;
+            ks.load(new FileInputStream(caKeystore), key.toCharArray());
+        } else {
+            key = "nonCA" + keystorePassword;
+            ks.load(new FileInputStream(nonCAKeystore), key.toCharArray());
+        }
+
         ArrayList<CertificateDTO> certificates = new ArrayList<>();
 
         Enumeration enumeration = ks.aliases();
         while (enumeration.hasMoreElements()) {
             String alias = (String) enumeration.nextElement();
             X509Certificate certificate = (X509Certificate) ks.getCertificate(alias);
-            certificates.add(new CertificateDTO(certificate, alias));
-        }
-
-        return certificates;
-    }
-
-    public ArrayList<CertificateDTO> getNonCACertificates() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
-        KeyStore nonCAKS = KeyStore.getInstance(KeyStore.getDefaultType());
-        String nonCAPass = "nonCA" + keystorePassword;
-        nonCAKS.load(new FileInputStream(nonCAKeystore), nonCAPass.toCharArray());
-        ArrayList<CertificateDTO> certificates = new ArrayList<>();
-
-        Enumeration enumeration = nonCAKS.aliases();
-        while (enumeration.hasMoreElements()) {
-            String alias = (String) enumeration.nextElement();
-            X509Certificate certificate = (X509Certificate) nonCAKS.getCertificate(alias);
             certificates.add(new CertificateDTO(certificate, alias));
         }
 
