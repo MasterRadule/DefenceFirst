@@ -14,6 +14,7 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.jce.X509KeyUsage;
+import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
@@ -21,6 +22,8 @@ import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import timejts.PKI.dto.CertAuthorityDTO;
+import timejts.PKI.exceptions.CANotValidException;
+import timejts.PKI.exceptions.ValidCertificateAlreadyExists;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -28,8 +31,11 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
@@ -38,7 +44,8 @@ import java.util.Vector;
 public class CertificateService {
 
     private static String csrFolder = "src/main/resources/static/csr/";
-
+    private static String caKeystore = "src/main/resources/static/keystore/ca.jks";
+    private static String nonCAKeystore = "src/main/resources/static/keystore/nonCA.jks";
     private static String serialNumbers = "src/main/resources/static/keystore/serialNumbers.sn";
 
     @Value("${server.ssl.key-store}")
@@ -53,32 +60,52 @@ public class CertificateService {
     @Value("${server.ssl.key-alias}")
     private String root;
 
-    public Object createNonCACertificate(String commonName, String caName) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, OperatorCreationException, ClassNotFoundException, InvalidKeyException {
+    public Object createNonCACertificate(String commonName, String caName) throws KeyStoreException, IOException, CertificateException, CANotValidException, UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, ClassNotFoundException, InvalidKeyException {
+        // Load non CA keystore
+        KeyStore nonCAKS = KeyStore.getInstance(KeyStore.getDefaultType());
+        String nonCAPass = "nonCA" + keystorePassword;
+        nonCAKS.load(new FileInputStream(nonCAKeystore), nonCAPass.toCharArray());
 
-        // Load certificate signing request and keystore
-        String fileName = csrFolder + commonName + ".csr";
-        byte[] csrData = FileUtils.readFileToByteArray(new File(fileName));
-        JcaPKCS10CertificationRequest csr = new JcaPKCS10CertificationRequest(csrData);
+        // Check if subject already has valid certificate
+        X509Certificate subjCert = (X509Certificate) nonCAKS.getCertificate(commonName);
+        if (subjCert != null) {
+            try {
+                subjCert.checkValidity();
+                throw new ValidCertificateAlreadyExists("Subject already has valid certificate");
+            } catch (Exception ignored) {
+            }
+        }
+
+        // Load CA keystore
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-        ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
+        String keyCA = "ca" + keystorePassword;
+        ks.load(new FileInputStream(caKeystore), keyCA.toCharArray());
 
-        // Get CA certificate and private key
+        // Get CA certificate and private key and check validity of CA certificate
         JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
         builder = builder.setProvider("BC");
-        Certificate cert = ks.getCertificate(caName);
+        X509Certificate cert = (X509Certificate) ks.getCertificate(caName);
+        cert.checkValidity();
+        checkCAEndDate(cert.getNotAfter());
         String caKeyPass = keyPassword + "-" + commonName;
         PrivateKey privKey = (PrivateKey) ks.getKey(commonName, caKeyPass.toCharArray());
         ContentSigner contentSigner = builder.build(privKey);
-        X500Name issuerName = new JcaX509CertificateHolder((X509Certificate) cert).getSubject();
+        X500Name issuerName = new JcaX509CertificateHolder(cert).getSubject();
+
+        // Load certificate signing request
+        String fileName = csrFolder + commonName + ".csr";
+        File csrFile = new File(fileName);
+        byte[] csrData = FileUtils.readFileToByteArray(csrFile);
+        JcaPKCS10CertificationRequest csr = new JcaPKCS10CertificationRequest(csrData);
 
         // Generate serial number and set start/end date
         BigInteger serialNumber = new BigInteger(64, new SecureRandom());
-        Date dt = new Date();
-        LocalDateTime endLocalDate = LocalDateTime.from(dt.toInstant()).plusYears(2);
+        Date startDate = new Date();
+        LocalDateTime endLocalDate = LocalDateTime.from(cert.getNotAfter().toInstant()).minusMonths(3);
         Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
 
         // Set certificate extensions and generate certificate
-        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, dt, endDate, csr
+        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, startDate, endDate, csr
                 .getSubject(), csr.getPublicKey());
         certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, new BasicConstraints(false));
         certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.15"), true,
@@ -91,21 +118,28 @@ public class CertificateService {
                 .getPublicKey()));
         X509CertificateHolder certHolder = certGen.build(contentSigner);
 
-        // Convert to X509 certificate and save keystore and serial number
+        // Convert to X509 certificate
         JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
         certConverter = certConverter.setProvider("BC");
         X509Certificate newCertificate = certConverter.getCertificate(certHolder);
+
+        // Save keystore and serial number
         ks.setCertificateEntry(commonName, newCertificate);
-        saveKeyStore(ks);
+        saveKeyStore(ks, nonCAKeystore, nonCAPass);
         saveSerialNumber(serialNumber);
 
-        // send certificate on email address
+        // Delete Certificate signing request
+        csrFile.delete();
+
+        // Create certificate file
+        File certificateFile = x509CertificateToPem(cert, commonName);
+
+        // Send certificate on email address
 
         return null;
     }
 
     public Object createCACertificate(CertAuthorityDTO certAuth) throws KeyStoreException, IOException, UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException, ClassNotFoundException {
-
         // Get data about CA
         X500Name subjectCA = generateX500Name(certAuth);
 
@@ -152,11 +186,14 @@ public class CertificateService {
         X509Certificate newCertificate = certConverter.getCertificate(certHolder);
 
         // Save certificate and private key in keystore and save serial number
+        KeyStore caKS = KeyStore.getInstance(KeyStore.getDefaultType());
+        String caPass = "ca" + keystorePassword;
+        caKS.load(new FileInputStream(caKeystore), caPass.toCharArray());
         KeyStore.PrivateKeyEntry privKeyEntry = new KeyStore.PrivateKeyEntry(kp.getPrivate(),
                 new Certificate[]{newCertificate});
         String pass = keyPassword + "-" + certAuth.getCommonName();
-        ks.setEntry(certAuth.getCommonName(), privKeyEntry, new KeyStore.PasswordProtection(pass.toCharArray()));
-        saveKeyStore(ks);
+        caKS.setEntry(certAuth.getCommonName(), privKeyEntry, new KeyStore.PasswordProtection(pass.toCharArray()));
+        saveKeyStore(caKS, caKeystore, caPass);
         saveSerialNumber(serialNumber);
 
         return "CA Certificate " + certAuth.getCommonName() + " successfully created";
@@ -185,6 +222,24 @@ public class CertificateService {
         return builder.build();
     }
 
+    private void checkCAEndDate(Date notAfter) throws CANotValidException {
+        LocalDate todayDate = Instant.ofEpochMilli(new Date().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate endDate = Instant.ofEpochMilli(notAfter.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        long monthsBetween = ChronoUnit.MONTHS.between(todayDate, endDate);
+        if (monthsBetween <= 3)
+            throw new CANotValidException("CA certificate will have been invalid in less than 3 months");
+    }
+
+    private File x509CertificateToPem(X509Certificate cert, String commonName) throws IOException {
+        File f = new File(commonName + ".pem");
+        FileWriter fileWriter = new FileWriter(f);
+        JcaPEMWriter pemWriter = new JcaPEMWriter(fileWriter);
+        pemWriter.writeObject(cert);
+        pemWriter.flush();
+        pemWriter.close();
+        return f;
+    }
+
     private ArrayList<BigInteger> loadSerialNumbers() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream(serialNumbers);
         ObjectInputStream ois = new ObjectInputStream(fis);
@@ -206,9 +261,9 @@ public class CertificateService {
         oos.close();
     }
 
-    private void saveKeyStore(KeyStore ks) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
-        try (FileOutputStream fos = new FileOutputStream(keystorePath)) {
-            ks.store(fos, keystorePassword.toCharArray());
+    private void saveKeyStore(KeyStore ks, String path, String pass) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
+        try (FileOutputStream fos = new FileOutputStream(path)) {
+            ks.store(fos, pass.toCharArray());
         }
     }
 }
