@@ -19,6 +19,7 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaContentVerifierProviderBuilder;
 import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import timejts.PKI.dto.CertAuthorityDTO;
@@ -68,6 +69,10 @@ public class CertificateService {
 
     @Value("${server.ssl.key-alias}")
     private String root;
+
+    @Autowired
+    private EmailService emailService;
+
 
     public Object createNonCACertificate(String commonName, String caName) throws KeyStoreException, IOException,
             CertificateException, CANotValidException, UnrecoverableKeyException, NoSuchAlgorithmException,
@@ -150,6 +155,8 @@ public class CertificateService {
 
         // Send certificate on email address
         String email = csr.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
+
+        emailService.sendEmail(email, commonName, certificateFile);
 
         return null;
     }
