@@ -20,6 +20,7 @@ import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import timejts.PKI.dto.CertAuthorityDTO;
+import timejts.PKI.dto.CertificateDTO;
 import timejts.PKI.exceptions.CANotValidException;
 import timejts.PKI.exceptions.ValidCertificateAlreadyExists;
 
@@ -33,7 +34,9 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Vector;
 
 import static timejts.PKI.utils.Utilities.*;
@@ -57,7 +60,10 @@ public class CertificateService {
     @Value("${server.ssl.key-alias}")
     private String root;
 
-    public Object createNonCACertificate(String commonName, String caName) throws KeyStoreException, IOException, CertificateException, CANotValidException, UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, ClassNotFoundException, InvalidKeyException {
+    public Object createNonCACertificate(String commonName, String caName) throws KeyStoreException, IOException,
+            CertificateException, CANotValidException, UnrecoverableKeyException, NoSuchAlgorithmException,
+            OperatorCreationException, ClassNotFoundException, InvalidKeyException {
+
         // Load non CA keystore
         KeyStore nonCAKS = KeyStore.getInstance(KeyStore.getDefaultType());
         String nonCAPass = "nonCA" + keystorePassword;
@@ -102,17 +108,19 @@ public class CertificateService {
         Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
 
         // Set certificate extensions and generate certificate
-        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, startDate, endDate, csr
-                .getSubject(), csr.getPublicKey());
+        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, startDate,
+                endDate, csr.getSubject(), csr.getPublicKey());
         certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, new BasicConstraints(false));
         certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.15"), true,
                 new X509KeyUsage(X509KeyUsage.digitalSignature | X509KeyUsage.keyEncipherment));
         Vector<KeyPurposeId> extendedKeyUsages = new Vector<>();
         extendedKeyUsages.add(KeyPurposeId.id_kp_serverAuth);
         extendedKeyUsages.add(KeyPurposeId.id_kp_clientAuth);
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.37"), false, new ExtendedKeyUsage(extendedKeyUsages));
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.35"), false, new AuthorityKeyIdentifier((SubjectPublicKeyInfo) cert
-                .getPublicKey()));
+        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.37"), false,
+                new ExtendedKeyUsage(extendedKeyUsages));
+        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.35"), false,
+                new AuthorityKeyIdentifier((SubjectPublicKeyInfo) cert
+                        .getPublicKey()));
         X509CertificateHolder certHolder = certGen.build(contentSigner);
 
         // Convert to X509 certificate
@@ -136,7 +144,10 @@ public class CertificateService {
         return null;
     }
 
-    public Object createCACertificate(CertAuthorityDTO certAuth) throws KeyStoreException, IOException, UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException, ClassNotFoundException {
+    public Object createCACertificate(CertAuthorityDTO certAuth) throws KeyStoreException, IOException,
+            UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException,
+            ClassNotFoundException {
+
         // Get data about CA
         X500Name subjectCA = generateX500Name(certAuth);
 
@@ -164,17 +175,21 @@ public class CertificateService {
         Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
 
         // Set certificate extensions and generate certificate
-        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, dt, endDate, subjectCA, kp
+        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, dt, endDate,
+                subjectCA, kp
                 .getPublic());
         certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, new BasicConstraints(true));
         certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.15"), true,
-                new X509KeyUsage(X509KeyUsage.keyCertSign | X509KeyUsage.digitalSignature | X509KeyUsage.keyEncipherment));
+                new X509KeyUsage(X509KeyUsage.keyCertSign | X509KeyUsage.digitalSignature
+                        | X509KeyUsage.keyEncipherment));
         Vector<KeyPurposeId> extendedKeyUsages = new Vector<>();
         extendedKeyUsages.add(KeyPurposeId.id_kp_serverAuth);
         extendedKeyUsages.add(KeyPurposeId.id_kp_clientAuth);
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.37"), false, new ExtendedKeyUsage(extendedKeyUsages));
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.35"), false, new AuthorityKeyIdentifier((SubjectPublicKeyInfo) cert
-                .getPublicKey()));
+        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.37"), false,
+                new ExtendedKeyUsage(extendedKeyUsages));
+        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.35"), false,
+                new AuthorityKeyIdentifier((SubjectPublicKeyInfo) cert
+                        .getPublicKey()));
         X509CertificateHolder certHolder = certGen.build(contentSigner);
 
         // Convert to X509 certificate
@@ -205,5 +220,50 @@ public class CertificateService {
         FileUtils.writeByteArrayToFile(new File(fileName), csrData);
 
         return "Certificate signing request successfully submitted";
+    }
+
+    public ArrayList<CertAuthorityDTO> getCertificateSigningRequests() throws IOException {
+        File folder = new File(csrFolder);
+        byte[] csrData;
+        ArrayList<CertAuthorityDTO> csrs = new ArrayList<>();
+        for (File csrFile : folder.listFiles()) {
+            csrData = FileUtils.readFileToByteArray(csrFile);
+            JcaPKCS10CertificationRequest csr = new JcaPKCS10CertificationRequest(csrData);
+            csrs.add(new CertAuthorityDTO(csr.getSubject()));
+        }
+
+        return csrs;
+    }
+
+    public ArrayList<CertificateDTO> getCACertificates() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        String keyCA = "ca" + keystorePassword;
+        ks.load(new FileInputStream(caKeystore), keyCA.toCharArray());
+        ArrayList<CertificateDTO> certificates = new ArrayList<>();
+
+        Enumeration enumeration = ks.aliases();
+        while (enumeration.hasMoreElements()) {
+            String alias = (String) enumeration.nextElement();
+            X509Certificate certificate = (X509Certificate) ks.getCertificate(alias);
+            certificates.add(new CertificateDTO(certificate, alias));
+        }
+
+        return certificates;
+    }
+
+    public ArrayList<CertificateDTO> getNonCACertificates() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
+        KeyStore nonCAKS = KeyStore.getInstance(KeyStore.getDefaultType());
+        String nonCAPass = "nonCA" + keystorePassword;
+        nonCAKS.load(new FileInputStream(nonCAKeystore), nonCAPass.toCharArray());
+        ArrayList<CertificateDTO> certificates = new ArrayList<>();
+
+        Enumeration enumeration = nonCAKS.aliases();
+        while (enumeration.hasMoreElements()) {
+            String alias = (String) enumeration.nextElement();
+            X509Certificate certificate = (X509Certificate) nonCAKS.getCertificate(alias);
+            certificates.add(new CertificateDTO(certificate, alias));
+        }
+
+        return certificates;
     }
 }

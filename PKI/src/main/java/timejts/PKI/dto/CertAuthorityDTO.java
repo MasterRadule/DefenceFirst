@@ -1,5 +1,8 @@
 package timejts.PKI.dto;
 
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x500.style.BCStyle;
+
 public class CertAuthorityDTO {
 
     private String commonName;
@@ -18,6 +21,16 @@ public class CertAuthorityDTO {
         this.state = state;
         this.country = country;
         this.email = email;
+    }
+
+    public CertAuthorityDTO(X500Name subject) {
+        this.commonName = subject.getRDNs(BCStyle.CN)[0].getFirst().getValue().toString();
+        this.organization = subject.getRDNs(BCStyle.O)[0].getFirst().getValue().toString();
+        this.organizationalUnit = subject.getRDNs(BCStyle.OU)[0].getFirst().getValue().toString();
+        this.city = subject.getRDNs(BCStyle.POSTAL_CODE)[0].getFirst().getValue().toString();
+        this.state = subject.getRDNs(BCStyle.ST)[0].getFirst().getValue().toString();
+        this.country = subject.getRDNs(BCStyle.C)[0].getFirst().getValue().toString();
+        this.email = subject.getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
     }
 
     public String getCommonName() {
