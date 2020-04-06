@@ -32,7 +32,8 @@ public class Utilities {
         builder.addRDN(BCStyle.OU, certAuth.getOrganizationalUnit());
         builder.addRDN(BCStyle.C, certAuth.getCountry());
         builder.addRDN(BCStyle.E, certAuth.getEmail());
-        builder.addRDN(BCStyle.ST, certAuth.getCity() + ", " + certAuth.getState());
+        builder.addRDN(BCStyle.L, certAuth.getCity());
+        builder.addRDN(BCStyle.ST, certAuth.getState());
 
         return builder.build();
     }

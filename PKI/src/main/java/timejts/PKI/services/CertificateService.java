@@ -16,12 +16,15 @@ import org.bouncycastle.jce.X509KeyUsage;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.bouncycastle.operator.jcajce.JcaContentVerifierProviderBuilder;
+import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import timejts.PKI.dto.CertAuthorityDTO;
 import timejts.PKI.dto.CertificateDTO;
 import timejts.PKI.exceptions.CANotValidException;
+import timejts.PKI.exceptions.DigitalSignatureInvalidException;
 import timejts.PKI.exceptions.ValidCertificateAlreadyExists;
 
 import java.io.File;
@@ -45,8 +48,8 @@ import static timejts.PKI.utils.Utilities.*;
 public class CertificateService {
 
     private static String csrFolder = "src/main/resources/static/csr/";
-    private static String caKeystore = "src/main/resources/static/keystore/ca.jks";
-    private static String nonCAKeystore = "src/main/resources/static/keystore/nonCA.jks";
+    private static String caKeystore = "src/main/resources/static/keystore/ca.p12";
+    private static String nonCAKeystore = "src/main/resources/static/keystore/nonCA.p12";
 
     @Value("${server.ssl.key-store}")
     private String keystorePath;
@@ -211,8 +214,13 @@ public class CertificateService {
         return "CA Certificate " + certAuth.getCommonName() + " successfully created";
     }
 
-    public String submitCSR(byte[] csrData) throws IOException {
+    public String submitCSR(byte[] csrData) throws IOException, NoSuchAlgorithmException, InvalidKeyException, OperatorCreationException, PKCSException, DigitalSignatureInvalidException {
         JcaPKCS10CertificationRequest csr = new JcaPKCS10CertificationRequest(csrData);
+        boolean signatureValid = csr
+                .isSignatureValid(new JcaContentVerifierProviderBuilder().setProvider("BC").build(csr.getPublicKey()));
+        if (!signatureValid)
+            throw new DigitalSignatureInvalidException("Digital signature check failed");
+
         X500Name subjectName = csr.getSubject();
         RDN[] rdns = subjectName.getRDNs(BCStyle.CN);
         String commonName = IETFUtils.valueToString(rdns[0].getFirst().getValue());
