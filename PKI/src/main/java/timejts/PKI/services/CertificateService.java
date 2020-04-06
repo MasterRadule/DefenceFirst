@@ -64,9 +64,6 @@ public class CertificateService {
     @Value("${server.ssl.key-store-password}")
     private String keystorePassword;
 
-    @Value("${server.ssl.key-password}")
-    private String keyPassword;
-
     @Value("${server.ssl.key-alias}")
     private String root;
 
@@ -104,7 +101,7 @@ public class CertificateService {
         X509Certificate cert = (X509Certificate) ks.getCertificate(caName);
         cert.checkValidity();
         checkCAEndDate(cert.getNotAfter());
-        String caKeyPass = keyPassword + "-" + commonName;
+        String caKeyPass = keystorePassword + "-" + commonName;
         PrivateKey privKey = (PrivateKey) ks.getKey(commonName, caKeyPass.toCharArray());
         ContentSigner contentSigner = builder.build(privKey);
         X500Name issuerName = new JcaX509CertificateHolder(cert).getSubject();
@@ -176,7 +173,7 @@ public class CertificateService {
         JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
         builder = builder.setProvider("BC");
         Certificate cert = ks.getCertificate(root);
-        PrivateKey privKey = (PrivateKey) ks.getKey(root, keyPassword.toCharArray());
+        PrivateKey privKey = (PrivateKey) ks.getKey(root, keystorePassword.toCharArray());
         ContentSigner contentSigner = builder.build(privKey);
         X500Name issuerName = new JcaX509CertificateHolder((X509Certificate) cert).getSubject();
 
@@ -220,7 +217,7 @@ public class CertificateService {
         caKS.load(new FileInputStream(caKeystore), caPass.toCharArray());
         KeyStore.PrivateKeyEntry privKeyEntry = new KeyStore.PrivateKeyEntry(kp.getPrivate(),
                 new Certificate[]{newCertificate});
-        String pass = keyPassword + "-" + certAuth.getCommonName();
+        String pass = keystorePassword + "-" + certAuth.getCommonName();
         caKS.setEntry(certAuth.getCommonName(), privKeyEntry, new KeyStore.PasswordProtection(pass.toCharArray()));
         saveKeyStore(caKS, caKeystore, caPass);
         saveSerialNumber(serialNumber);
