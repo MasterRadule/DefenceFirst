@@ -3,15 +3,13 @@ package timejts.PKI.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.io.File;
 
 @Service
@@ -24,23 +22,18 @@ public class EmailService {
 
 
     @Async
-    public void sendEmail(String to, String name, File certificate) {
-        MimeMessagePreparator mimeMessagePreparator = mimeMessage -> {
-            mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            mimeMessage.setFrom(new InternetAddress(email));
-            mimeMessage.setSubject("Certificate");
-            mimeMessage.setText("Your new certificates is in attachments");
+    public void sendEmail(String to, File certificate) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(to);
+        helper.setFrom(email);
+        helper.setSubject("Certificate");
+        helper.setText("Your new certificate is in attachments");
 
-            FileSystemResource certificateFile = new FileSystemResource(certificate);
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.addAttachment(String.format("%s.pem", name), certificateFile);
-        };
+        FileSystemResource certificateFile = new FileSystemResource(certificate);
+        helper.addAttachment(certificateFile.getFilename(), certificateFile);
 
-        try {
-            mailSender.send(mimeMessagePreparator);
-        } catch (MailException e) {
-            System.out.println(e.getMessage());
-        }
+        mailSender.send(message);
     }
 
 }

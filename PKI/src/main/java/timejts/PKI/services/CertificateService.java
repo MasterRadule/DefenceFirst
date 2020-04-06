@@ -28,6 +28,7 @@ import timejts.PKI.exceptions.CANotValidException;
 import timejts.PKI.exceptions.DigitalSignatureInvalidException;
 import timejts.PKI.exceptions.ValidCertificateAlreadyExists;
 
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -153,7 +154,10 @@ public class CertificateService {
         // Send certificate on email address
         String email = csr.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
 
-        emailService.sendEmail(email, commonName, certificateFile);
+        try {
+            emailService.sendEmail(email, certificateFile);
+        } catch (MessagingException ignored) {
+        }
 
         return null;
     }
