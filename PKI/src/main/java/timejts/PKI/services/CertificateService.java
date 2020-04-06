@@ -43,6 +43,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import static timejts.PKI.utils.Utilities.*;
+import static timejts.PKI.utils.Utilities.getSerialNumber;
 
 @Service
 public class CertificateService {
@@ -110,7 +111,7 @@ public class CertificateService {
         JcaPKCS10CertificationRequest csr = new JcaPKCS10CertificationRequest(csrData);
 
         // Generate serial number and set start/end date
-        BigInteger serialNumber = new BigInteger(64, new SecureRandom());
+        BigInteger serialNumber = getSerialNumber();
         Date startDate = new Date();
         LocalDateTime endLocalDate = LocalDateTime.from(cert.getNotAfter().toInstant()).minusMonths(3);
         Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
@@ -148,6 +149,7 @@ public class CertificateService {
         File certificateFile = x509CertificateToPem(cert, commonName);
 
         // Send certificate on email address
+        String email = csr.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
 
         return null;
     }
@@ -177,7 +179,7 @@ public class CertificateService {
         KeyPair kp = kpg.generateKeyPair();
 
         // Generate serial number and set start/end date
-        BigInteger serialNumber = new BigInteger(64, new SecureRandom());
+        BigInteger serialNumber = getSerialNumber();
         Date dt = new Date();
         LocalDateTime endLocalDate = LocalDateTime.from(dt.toInstant()).plusYears(3);
         Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
