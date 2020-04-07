@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface RevokedCertificatesRepository extends MongoRepository<RevokedCertificate,String> {
 
     Optional<RevokedCertificate> findById(String id);
-    Optional<RevokedCertificate> findByCommonName(String id);
+    Optional<RevokedCertificate> findByCommonName(String commonName);
 }

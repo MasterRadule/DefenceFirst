@@ -283,8 +283,6 @@ public class CertificateService {
     }
 
     public String revokeCertificate(String commonName) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, NotExistingCertificateException, CertificateAlreadyRevokedException {
-
-
         Optional<RevokedCertificate> r = revokedCertificatesRepository.findByCommonName(commonName);
         if (r.isPresent()) {
             throw new CertificateAlreadyRevokedException("Certificate with common name " + commonName + " is already revoked");
@@ -315,7 +313,6 @@ public class CertificateService {
         }
 
         return "Certificate revoked";
-
     }
 
     public void saveRevokedCertificate(X509Certificate certificate, String commonName) throws CertificateNotYetValidException, CertificateExpiredException {

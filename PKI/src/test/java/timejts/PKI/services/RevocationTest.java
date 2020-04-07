@@ -8,14 +8,15 @@ import timejts.PKI.repository.RevokedCertificatesRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RevocationTest {
-    @Autowired CertificateService certificateService;
+    @Autowired
+    CertificateService certificateService;
 
     @Autowired
     RevokedCertificatesRepository repository;
 
     @Test()
-    void revoke(){
-        String commonName  = "defencefirst";
+    void revoke() {
+        String commonName = "defencefirst";
         try {
             certificateService.revokeCertificate(commonName);
         } catch (Exception e) {
