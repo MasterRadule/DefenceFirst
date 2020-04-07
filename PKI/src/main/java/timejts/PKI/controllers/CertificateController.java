@@ -5,14 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import timejts.PKI.dto.CertAuthorityDTO;
-import timejts.PKI.exceptions.CertificateAlreadyRevokedException;
-import timejts.PKI.exceptions.NotExistingCertificateException;
 import timejts.PKI.services.CertificateService;
-
-import java.io.IOException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 
 @RestController
 @RequestMapping("/certificates")
@@ -31,10 +24,11 @@ public class CertificateController {
     }
 
     @PostMapping("/non-ca")
-    public ResponseEntity<Object> createNonCACertificate(@RequestParam String commonName, @RequestParam String caName) {
+    public ResponseEntity<Object> createNonCACertificate(@RequestParam String serialNumber, @RequestParam String commonName,
+                                                         @RequestParam String caSerialNumber) {
         try {
             return new ResponseEntity<>(certificateService
-                    .createNonCACertificate(commonName, caName), HttpStatus.CREATED);
+                    .createNonCACertificate(serialNumber, commonName, caSerialNumber), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

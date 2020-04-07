@@ -4,27 +4,20 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
-import org.bouncycastle.util.BigIntegers;
 import org.springframework.beans.factory.annotation.Value;
 import timejts.PKI.dto.CertAuthorityDTO;
 import timejts.PKI.exceptions.CANotValidException;
-import timejts.PKI.model.RevokedCertificate;
 
 import java.io.*;
-import java.math.BigInteger;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.cert.CertificateException;
-import java.security.cert.CertificateExpiredException;
-import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Utilities {
@@ -61,40 +54,6 @@ public class Utilities {
         pemWriter.flush();
         pemWriter.close();
         return f;
-    }
-
-    public static ArrayList<BigInteger> loadSerialNumbers() throws IOException, ClassNotFoundException {
-        FileInputStream fis = new FileInputStream(serialNumbersFile);
-        ObjectInputStream ois = new ObjectInputStream(fis);
-
-        ArrayList<BigInteger> serialNums = (ArrayList<BigInteger>) ois.readObject();
-
-        ois.close();
-
-        return serialNums;
-    }
-
-    public static BigInteger getSerialNumber() throws IOException, ClassNotFoundException {
-        ArrayList<BigInteger> serialNumbers = loadSerialNumbers();
-        BigInteger serialNumber;
-
-        do {
-            serialNumber = new BigInteger(64, new SecureRandom());
-        } while (serialNumbers.contains(serialNumber));
-
-        return serialNumber;
-    }
-
-
-    public static void saveSerialNumber(BigInteger newSerialNumber) throws IOException, ClassNotFoundException {
-        ArrayList<BigInteger> serNumbers = loadSerialNumbers();
-        serNumbers.add(newSerialNumber);
-        FileOutputStream fos = new FileOutputStream(serialNumbersFile);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-        oos.writeObject(serNumbers);
-        oos.flush();
-        oos.close();
     }
 
     public static KeyStore loadKeyStore(String keystorePath, String keystorePassword) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
