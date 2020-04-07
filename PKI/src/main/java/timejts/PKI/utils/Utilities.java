@@ -97,6 +97,13 @@ public class Utilities {
         oos.close();
     }
 
+    public static KeyStore loadKeyStore(String keystorePath, String keystorePassword) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
+
+        return ks;
+    }
+
     public static void saveKeyStore(KeyStore ks, String path, String pass) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException {
         try (FileOutputStream fos = new FileOutputStream(path)) {
             ks.store(fos, pass.toCharArray());

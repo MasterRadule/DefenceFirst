@@ -50,11 +50,11 @@ public class CertificateService {
     @Value("${csr-folder}")
     private String csrFolder;
 
-    @Value("${ca-keystore}")
-    private String caKeystore;
-
     @Value("${non-ca-keystore}")
     private String nonCAKeystore;
+
+    @Value("${non-ca-password}")
+    private String nonCAPassword;
 
     @Value("${server.ssl.key-store}")
     private String keystorePath;
@@ -77,9 +77,7 @@ public class CertificateService {
             OperatorCreationException, ClassNotFoundException, InvalidKeyException {
 
         // Load non CA keystore
-        KeyStore nonCAKS = KeyStore.getInstance(KeyStore.getDefaultType());
-        String nonCAPass = "nonCA" + keystorePassword;
-        nonCAKS.load(new FileInputStream(nonCAKeystore), nonCAPass.toCharArray());
+        KeyStore nonCAKS = loadKeyStore(nonCAKeystore, nonCAPassword);
 
         // Check if subject already has valid certificate
         X509Certificate subjCert = (X509Certificate) nonCAKS.getCertificate(commonName);
@@ -92,9 +90,7 @@ public class CertificateService {
         }
 
         // Load CA keystore
-        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-        String keyCA = "ca" + keystorePassword;
-        ks.load(new FileInputStream(caKeystore), keyCA.toCharArray());
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
 
         // Get CA certificate and private key and check validity of CA certificate
         JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
@@ -142,7 +138,7 @@ public class CertificateService {
 
         // Save keystore and serial number
         ks.setCertificateEntry(commonName, newCertificate);
-        saveKeyStore(ks, nonCAKeystore, nonCAPass);
+        saveKeyStore(ks, nonCAKeystore, nonCAPassword);
         saveSerialNumber(serialNumber);
 
         // Delete Certificate signing request
@@ -170,8 +166,7 @@ public class CertificateService {
         X500Name subjectCA = generateX500Name(certAuth);
 
         // Load keystore
-        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-        ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
 
         // Get root certificate and private key
         JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
@@ -216,14 +211,11 @@ public class CertificateService {
         X509Certificate newCertificate = certConverter.getCertificate(certHolder);
 
         // Save certificate and private key in keystore and save serial number
-        KeyStore caKS = KeyStore.getInstance(KeyStore.getDefaultType());
-        String caPass = "ca" + keystorePassword;
-        caKS.load(new FileInputStream(caKeystore), caPass.toCharArray());
         KeyStore.PrivateKeyEntry privKeyEntry = new KeyStore.PrivateKeyEntry(kp.getPrivate(),
                 new Certificate[]{newCertificate});
         String pass = keystorePassword + "-" + certAuth.getCommonName();
-        caKS.setEntry(certAuth.getCommonName(), privKeyEntry, new KeyStore.PasswordProtection(pass.toCharArray()));
-        saveKeyStore(caKS, caKeystore, caPass);
+        ks.setEntry(certAuth.getCommonName(), privKeyEntry, new KeyStore.PasswordProtection(pass.toCharArray()));
+        saveKeyStore(ks, keystorePath, keystorePassword);
         saveSerialNumber(serialNumber);
 
         return "CA Certificate " + certAuth.getCommonName() + " successfully created";
@@ -259,17 +251,7 @@ public class CertificateService {
     }
 
     public ArrayList<CertificateDTO> getCertificates(boolean ca) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
-        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-        String key;
-
-        if (ca) {
-            key = "ca" + keystorePassword;
-            ks.load(new FileInputStream(caKeystore), key.toCharArray());
-        } else {
-            key = "nonCA" + keystorePassword;
-            ks.load(new FileInputStream(nonCAKeystore), key.toCharArray());
-        }
-
+        KeyStore ks = ca ? loadKeyStore(keystorePath, keystorePassword):loadKeyStore(nonCAKeystore, nonCAPassword);
         ArrayList<CertificateDTO> certificates = new ArrayList<>();
 
         Enumeration enumeration = ks.aliases();
@@ -289,30 +271,24 @@ public class CertificateService {
         }
 
         // Load non CA keystore
-        KeyStore nonCAKS = KeyStore.getInstance(KeyStore.getDefaultType());
-        String nonCAPass = "nonCA" + keystorePassword;
-        nonCAKS.load(new FileInputStream(nonCAKeystore), nonCAPass.toCharArray());
-
+        KeyStore nonCAKS = loadKeyStore(nonCAKeystore, nonCAPassword);
 
         // Load CA keystore
-        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-        String keyCA = "ca" + keystorePassword;
-        ks.load(new FileInputStream(caKeystore), keyCA.toCharArray());
-
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
 
         X509Certificate certificate = (X509Certificate) nonCAKS.getCertificate(commonName);
         if (certificate == null) {
             certificate = (X509Certificate) ks.getCertificate(commonName);
             if (certificate == null) {
-                throw new NotExistingCertificateException("Certificate with name" + commonName + " doesn't exist in keystorage");
+                throw new NotExistingCertificateException("Certificate with name" + commonName + " doesn't exist");
             }
         }
 
         saveRevokedCertificate(certificate, commonName);
-        return "Certificate revoked";
+        return "Certificate successfully revoked";
     }
 
-    public void saveRevokedCertificate(X509Certificate certificate, String commonName) throws CertificateNotYetValidException, CertificateExpiredException {
+    private void saveRevokedCertificate(X509Certificate certificate, String commonName) throws CertificateNotYetValidException, CertificateExpiredException {
         certificate.checkValidity();
         String id = certificate.getSerialNumber().toString();
         RevokedCertificate certificateToBeRevoked = new RevokedCertificate(id, commonName);
