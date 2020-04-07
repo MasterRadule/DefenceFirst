@@ -5,7 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import timejts.PKI.dto.CertAuthorityDTO;
+import timejts.PKI.exceptions.CertificateAlreadyRevokedException;
+import timejts.PKI.exceptions.NotExistingCertificateException;
 import timejts.PKI.services.CertificateService;
+
+import java.io.IOException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 
 @RestController
 @RequestMapping("/certificates")
@@ -58,5 +65,15 @@ public class CertificateController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PutMapping("/revoked")
+    public ResponseEntity<Object> revokeCertificate(@RequestParam String commonName) {
+        try {
+            return new ResponseEntity<>(certificateService.revokeCertificate(commonName), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

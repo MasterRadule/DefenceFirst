@@ -24,25 +24,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import timejts.PKI.dto.CertAuthorityDTO;
 import timejts.PKI.dto.CertificateDTO;
-import timejts.PKI.exceptions.CANotValidException;
-import timejts.PKI.exceptions.DigitalSignatureInvalidException;
-import timejts.PKI.exceptions.ValidCertificateAlreadyExists;
+import timejts.PKI.exceptions.*;
+import timejts.PKI.model.RevokedCertificate;
+import timejts.PKI.repository.RevokedCertificatesRepository;
 
 import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.*;
+import java.security.cert.*;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.*;
 
 import static timejts.PKI.utils.Utilities.*;
 import static timejts.PKI.utils.Utilities.getSerialNumber;
@@ -70,6 +67,9 @@ public class CertificateService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private RevokedCertificatesRepository revokedCertificatesRepository;
 
 
     public Object createNonCACertificate(String commonName, String caName) throws KeyStoreException, IOException,
@@ -280,5 +280,42 @@ public class CertificateService {
         }
 
         return certificates;
+    }
+
+    public String revokeCertificate(String commonName) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, NotExistingCertificateException, CertificateAlreadyRevokedException {
+        Optional<RevokedCertificate> r = revokedCertificatesRepository.findByCommonName(commonName);
+        if (r.isPresent()) {
+            throw new CertificateAlreadyRevokedException("Certificate with common name " + commonName + " is already revoked");
+        }
+
+        // Load non CA keystore
+        KeyStore nonCAKS = KeyStore.getInstance(KeyStore.getDefaultType());
+        String nonCAPass = "nonCA" + keystorePassword;
+        nonCAKS.load(new FileInputStream(nonCAKeystore), nonCAPass.toCharArray());
+
+
+        // Load CA keystore
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        String keyCA = "ca" + keystorePassword;
+        ks.load(new FileInputStream(caKeystore), keyCA.toCharArray());
+
+
+        X509Certificate certificate = (X509Certificate) nonCAKS.getCertificate(commonName);
+        if (certificate == null) {
+            certificate = (X509Certificate) ks.getCertificate(commonName);
+            if (certificate == null) {
+                throw new NotExistingCertificateException("Certificate with name" + commonName + " doesn't exist in keystorage");
+            }
+        }
+
+        saveRevokedCertificate(certificate, commonName);
+        return "Certificate revoked";
+    }
+
+    public void saveRevokedCertificate(X509Certificate certificate, String commonName) throws CertificateNotYetValidException, CertificateExpiredException {
+        certificate.checkValidity();
+        String id = certificate.getSerialNumber().toString();
+        RevokedCertificate certificateToBeRevoked = new RevokedCertificate(id, commonName);
+        revokedCertificatesRepository.save(certificateToBeRevoked);
     }
 }
