@@ -8,6 +8,7 @@ import org.bouncycastle.util.BigIntegers;
 import org.springframework.beans.factory.annotation.Value;
 import timejts.PKI.dto.CertAuthorityDTO;
 import timejts.PKI.exceptions.CANotValidException;
+import timejts.PKI.model.RevokedCertificate;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -16,6 +17,8 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -99,4 +102,5 @@ public class Utilities {
             ks.store(fos, pass.toCharArray());
         }
     }
+
 }
