@@ -1,15 +1,11 @@
 package timejts.PKI.services;
 
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.bouncycastle.asn1.x509.*;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
-import org.bouncycastle.jce.X509KeyUsage;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
@@ -36,7 +32,10 @@ import java.security.cert.Certificate;
 import java.security.cert.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static timejts.PKI.utils.Utilities.*;
@@ -93,6 +92,8 @@ public class CertificateService {
         checkCAEndDate(cert.getNotAfter());
         String caKeyPass = keystorePassword + caSerialNumber;
         PrivateKey privKey = (PrivateKey) ks.getKey(commonName, caKeyPass.toCharArray());
+
+        // Build content signer and get issuer (CA)
         ContentSigner contentSigner = builder.build(privKey);
         X500Name issuerName = new JcaX509CertificateHolder(cert).getSubject();
 
@@ -109,23 +110,10 @@ public class CertificateService {
         // Set certificate extensions and generate certificate
         X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, new BigInteger(serialNumber), startDate,
                 endDate, csr.getCsr().getSubject(), csr.getCsr().getPublicKey());
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, new BasicConstraints(false));
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.15"), true,
-                new X509KeyUsage(X509KeyUsage.digitalSignature | X509KeyUsage.keyEncipherment));
-        Vector<KeyPurposeId> extendedKeyUsages = new Vector<>();
-        extendedKeyUsages.add(KeyPurposeId.id_kp_serverAuth);
-        extendedKeyUsages.add(KeyPurposeId.id_kp_clientAuth);
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.37"), false,
-                new ExtendedKeyUsage(extendedKeyUsages));
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.35"), false,
-                new AuthorityKeyIdentifier((SubjectPublicKeyInfo) cert
-                        .getPublicKey()));
-        X509CertificateHolder certHolder = certGen.build(contentSigner);
+        X509CertificateHolder certHolder = addExtensionsAndBuildCertificate(certGen, cert, contentSigner, false);
 
         // Convert to X509 certificate
-        JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
-        certConverter = certConverter.setProvider("BC");
-        X509Certificate newCertificate = certConverter.getCertificate(certHolder);
+        X509Certificate newCertificate = convertToX509Certificate(certHolder);
 
         // Save keystore and serial number
         ks.setCertificateEntry(serialNumber, newCertificate);
@@ -159,10 +147,12 @@ public class CertificateService {
         // Get root certificate and private key
         JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
         builder = builder.setProvider("BC");
-        Certificate cert = ks.getCertificate(root);
+        X509Certificate cert = (X509Certificate) ks.getCertificate(root);
         PrivateKey privKey = (PrivateKey) ks.getKey(root, keystorePassword.toCharArray());
+
+        // Build content signer and get issuer (root)
         ContentSigner contentSigner = builder.build(privKey);
-        X500Name issuerName = new JcaX509CertificateHolder((X509Certificate) cert).getSubject();
+        X500Name issuerName = new JcaX509CertificateHolder(cert).getSubject();
 
         // Generate CA public and private key
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
@@ -177,26 +167,12 @@ public class CertificateService {
 
         // Set certificate extensions and generate certificate
         X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, dt, endDate,
-                subjectCA, kp
-                .getPublic());
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, new BasicConstraints(true));
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.15"), true,
-                new X509KeyUsage(X509KeyUsage.keyCertSign | X509KeyUsage.digitalSignature
-                        | X509KeyUsage.keyEncipherment));
-        Vector<KeyPurposeId> extendedKeyUsages = new Vector<>();
-        extendedKeyUsages.add(KeyPurposeId.id_kp_serverAuth);
-        extendedKeyUsages.add(KeyPurposeId.id_kp_clientAuth);
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.37"), false,
-                new ExtendedKeyUsage(extendedKeyUsages));
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.35"), false,
-                new AuthorityKeyIdentifier((SubjectPublicKeyInfo) cert
-                        .getPublicKey()));
-        X509CertificateHolder certHolder = certGen.build(contentSigner);
+                subjectCA, kp.getPublic());
+        X509CertificateHolder certHolder = addExtensionsAndBuildCertificate(certGen, cert,
+                contentSigner, true);
 
         // Convert to X509 certificate
-        JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
-        certConverter = certConverter.setProvider("BC");
-        X509Certificate newCertificate = certConverter.getCertificate(certHolder);
+        X509Certificate newCertificate = convertToX509Certificate(certHolder);
 
         // Save certificate and private key in keystore and save serial number
         KeyStore.PrivateKeyEntry privKeyEntry = new KeyStore.PrivateKeyEntry(kp.getPrivate(),
