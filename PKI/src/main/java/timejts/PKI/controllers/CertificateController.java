@@ -67,7 +67,7 @@ public class CertificateController {
         }
     }
 
-    @PostMapping("/revoke")
+    @PutMapping("/revoke")
     public ResponseEntity<Object> revokeCertificate(@RequestParam String commonName) {
         try {
             return new ResponseEntity<>(certificateService.revokeCertificate(commonName), HttpStatus.OK);

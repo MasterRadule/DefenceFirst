@@ -300,18 +300,15 @@ public class CertificateService {
         ks.load(new FileInputStream(caKeystore), keyCA.toCharArray());
 
 
-        X509Certificate subjCertNotCA = (X509Certificate) nonCAKS.getCertificate(commonName);
-        if (subjCertNotCA == null) {
-            X509Certificate subjCertCA = (X509Certificate) ks.getCertificate(commonName);
-            if (subjCertCA == null) {
+        X509Certificate certificate = (X509Certificate) nonCAKS.getCertificate(commonName);
+        if (certificate == null) {
+            certificate = (X509Certificate) ks.getCertificate(commonName);
+            if (certificate == null) {
                 throw new NotExistingCertificateException("Certificate with name" + commonName + " doesn't exist in keystorage");
-            } else {
-                saveRevokedCertificate(subjCertCA, commonName);
             }
-        } else {
-            saveRevokedCertificate(subjCertNotCA, commonName);
         }
 
+        saveRevokedCertificate(certificate, commonName);
         return "Certificate revoked";
     }
 
