@@ -53,9 +53,9 @@ public class CertificateController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getCertificates(@RequestParam boolean ca) {
+    public ResponseEntity<Object> getCertificates() {
         try {
-            return new ResponseEntity<>(certificateService.getCertificates(ca), HttpStatus.OK);
+            return new ResponseEntity<>(certificateService.getCertificates(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
