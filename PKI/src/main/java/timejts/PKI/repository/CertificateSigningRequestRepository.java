@@ -3,9 +3,7 @@ package timejts.PKI.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import timejts.PKI.model.CertificateSigningRequest;
 
-import java.util.Optional;
+import java.math.BigInteger;
 
-public interface CertificateSigningRequestRepository extends MongoRepository<CertificateSigningRequest, Integer> {
-
-    Optional<CertificateSigningRequest> findById(Integer id);
+public interface CertificateSigningRequestRepository extends MongoRepository<CertificateSigningRequest, BigInteger> {
 }

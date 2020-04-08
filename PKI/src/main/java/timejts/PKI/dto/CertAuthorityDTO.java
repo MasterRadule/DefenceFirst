@@ -3,8 +3,11 @@ package timejts.PKI.dto;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 
+import java.math.BigInteger;
+
 public class CertAuthorityDTO {
 
+    private String serialNumber;
     private String commonName;
     private String organization;
     private String organizationalUnit;
@@ -13,8 +16,9 @@ public class CertAuthorityDTO {
     private String country;
     private String email;
 
-    public CertAuthorityDTO(String commonName, String organization, String organizationalUnit,
+    public CertAuthorityDTO(String serialNumber, String commonName, String organization, String organizationalUnit,
                             String city, String state, String country, String email) {
+        this.serialNumber = serialNumber;
         this.commonName = commonName;
         this.organization = organization;
         this.organizationalUnit = organizationalUnit;
@@ -24,7 +28,8 @@ public class CertAuthorityDTO {
         this.email = email;
     }
 
-    public CertAuthorityDTO(X500Name subject) {
+    public CertAuthorityDTO(BigInteger serialNumber, X500Name subject) {
+        this.serialNumber = serialNumber.toString();
         this.commonName = subject.getRDNs(BCStyle.CN)[0].getFirst().getValue().toString();
         this.organization = subject.getRDNs(BCStyle.O)[0].getFirst().getValue().toString();
         this.organizationalUnit = subject.getRDNs(BCStyle.OU)[0].getFirst().getValue().toString();
@@ -32,6 +37,14 @@ public class CertAuthorityDTO {
         this.state = subject.getRDNs(BCStyle.ST)[0].getFirst().getValue().toString();
         this.country = subject.getRDNs(BCStyle.C)[0].getFirst().getValue().toString();
         this.email = subject.getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public String getCommonName() {
