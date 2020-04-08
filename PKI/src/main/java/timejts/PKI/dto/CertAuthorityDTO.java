@@ -16,6 +16,9 @@ public class CertAuthorityDTO {
     private String country;
     private String email;
 
+    public CertAuthorityDTO() {
+    }
+
     public CertAuthorityDTO(String serialNumber, String commonName, String organization, String organizationalUnit,
                             String city, String state, String country, String email) {
         this.serialNumber = serialNumber;

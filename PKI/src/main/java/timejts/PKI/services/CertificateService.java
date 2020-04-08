@@ -11,11 +11,8 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaContentVerifierProviderBuilder;
-import org.bouncycastle.pkcs.PKCS10CertificationRequest;
-import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
-import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,11 +24,8 @@ import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
-import javax.security.auth.x500.X500Principal;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.*;
@@ -134,7 +128,7 @@ public class CertificateService {
         String email = csrData.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
 
         try {
-            emailService.sendEmail(email, certificateFile);
+            emailService.sendEmailWithCertificate(email, certificateFile);
         } catch (MessagingException ignored) {
         }
 
@@ -143,7 +137,7 @@ public class CertificateService {
         return "CA Certificate for " + commonName + " successfully created";
     }
 
-    public Object createCACertificate(CertAuthorityDTO certAuth) throws KeyStoreException, IOException,
+    public String createCACertificate(CertAuthorityDTO certAuth) throws KeyStoreException, IOException,
             UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException {
 
         // Get data about CA
@@ -215,7 +209,8 @@ public class CertificateService {
         ArrayList<CertificateSigningRequest> csrs = (ArrayList<CertificateSigningRequest>) csrRepository.findAll();
         ArrayList<CertAuthorityDTO> certDTOs = new ArrayList<>();
         for (CertificateSigningRequest csr : csrs) {
-            certDTOs.add(new CertAuthorityDTO(csr.getId(), new JcaPKCS10CertificationRequest(csr.getCsr()).getSubject()));
+            certDTOs.add(new CertAuthorityDTO(csr.getId(), new JcaPKCS10CertificationRequest(csr.getCsr())
+                    .getSubject()));
         }
 
         return certDTOs;
@@ -225,9 +220,9 @@ public class CertificateService {
         KeyStore ks = ca ? loadKeyStore(keystorePath, keystorePassword) : loadKeyStore(nonCAKeystore, nonCAPassword);
         ArrayList<CertificateDTO> certificates = new ArrayList<>();
 
-        Enumeration enumeration = ks.aliases();
+        Enumeration<String> enumeration = ks.aliases();
         while (enumeration.hasMoreElements()) {
-            String alias = (String) enumeration.nextElement();
+            String alias = enumeration.nextElement();
             X509Certificate certificate = (X509Certificate) ks.getCertificate(alias);
             certificates.add(new CertificateDTO(certificate, alias));
         }
@@ -276,52 +271,5 @@ public class CertificateService {
         } while (csr.isPresent());
 
         return serialNumber;
-    }
-
-    @PostConstruct
-    void proba() throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException, OperatorCreationException, PKCSException, DigitalSignatureInvalidException, CertificateException, CANotValidException, KeyStoreException, UnrecoverableEntryException, ValidCertificateAlreadyExistsException, CSRDoesNotExistException {
-        CertAuthorityDTO cDTO = new CertAuthorityDTO(null, "America Chamber",
-                "America DefenceFirst", "Washington corp.",
-                "Washington", "Washington", "USA", "master.daca09@gmail.com");
-        String a = null;
-        try {
-            a = createCACertificate(cDTO).toString();
-            System.out.println(a);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            ArrayList<CertificateDTO> certs = getCertificates(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        KeyPairGenerator keyGen = null;
-        try {
-            keyGen = KeyPairGenerator.getInstance("RSA");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        keyGen.initialize(2048, new SecureRandom());
-        KeyPair keypair = keyGen.generateKeyPair();
-        PublicKey publicKey = keypair.getPublic();
-        PrivateKey privateKey = keypair.getPrivate();
-
-        PKCS10CertificationRequestBuilder p10Builder = new JcaPKCS10CertificationRequestBuilder(
-                new X500Principal("CN=Ole Nordmann, OU=ACME, O=Sales, C=NO, L=Oslo, ST=Oslo, EmailAddress=master.daca09@gmail.com"), publicKey);
-        JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
-        ContentSigner signer = csBuilder.build(privateKey);
-        PKCS10CertificationRequest csr = p10Builder.build(signer);
-
-        submitCSR(csr.getEncoded());
-        ArrayList<CertAuthorityDTO> caDTO = getCertificateSigningRequests();
-        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-        char[] pwdArray = nonCAPassword.toCharArray();
-        ks.load(null, pwdArray);
-        saveKeyStore(ks, nonCAKeystore, nonCAPassword);
-        System.out.println(createNonCACertificate(caDTO.get(0).getSerialNumber(),
-                caDTO.get(0).getCommonName(), a));
-
     }
 }
