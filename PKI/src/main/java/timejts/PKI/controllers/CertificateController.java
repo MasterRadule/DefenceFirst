@@ -24,11 +24,11 @@ public class CertificateController {
     }
 
     @PostMapping("/non-ca")
-    public ResponseEntity<Object> createNonCACertificate(@RequestParam String serialNumber, @RequestParam String commonName,
+    public ResponseEntity<Object> createNonCACertificate(@RequestParam String serialNumber,
                                                          @RequestParam String caSerialNumber) {
         try {
             return new ResponseEntity<>(certificateService
-                    .createNonCACertificate(serialNumber, commonName, caSerialNumber), HttpStatus.CREATED);
+                    .createNonCACertificate(serialNumber, caSerialNumber), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -62,9 +62,9 @@ public class CertificateController {
     }
 
     @PutMapping("/revoked")
-    public ResponseEntity<Object> revokeCertificate(@RequestParam String commonName) {
+    public ResponseEntity<Object> revokeCertificate(@RequestParam String serialNumber) {
         try {
-            return new ResponseEntity<>(certificateService.revokeCertificate(commonName), HttpStatus.OK);
+            return new ResponseEntity<>(certificateService.revokeCertificate(serialNumber), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
