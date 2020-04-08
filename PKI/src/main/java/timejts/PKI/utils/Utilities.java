@@ -1,6 +1,7 @@
 package timejts.PKI.utils;
 
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
@@ -10,6 +11,7 @@ import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.jce.X509KeyUsage;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.bouncycastle.operator.ContentSigner;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +42,7 @@ public class Utilities {
         builder.addRDN(BCStyle.O, certAuth.getOrganization());
         builder.addRDN(BCStyle.OU, certAuth.getOrganizationalUnit());
         builder.addRDN(BCStyle.C, certAuth.getCountry());
-        builder.addRDN(BCStyle.E, certAuth.getEmail());
+        builder.addRDN(BCStyle.EmailAddress, certAuth.getEmail());
         builder.addRDN(BCStyle.L, certAuth.getCity());
         builder.addRDN(BCStyle.ST, certAuth.getState());
 
@@ -85,9 +87,10 @@ public class Utilities {
                 new ExtendedKeyUsage(extendedKeyUsages));
 
         // Authority Key Identifier
+        byte[] encoded = cert.getPublicKey().getEncoded();
+        SubjectPublicKeyInfo subjectPublicKeyInfo = new SubjectPublicKeyInfo(ASN1Sequence.getInstance(encoded));
         certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.35"), false,
-                new AuthorityKeyIdentifier((SubjectPublicKeyInfo) cert
-                        .getPublicKey()));
+                new AuthorityKeyIdentifier(subjectPublicKeyInfo));
 
         // Build certificate
         return certGen.build(contentSigner);
@@ -95,7 +98,8 @@ public class Utilities {
 
     public static X509Certificate convertToX509Certificate(X509CertificateHolder certHolder) throws CertificateException {
         JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
-        certConverter = certConverter.setProvider("BC");
+        BouncyCastleProvider bcp = new BouncyCastleProvider();
+        certConverter = certConverter.setProvider(bcp);
 
         return certConverter.getCertificate(certHolder);
     }

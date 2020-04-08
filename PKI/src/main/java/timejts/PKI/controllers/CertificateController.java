@@ -1,5 +1,6 @@
 package timejts.PKI.controllers;
 
+import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ public class CertificateController {
     CertificateService certificateService;
 
     @PostMapping("/csr")
-    public ResponseEntity<Object> submitCSR(@RequestBody byte[] csrData) {
+    public ResponseEntity<Object> submitCSR(@RequestBody PKCS10CertificationRequest csrData) {
         try {
             return new ResponseEntity<>(certificateService.submitCSR(csrData), HttpStatus.OK);
         } catch (Exception e) {

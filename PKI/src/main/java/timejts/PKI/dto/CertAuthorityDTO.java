@@ -13,7 +13,8 @@ public class CertAuthorityDTO {
     private String country;
     private String email;
 
-    public CertAuthorityDTO(String commonName, String organization, String organizationalUnit, String city, String state, String country, String email) {
+    public CertAuthorityDTO(String commonName, String organization, String organizationalUnit,
+                            String city, String state, String country, String email) {
         this.commonName = commonName;
         this.organization = organization;
         this.organizationalUnit = organizationalUnit;

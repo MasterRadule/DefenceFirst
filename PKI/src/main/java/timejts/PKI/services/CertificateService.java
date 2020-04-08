@@ -6,15 +6,20 @@ import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaContentVerifierProviderBuilder;
+import org.bouncycastle.pkcs.PKCS10CertificationRequest;
+import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
+import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import sun.security.pkcs10.PKCS10;
 import timejts.PKI.dto.CertAuthorityDTO;
 import timejts.PKI.dto.CertificateDTO;
 import timejts.PKI.exceptions.*;
@@ -23,13 +28,18 @@ import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
+import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
+import javax.security.auth.x500.X500Principal;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -86,7 +96,8 @@ public class CertificateService {
 
         // Get CA certificate and private key and check validity of CA certificate
         JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
-        builder = builder.setProvider("BC");
+        BouncyCastleProvider bcp = new BouncyCastleProvider();
+        builder = builder.setProvider(bcp);
         X509Certificate cert = (X509Certificate) ks.getCertificate(caSerialNumber);
         cert.checkValidity();
         checkCAEndDate(cert.getNotAfter());
@@ -98,7 +109,7 @@ public class CertificateService {
         X500Name issuerName = new JcaX509CertificateHolder(cert).getSubject();
 
         // Load certificate signing request
-        CertificateSigningRequest csr = csrRepository.findById(new BigInteger(serialNumber))
+        CertificateSigningRequest csr = csrRepository.findById(new Integer(serialNumber))
                 .orElseThrow(() -> new CSRDoesNotExistException("Certificate signing request " +
                         "with given serial number does not exist"));
 
@@ -132,7 +143,7 @@ public class CertificateService {
 
         csrRepository.delete(csr);
 
-        return "CA Certificate for" + commonName + " successfully created";
+        return "CA Certificate for " + commonName + " successfully created";
     }
 
     public Object createCACertificate(CertAuthorityDTO certAuth) throws KeyStoreException, IOException,
@@ -146,7 +157,8 @@ public class CertificateService {
 
         // Get root certificate and private key
         JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
-        builder = builder.setProvider("BC");
+        BouncyCastleProvider bcp = new BouncyCastleProvider();
+        builder = builder.setProvider(bcp);
         X509Certificate cert = (X509Certificate) ks.getCertificate(root);
         PrivateKey privKey = (PrivateKey) ks.getKey(root, keystorePassword.toCharArray());
 
@@ -162,7 +174,8 @@ public class CertificateService {
         // Generate serial number and set start/end date
         BigInteger serialNumber = getSerialNumber();
         Date dt = new Date();
-        LocalDateTime endLocalDate = LocalDateTime.from(dt.toInstant()).plusYears(3);
+        LocalDateTime endLocalDate = dt.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+                .plusYears(2).plusMonths(6);
         Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
 
         // Set certificate extensions and generate certificate
@@ -181,15 +194,16 @@ public class CertificateService {
         ks.setEntry(serialNumber.toString(), privKeyEntry, new KeyStore.PasswordProtection(pass.toCharArray()));
         saveKeyStore(ks, keystorePath, keystorePassword);
 
-        return "CA Certificate for" + certAuth.getCommonName() + " successfully created";
+        return "CA Certificate for " + certAuth.getCommonName() + " successfully created";
     }
 
-    public String submitCSR(byte[] csrData) throws IOException, NoSuchAlgorithmException, InvalidKeyException,
+    public String submitCSR(PKCS10CertificationRequest csrData) throws IOException, NoSuchAlgorithmException, InvalidKeyException,
             OperatorCreationException, PKCSException, DigitalSignatureInvalidException {
 
         JcaPKCS10CertificationRequest csr = new JcaPKCS10CertificationRequest(csrData);
+        BouncyCastleProvider bcp = new BouncyCastleProvider();
         boolean signatureValid = csr.isSignatureValid(new JcaContentVerifierProviderBuilder()
-                .setProvider("BC").build(csr.getPublicKey()));
+                .setProvider(bcp).build(csr.getPublicKey()));
         if (!signatureValid)
             throw new DigitalSignatureInvalidException("Digital signature check failed");
 
@@ -255,9 +269,48 @@ public class CertificateService {
 
         do {
             serialNumber = new BigInteger(64, new SecureRandom());
-            csr = csrRepository.findById(serialNumber);
+            csr = csrRepository.findById(serialNumber.intValue());
         } while (csr.isPresent());
 
         return serialNumber;
+    }
+
+    @PostConstruct
+    void proba() throws NoSuchAlgorithmException, InvalidKeyException, IOException, SignatureException, OperatorCreationException, PKCSException, DigitalSignatureInvalidException {
+        /*CertAuthorityDTO cDTO = new CertAuthorityDTO("Europe Chamber",
+                "Europe DefenceFirst", "Belgrade corp.",
+                "Belgrade", "Belgrade", "RS", "master.daca09@gmail.com");
+        try {
+            System.out.println(createCACertificate(cDTO));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        try {
+            ArrayList<CertificateDTO> certs = getCertificates(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        KeyPairGenerator keyGen = null;
+        try {
+            keyGen = KeyPairGenerator.getInstance("RSA");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        keyGen.initialize(2048, new SecureRandom());
+        KeyPair keypair = keyGen.generateKeyPair();
+        PublicKey publicKey = keypair.getPublic();
+        PrivateKey privateKey = keypair.getPrivate();
+
+        PKCS10CertificationRequestBuilder p10Builder = new JcaPKCS10CertificationRequestBuilder(
+                new X500Principal("CN=Ole Nordmann, OU=ACME, O=Sales, C=NO, L=Oslo, ST=Oslo, EmailAddress=master.daca09@gmail.com"), publicKey);
+        JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
+        ContentSigner signer = csBuilder.build(privateKey);
+        PKCS10CertificationRequest csr = p10Builder.build(signer);
+
+        submitCSR(csr);
+        //System.out.println(createNonCACertificate(""));
+
     }
 }

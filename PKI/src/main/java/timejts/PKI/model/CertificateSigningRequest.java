@@ -2,25 +2,25 @@ package timejts.PKI.model;
 
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigInteger;
-
+@Document(collection = "csr")
 public class CertificateSigningRequest {
 
     @Id
-    private BigInteger id;
+    private Integer id;
     private JcaPKCS10CertificationRequest csr;
 
-    public CertificateSigningRequest(BigInteger id, JcaPKCS10CertificationRequest csr) {
+    public CertificateSigningRequest(Integer id, JcaPKCS10CertificationRequest csr) {
         this.id = id;
         this.csr = csr;
     }
 
-    public BigInteger getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
