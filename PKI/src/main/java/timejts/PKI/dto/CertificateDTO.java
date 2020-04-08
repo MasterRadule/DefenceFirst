@@ -5,31 +5,31 @@ import java.util.Date;
 
 public class CertificateDTO {
 
-    private String commonName;
+    private String serialNumber;
     private Date startDate;
     private Date endDate;
     private String ca;
 
     public CertificateDTO(String commonName, Date startDate, Date endDate, String ca) {
-        this.commonName = commonName;
+        this.serialNumber = commonName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.ca = ca;
     }
 
     public CertificateDTO(X509Certificate certificate, String alias) {
-        this.commonName = alias;
+        this.serialNumber = alias;
         this.startDate = certificate.getNotBefore();
         this.endDate = certificate.getNotAfter();
         this.ca = certificate.getIssuerX500Principal().getName();
     }
 
-    public String getCommonName() {
-        return commonName;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setCommonName(String commonName) {
-        this.commonName = commonName;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public Date getStartDate() {
