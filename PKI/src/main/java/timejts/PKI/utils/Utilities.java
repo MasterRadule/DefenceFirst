@@ -10,6 +10,7 @@ import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.jce.X509KeyUsage;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
@@ -22,6 +23,7 @@ import java.io.*;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.Instant;
@@ -68,7 +70,7 @@ public class Utilities {
     }
 
     public static X509CertificateHolder addExtensionsAndBuildCertificate(X509v3CertificateBuilder certGen, X509Certificate cert,
-                                                                   ContentSigner contentSigner, boolean ca) throws CertIOException {
+                                                                         ContentSigner contentSigner, boolean ca) throws CertIOException {
 
         // Basic constraints
         certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, new BasicConstraints(ca));
@@ -115,6 +117,22 @@ public class Utilities {
         try (FileOutputStream fos = new FileOutputStream(path)) {
             ks.store(fos, pass.toCharArray());
         }
+    }
+
+    public static CertAuthorityDTO extractDataFromCertificate(X509Certificate certificate) throws CertificateEncodingException {
+        CertAuthorityDTO dto = new CertAuthorityDTO();
+        dto.setSerialNumber(null);
+
+        JcaX509CertificateHolder holder = new JcaX509CertificateHolder(certificate);
+
+        dto.setEmail(holder.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString());
+        dto.setCity(holder.getSubject().getRDNs(BCStyle.C)[0].getFirst().getValue().toString());
+        dto.setCommonName(holder.getSubject().getRDNs(BCStyle.NAME)[0].getFirst().getValue().toString());
+        dto.setCountry(holder.getSubject().getRDNs(BCStyle.C)[0].getFirst().getValue().toString());
+        dto.setOrganization(holder.getSubject().getRDNs(BCStyle.O)[0].getFirst().getValue().toString());
+        dto.setOrganizationalUnit(holder.getSubject().getRDNs(BCStyle.OU)[0].getFirst().getValue().toString());
+
+        return dto;
     }
 
 }

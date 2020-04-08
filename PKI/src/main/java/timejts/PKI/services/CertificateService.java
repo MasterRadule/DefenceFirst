@@ -24,7 +24,6 @@ import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import java.io.File;
 import java.io.IOException;
@@ -130,7 +129,7 @@ public class CertificateService {
         String email = csrData.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
 
         try {
-            emailService.sendEmail(email, certificateFile);
+            emailService.sendEmailWithCertificate(email, certificateFile);
         } catch (MessagingException ignored) {
         }
 
@@ -139,7 +138,7 @@ public class CertificateService {
         return serialNumber;
     }
 
-    public Object createCACertificate(CertAuthorityDTO certAuth) throws KeyStoreException, IOException,
+    public String createCACertificate(CertAuthorityDTO certAuth) throws KeyStoreException, IOException,
             UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException {
 
         // Get data about CA
@@ -221,9 +220,9 @@ public class CertificateService {
         KeyStore ks = ca ? loadKeyStore(keystorePath, keystorePassword) : loadKeyStore(nonCAKeystore, nonCAPassword);
         ArrayList<CertificateDTO> certificates = new ArrayList<>();
 
-        Enumeration enumeration = ks.aliases();
+        Enumeration<String> enumeration = ks.aliases();
         while (enumeration.hasMoreElements()) {
-            String alias = (String) enumeration.nextElement();
+            String alias = enumeration.nextElement();
             X509Certificate certificate = (X509Certificate) ks.getCertificate(alias);
             certificates.add(new CertificateDTO(certificate, alias));
         }
