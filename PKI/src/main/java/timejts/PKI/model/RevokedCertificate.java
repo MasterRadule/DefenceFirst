@@ -8,11 +8,11 @@ public class RevokedCertificate {
     private String id;
     private String commonName;
 
-    public RevokedCertificate(){
+    public RevokedCertificate() {
         super();
     }
 
-    public RevokedCertificate(String id, String commonName){
+    public RevokedCertificate(String id, String commonName) {
         this.id = id;
         this.commonName = commonName;
     }

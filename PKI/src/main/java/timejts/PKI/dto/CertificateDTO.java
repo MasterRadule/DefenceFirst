@@ -5,31 +5,34 @@ import java.util.Date;
 
 public class CertificateDTO {
 
-    private String commonName;
+    private String serialNumber;
     private Date startDate;
     private Date endDate;
-    private String ca;
+    private String issuerSerialNumber;
+    private boolean ca;
 
-    public CertificateDTO(String commonName, Date startDate, Date endDate, String ca) {
-        this.commonName = commonName;
+    public CertificateDTO(String commonName, Date startDate, Date endDate, String issuerSerialNumber, boolean ca) {
+        this.serialNumber = commonName;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.issuerSerialNumber = issuerSerialNumber;
         this.ca = ca;
     }
 
-    public CertificateDTO(X509Certificate certificate, String alias) {
-        this.commonName = alias;
+    public CertificateDTO(X509Certificate certificate, String alias, boolean ca) {
+        this.serialNumber = alias;
         this.startDate = certificate.getNotBefore();
         this.endDate = certificate.getNotAfter();
-        this.ca = certificate.getIssuerX500Principal().getName();
+        this.issuerSerialNumber = certificate.getSerialNumber().toString();
+        this.ca = ca;
     }
 
-    public String getCommonName() {
-        return commonName;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setCommonName(String commonName) {
-        this.commonName = commonName;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public Date getStartDate() {
@@ -48,11 +51,19 @@ public class CertificateDTO {
         this.endDate = endDate;
     }
 
-    public String getCa() {
+    public String getIssuerSerialNumber() {
+        return issuerSerialNumber;
+    }
+
+    public void setIssuerSerialNumber(String issuerSerialNumber) {
+        this.issuerSerialNumber = issuerSerialNumber;
+    }
+
+    public boolean isCa() {
         return ca;
     }
 
-    public void setCa(String ca) {
+    public void setCa(boolean ca) {
         this.ca = ca;
     }
 }
