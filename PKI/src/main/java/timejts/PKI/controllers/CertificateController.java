@@ -88,6 +88,7 @@ public class CertificateController {
 
     }
 
+    @PostMapping("/validate")
     public ResponseEntity<Object> validateCertificate(@RequestBody X509Certificate certificate) {
         try {
             return new ResponseEntity<>(certificateService.validateCertificate(certificate), HttpStatus.OK);

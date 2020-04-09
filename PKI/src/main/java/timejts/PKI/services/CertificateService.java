@@ -285,12 +285,12 @@ public class CertificateService {
         return serialNumber;
     }
 
-    public String validateCertificate(X509Certificate certificate) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException, CorruptedCertificateException, InvalidKeyException, NoSuchProviderException, SignatureException {
+    public boolean validateCertificate(X509Certificate certificate) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException, CorruptedCertificateException, InvalidKeyException, NoSuchProviderException, SignatureException {
 
         //load keystore
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
 
-        //check if certificate exsist in keystorage
+        //check if certificate exists in keystore
         X509Certificate certificateFromKS = (X509Certificate) ks
                 .getCertificate(certificate.getSerialNumber().toString());
         if (certificate == null) {
@@ -303,11 +303,7 @@ public class CertificateService {
         }
 
         //check certificate revoke status
-        Optional<RevokedCertificate> r = revokedCertificatesRepository
-                .findById(certificate.getSerialNumber().toString());
-        if (r.isPresent()) {
-            throw new CertificateRevokedException("Certificate is revoked");
-        }
+        checkCertificateStatus(certificate.getSerialNumber().toString());
 
         //chain root -> c (dates, revoke status and key validation)
         X500Name x500name = new JcaX509CertificateHolder(certificate).getSubject();
@@ -320,11 +316,7 @@ public class CertificateService {
 
             child.checkValidity();
             child.verify(parent.getPublicKey());
-            Optional<RevokedCertificate> revokedChild = revokedCertificatesRepository
-                    .findById(child.getSerialNumber().toString());
-            if (revokedChild.isPresent()) {
-                throw new CertificateRevokedException("Certificate is revoked");
-            }
+            checkCertificateStatus(child.getSerialNumber().toString());
         }
 
         //checking date and key validation for given certificate(final result)
@@ -332,6 +324,14 @@ public class CertificateService {
         certificate.verify(caCertificate.getPublicKey());
         certificate.checkValidity();
 
-        return "Certificate is valid";
+        return true;
+    }
+
+    private void checkCertificateStatus(String serialNumber) throws CertificateRevokedException {
+        Optional<RevokedCertificate> r = revokedCertificatesRepository
+                .findById(serialNumber);
+        if (r.isPresent()) {
+            throw new CertificateRevokedException("Certificate is revoked");
+        }
     }
 }
