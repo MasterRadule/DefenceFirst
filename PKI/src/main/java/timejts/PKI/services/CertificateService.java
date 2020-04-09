@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 import timejts.PKI.dto.CertificateDTO;
 import timejts.PKI.dto.CertificateDetailsDTO;
 import timejts.PKI.dto.SubjectDTO;
-import timejts.PKI.exceptions.*;
 import timejts.PKI.exceptions.CertificateRevokedException;
+import timejts.PKI.exceptions.*;
 import timejts.PKI.model.CertificateSigningRequest;
 import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
@@ -291,13 +291,15 @@ public class CertificateService {
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
 
         //check if certificate exsist in keystorage
-        X509Certificate certificateFromKS = (X509Certificate) ks.getCertificate(certificate.getSerialNumber().toString());
-        if(certificate == null) {
+        X509Certificate certificateFromKS = (X509Certificate) ks
+                .getCertificate(certificate.getSerialNumber().toString());
+        if (certificate == null) {
             throw new NotExistingCertificateException("Certificate doesn't exist");
         }
 
         //check certificate revoke status
-        Optional<RevokedCertificate> r = revokedCertificatesRepository.findById(certificate.getSerialNumber().toString());
+        Optional<RevokedCertificate> r = revokedCertificatesRepository
+                .findById(certificate.getSerialNumber().toString());
         if (r.isPresent()) {
             throw new CertificateRevokedException("Certificate is revoked");
         }
@@ -305,8 +307,8 @@ public class CertificateService {
         //chain certificate -> root (dates and revoke status)
         //Certificate certificateCahin []  = ks.getCertificateChain(certificate.getIssuerX500Principal().);
         //for(Certificate c : certificateCahin){
-       //     c.
-      //  }
+        //     c.
+        //  }
 
 
         //chaint root -> certificate (keys)
