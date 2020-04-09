@@ -35,6 +35,7 @@ public class RevocationTest {
         }
     }
 
+    @Test
     void checkValid() {
 
 
@@ -46,6 +47,7 @@ public class RevocationTest {
                     .getInstance("X.509");
             inStream = new FileInputStream(serverCertFile);
             X509Certificate cer = (X509Certificate) certFactory.generateCertificate(inStream);
+            System.out.println(cer.getIssuerX500Principal().getName());
             certificateService.validateCertificate(cer);
             inStream.close();
         } catch (CertificateException e) {

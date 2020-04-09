@@ -282,7 +282,7 @@ public class CertificateService {
         }
 
         //chain certificate -> root (dates and revoke status)
-        Certificate certificateCahin []  = ks.getCertificateChain(certificate.getSerialNumber().toString());
+        //Certificate certificateCahin []  = ks.getCertificateChain(certificate.getIssuerX500Principal().);
         //for(Certificate c : certificateCahin){
        //     c.
       //  }
