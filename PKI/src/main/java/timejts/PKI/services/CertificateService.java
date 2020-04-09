@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import timejts.PKI.dto.CertAuthorityDTO;
 import timejts.PKI.dto.CertificateDTO;
 import timejts.PKI.exceptions.*;
+import timejts.PKI.exceptions.CertificateRevokedException;
 import timejts.PKI.model.CertificateSigningRequest;
 import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
@@ -235,7 +236,7 @@ public class CertificateService {
 
         X509Certificate certificate = (X509Certificate) ks.getCertificate(serialNumber);
         if (certificate == null) {
-            throw new NotExistingCertificateException("Certificate with name" + serialNumber + " doesn't exist");
+            throw new NotExistingCertificateException("Certificate with serial number" + serialNumber + " doesn't exist");
         }
 
         saveRevokedCertificate(certificate);
@@ -261,5 +262,34 @@ public class CertificateService {
         } while (csr.isPresent());
 
         return serialNumber;
+    }
+
+    public String validateCertificate(X509Certificate certificate) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException {
+
+        //load keystore
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+
+        //check if certificate exsist in keystorage
+        X509Certificate certificateFromKS = (X509Certificate) ks.getCertificate(certificate.getSerialNumber().toString());
+        if(certificate == null) {
+            throw new NotExistingCertificateException("Certificate doesn't exist");
+        }
+
+        //check certificate revoke status
+        Optional<RevokedCertificate> r = revokedCertificatesRepository.findById(certificate.getSerialNumber().toString());
+        if (r.isPresent()) {
+            throw new CertificateRevokedException("Certificate is revoked");
+        }
+
+        //chain certificate -> root (dates and revoke status)
+        Certificate certificateCahin []  = ks.getCertificateChain(certificate.getSerialNumber().toString());
+        //for(Certificate c : certificateCahin){
+       //     c.
+      //  }
+
+
+        //chaint root -> certificate (keys)
+
+        return "Moze";
     }
 }
