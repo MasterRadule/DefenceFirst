@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import timejts.PKI.dto.CertAuthorityDTO;
+import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.services.CertificateService;
 
 @RestController
@@ -35,7 +35,7 @@ public class CertificateController {
     }
 
     @PostMapping("/ca")
-    public ResponseEntity<Object> createCACertificate(@RequestBody CertAuthorityDTO certAuth) {
+    public ResponseEntity<Object> createCACertificate(@RequestBody SubjectDTO certAuth) {
         try {
             return new ResponseEntity<>(certificateService.createCACertificate(certAuth), HttpStatus.CREATED);
         } catch (Exception e) {
@@ -56,6 +56,15 @@ public class CertificateController {
     public ResponseEntity<Object> getCertificates() {
         try {
             return new ResponseEntity<>(certificateService.getCertificates(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{serialNumber}")
+    public ResponseEntity<Object> getCertificate(@PathVariable(value = "serialNumber") String serialNumber) {
+        try {
+            return new ResponseEntity<>(certificateService.getCertificate(serialNumber), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
