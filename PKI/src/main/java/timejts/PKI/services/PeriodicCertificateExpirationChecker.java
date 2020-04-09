@@ -14,6 +14,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
@@ -25,12 +26,6 @@ import static timejts.PKI.utils.Utilities.*;
 
 @Service
 public class PeriodicCertificateExpirationChecker {
-    @Value("${non-ca-keystore}")
-    private String nonCAKeystore;
-
-    @Value("${non-ca-password}")
-    private String nonCAPassword;
-
     @Value("${server.ssl.key-store}")
     private String keystorePath;
 
@@ -43,65 +38,70 @@ public class PeriodicCertificateExpirationChecker {
     @Autowired
     private CertificateService certificateService;
 
+    private void checkNonCaCertificate(KeyStore ks, String alias, X509Certificate certificate, Calendar now,
+                                       Calendar other) throws KeyStoreException, CertificateEncodingException {
+        other.setTime(certificate.getNotAfter());
 
-    @Scheduled(cron = "${certificate.check.period}")
-    private void checkCertificates() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
-        // Load non CA keystore
-        KeyStore ks = loadKeyStore(nonCAKeystore, nonCAPassword);
+        String email = new JcaX509CertificateHolder(certificate).getSubject().getRDNs(BCStyle.EmailAddress)[0]
+                .getFirst().getValue().toString();
 
-        Calendar now = new GregorianCalendar();
-        now.setTime(new Date());
-
-        Calendar other = new GregorianCalendar();
-
-        Enumeration<String> enumeration = ks.aliases();
-        X509Certificate certificate;
-        String alias;
-        String email;
-        while (enumeration.hasMoreElements()) {
-            alias = enumeration.nextElement();
-            certificate = (X509Certificate) ks.getCertificate(alias);
-            other.setTime(certificate.getNotAfter());
-
-            email = new JcaX509CertificateHolder(certificate).getSubject().getRDNs(BCStyle.EmailAddress)[0]
-                    .getFirst().getValue().toString();
-
-            if (other.before(now)) {
-                // delete certificate from keystore and send email
-                ks.deleteEntry(alias);
-                try {
-                    emailService.sendEmail(email, "Certificate expired", String.format("Your certificate with serial " +
-                            "number %s has expired", certificate.getSerialNumber()));
-                } catch (MessagingException ignored) {
-                }
-            } else if (other.after(now) && other.get(Calendar.MONTH) - now.get(Calendar.MONTH) < 3) {
-                // send reminder via email
-                try {
-                    emailService.sendEmail(email, "Certificate expires soon", String.format("Your certificate with " +
-                            "serial number %s will expire in less than 3 months", certificate.getSerialNumber()));
-                } catch (MessagingException ignored) {
-                }
+        if (other.before(now)) {
+            // delete certificate from keystore and send email
+            ks.deleteEntry(alias);
+            try {
+                emailService.sendEmail(email, "Certificate expired", String.format("Your certificate with serial " +
+                        "number %s has expired", certificate.getSerialNumber()));
+            } catch (MessagingException ignored) {
+            }
+        } else if (other.after(now) && other.get(Calendar.MONTH) - now.get(Calendar.MONTH) < 3) {
+            // send reminder via email
+            try {
+                emailService.sendEmail(email, "Certificate expires soon", String.format("Your certificate with " +
+                        "serial number %s will expire in less than 3 months", certificate.getSerialNumber()));
+            } catch (MessagingException ignored) {
             }
         }
+    }
 
-        saveKeyStore(ks, nonCAKeystore, nonCAPassword);
+    private void checkCACertificate(X509Certificate certificate, Calendar now, Calendar other) throws CertificateException,
+            OperatorCreationException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        other.setTime(certificate.getNotAfter());
 
-        // Load CA keystore
-        ks = loadKeyStore(keystorePath, keystorePassword);
+        if (other.after(now) && other.get(Calendar.MONTH) - now.get(Calendar.MONTH) < 3) {
+            // create new certificate with 2 years and 3 months expiration date
+            certificateService.createCACertificate(extractDataFromCertificate(certificate));
+        }
+    }
 
-        enumeration = ks.aliases();
-        while (enumeration.hasMoreElements()) {
-            certificate = (X509Certificate) ks.getCertificate(enumeration.nextElement());
-            other.setTime(certificate.getNotAfter());
 
-            if (other.after(now) && other.get(Calendar.MONTH) - now.get(Calendar.MONTH) < 3) {
-                try {
-                    // create new certificate with 2 years and 3 months expiration date
-                    certificateService.createCACertificate(extractDataFromCertificate(certificate));
-                } catch (UnrecoverableKeyException | OperatorCreationException e) {
-                    e.printStackTrace();
+    @Scheduled(cron = "${certificate.check.period}")
+    private void checkCertificates() {
+        try {
+            // Load non CA keystore
+            KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+
+            Calendar now = new GregorianCalendar();
+            now.setTime(new Date());
+
+            Calendar other = new GregorianCalendar();
+
+            Enumeration<String> enumeration = ks.aliases();
+            X509Certificate certificate;
+            String alias;
+            while (enumeration.hasMoreElements()) {
+                alias = enumeration.nextElement();
+                certificate = (X509Certificate) ks.getCertificate(alias);
+
+                if (ks.getCertificateChain(alias) != null) {
+                    checkCACertificate(certificate, now, other);
+                } else {
+                    checkNonCaCertificate(ks, alias, certificate, now, other);
                 }
             }
+
+            saveKeyStore(ks, keystorePath, keystorePassword);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

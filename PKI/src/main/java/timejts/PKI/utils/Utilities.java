@@ -126,8 +126,8 @@ public class Utilities {
         JcaX509CertificateHolder holder = new JcaX509CertificateHolder(certificate);
 
         dto.setEmail(holder.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString());
-        dto.setCity(holder.getSubject().getRDNs(BCStyle.C)[0].getFirst().getValue().toString());
-        dto.setCommonName(holder.getSubject().getRDNs(BCStyle.NAME)[0].getFirst().getValue().toString());
+        dto.setCity(holder.getSubject().getRDNs(BCStyle.L)[0].getFirst().getValue().toString());
+        dto.setCommonName(holder.getSubject().getRDNs(BCStyle.CN)[0].getFirst().getValue().toString());
         dto.setCountry(holder.getSubject().getRDNs(BCStyle.C)[0].getFirst().getValue().toString());
         dto.setOrganization(holder.getSubject().getRDNs(BCStyle.O)[0].getFirst().getValue().toString());
         dto.setOrganizationalUnit(holder.getSubject().getRDNs(BCStyle.OU)[0].getFirst().getValue().toString());
