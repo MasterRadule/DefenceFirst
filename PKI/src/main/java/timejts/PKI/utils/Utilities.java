@@ -17,7 +17,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.bouncycastle.operator.ContentSigner;
 import org.springframework.beans.factory.annotation.Value;
-import timejts.PKI.dto.CertAuthorityDTO;
+import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.exceptions.CANotValidException;
 
 import java.io.*;
@@ -39,7 +39,7 @@ public class Utilities {
     @Value("${serial-numbers-file}")
     private static String serialNumbersFile;
 
-    public static X500Name generateX500Name(CertAuthorityDTO certAuth) {
+    public static X500Name generateX500Name(SubjectDTO certAuth) {
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
         builder.addRDN(BCStyle.CN, certAuth.getCommonName());
         builder.addRDN(BCStyle.O, certAuth.getOrganization());
@@ -120,8 +120,8 @@ public class Utilities {
         }
     }
 
-    public static CertAuthorityDTO extractDataFromCertificate(X509Certificate certificate) throws CertificateEncodingException {
-        CertAuthorityDTO dto = new CertAuthorityDTO();
+    public static SubjectDTO extractDataFromCertificate(X509Certificate certificate) throws CertificateEncodingException {
+        SubjectDTO dto = new SubjectDTO();
         dto.setSerialNumber(null);
 
         JcaX509CertificateHolder holder = new JcaX509CertificateHolder(certificate);

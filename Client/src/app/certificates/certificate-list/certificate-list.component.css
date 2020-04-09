@@ -1,0 +1,14 @@
+table {
+  width: 100%;
+}
+
+td, th {
+  width: 25%;
+}
+
+#certificates-table {
+  margin-top: 2%;
+  width: 45%;
+  margin-right: auto;
+  margin-left: auto;
+}

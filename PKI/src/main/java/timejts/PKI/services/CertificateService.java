@@ -16,8 +16,9 @@ import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import timejts.PKI.dto.CertAuthorityDTO;
 import timejts.PKI.dto.CertificateDTO;
+import timejts.PKI.dto.CertificateDetailsDTO;
+import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.exceptions.*;
 import timejts.PKI.exceptions.CertificateRevokedException;
 import timejts.PKI.model.CertificateSigningRequest;
@@ -136,7 +137,7 @@ public class CertificateService {
         return "Please check your email. Certificate is sent to your email address.";
     }
 
-    public String createCACertificate(CertAuthorityDTO certAuth) throws KeyStoreException, IOException,
+    public String createCACertificate(SubjectDTO certAuth) throws KeyStoreException, IOException,
             UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException {
 
         // Get data about CA
@@ -203,11 +204,11 @@ public class CertificateService {
         return "Certificate signing request successfully submitted";
     }
 
-    public ArrayList<CertAuthorityDTO> getCertificateSigningRequests() throws IOException {
+    public ArrayList<SubjectDTO> getCertificateSigningRequests() throws IOException {
         ArrayList<CertificateSigningRequest> csrs = (ArrayList<CertificateSigningRequest>) csrRepository.findAll();
-        ArrayList<CertAuthorityDTO> certDTOs = new ArrayList<>();
+        ArrayList<SubjectDTO> certDTOs = new ArrayList<>();
         for (CertificateSigningRequest csr : csrs) {
-            certDTOs.add(new CertAuthorityDTO(csr.getId(), new JcaPKCS10CertificationRequest(csr.getCsr())
+            certDTOs.add(new SubjectDTO(csr.getId(), new JcaPKCS10CertificationRequest(csr.getCsr())
                     .getSubject()));
         }
 
@@ -217,15 +218,33 @@ public class CertificateService {
     public ArrayList<CertificateDTO> getCertificates() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
         ArrayList<CertificateDTO> certificates = new ArrayList<>();
+        String alias, commonName, issuer;
+        X509Certificate certificate;
 
         Enumeration<String> enumeration = ks.aliases();
         while (enumeration.hasMoreElements()) {
-            String alias = enumeration.nextElement();
-            X509Certificate certificate = (X509Certificate) ks.getCertificate(alias);
-            certificates.add(new CertificateDTO(certificate, alias, ks.getCertificateChain(alias) != null));
+            alias = enumeration.nextElement();
+            certificate = (X509Certificate) ks.getCertificate(alias);
+            commonName = getCommonName(certificate);
+            issuer = getIssuerCommonName(certificate);
+            certificates.add(new CertificateDTO(alias, commonName, certificate.getNotBefore(), certificate
+                    .getNotAfter(), issuer, ks.getCertificateChain(alias) != null));
         }
 
         return certificates;
+    }
+
+    public CertificateDetailsDTO getCertificate(String serialNumber) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException {
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+        X509Certificate certificate = (X509Certificate) ks.getCertificate(serialNumber);
+        if (certificate == null)
+            throw new NotExistingCertificateException("Certificate with serial number" + serialNumber + " doesn't exist");
+
+        SubjectDTO subjData = new SubjectDTO(new BigInteger(serialNumber), new JcaX509CertificateHolder(certificate)
+                .getSubject());
+
+        return new CertificateDetailsDTO(subjData, certificate.getNotBefore(), certificate
+                .getNotAfter(), getIssuerCommonName(certificate), ks.getCertificateChain(serialNumber) != null);
     }
 
     public String revokeCertificate(String serialNumber) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, NotExistingCertificateException, CertificateAlreadyRevokedException {
@@ -249,8 +268,7 @@ public class CertificateService {
     private void saveRevokedCertificate(X509Certificate certificate) throws CertificateNotYetValidException, CertificateExpiredException, CertificateEncodingException {
         certificate.checkValidity();
         String id = certificate.getSerialNumber().toString();
-        String commonName = new JcaX509CertificateHolder(certificate).getSubject().getRDNs(BCStyle.CN)[0]
-                .getFirst().getValue().toString();
+        String commonName = getCommonName(certificate);
         RevokedCertificate certificateToBeRevoked = new RevokedCertificate(id, commonName);
         revokedCertificatesRepository.save(certificateToBeRevoked);
     }
