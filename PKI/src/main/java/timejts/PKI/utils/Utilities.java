@@ -2,6 +2,7 @@ package timejts.PKI.utils;
 
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
@@ -135,4 +136,32 @@ public class Utilities {
         return dto;
     }
 
+    public static String getCommonName(X509Certificate certificate) throws CertificateEncodingException {
+        X500Name x500name = new JcaX509CertificateHolder(certificate).getSubject();
+        RDN cn = x500name.getRDNs(BCStyle.CN)[0];
+
+        return cn.getFirst().getValue().toString();
+    }
+
+    public static String getIssuerCommonName(X509Certificate certificate) {
+        String issuerData = certificate.getIssuerX500Principal().getName();
+        String[] parts = issuerData.split("CN=");
+        int index = parts[1].indexOf(',') == -1 ? parts[1].length() : parts[1].indexOf(',');
+
+        return parts[1].substring(0, index);
+    }
+
+    public static X500Name createSubjectX500Name(X500Name subj, String caSerialNumber) {
+        X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
+        builder.addRDN(BCStyle.CN, subj.getRDNs(BCStyle.CN)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.O, subj.getRDNs(BCStyle.O)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.OU, subj.getRDNs(BCStyle.OU)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.C, subj.getRDNs(BCStyle.C)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.EmailAddress, subj.getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.L, subj.getRDNs(BCStyle.L)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.ST, subj.getRDNs(BCStyle.ST)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.SERIALNUMBER, caSerialNumber);
+
+        return builder.build();
+    }
 }

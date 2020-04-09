@@ -105,9 +105,12 @@ public class CertificateService {
                 .toLocalDateTime().minusMonths(3);
         Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
 
+        // Create Subject X500Name
+        X500Name subject = createSubjectX500Name(csrData.getSubject(), certificate.getSerialNumber().toString());
+
         // Set certificate extensions and generate certificate
         X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, new BigInteger(serialNumber), startDate,
-                endDate, csrData.getSubject(), csrData.getPublicKey());
+                endDate, subject, csrData.getPublicKey());
         X509CertificateHolder certHolder = addExtensionsAndBuildCertificate(certGen, certificate, contentSigner, false);
 
         // Convert to X509 certificate
@@ -118,7 +121,7 @@ public class CertificateService {
         saveKeyStore(ks, keystorePath, keystorePassword);
 
         // Create certificate file
-        File certificateFile = x509CertificateToPem(certificate, serialNumber);
+        File certificateFile = x509CertificateToPem(newCertificate, serialNumber);
 
         // Send certificate on email address
         String email = csrData.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
