@@ -4,14 +4,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import timejts.PKI.exceptions.CertificateRevokedException;
+import timejts.PKI.exceptions.CorruptedCertificateException;
 import timejts.PKI.exceptions.NotExistingCertificateException;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -48,23 +48,9 @@ public class RevocationTest {
             inStream = new FileInputStream(serverCertFile);
             X509Certificate cer = (X509Certificate) certFactory.generateCertificate(inStream);
             System.out.println(cer.getIssuerX500Principal().getName());
-            certificateService.validateCertificate(cer);
+            String result = certificateService.validateCertificate(cer);
             inStream.close();
-        } catch (CertificateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (CertificateRevokedException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (NotExistingCertificateException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

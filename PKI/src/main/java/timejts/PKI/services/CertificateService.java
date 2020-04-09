@@ -285,7 +285,7 @@ public class CertificateService {
         return serialNumber;
     }
 
-    public String validateCertificate(X509Certificate certificate) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException {
+    public String validateCertificate(X509Certificate certificate) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException, CorruptedCertificateException, InvalidKeyException, NoSuchProviderException, SignatureException {
 
         //load keystore
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
@@ -297,6 +297,11 @@ public class CertificateService {
             throw new NotExistingCertificateException("Certificate doesn't exist");
         }
 
+        //check if certificate from database is equal with given certificate
+        if (!certificateFromKS.equals(certificate)) {
+            throw new CorruptedCertificateException("Certificate is corrupted");
+        }
+
         //check certificate revoke status
         Optional<RevokedCertificate> r = revokedCertificatesRepository
                 .findById(certificate.getSerialNumber().toString());
@@ -304,15 +309,29 @@ public class CertificateService {
             throw new CertificateRevokedException("Certificate is revoked");
         }
 
-        //chain certificate -> root (dates and revoke status)
-        //Certificate certificateCahin []  = ks.getCertificateChain(certificate.getIssuerX500Principal().);
-        //for(Certificate c : certificateCahin){
-        //     c.
-        //  }
+        //chain root -> c (dates, revoke status and key validation)
+        X500Name x500name = new JcaX509CertificateHolder(certificate).getSubject();
+        String caSerialNumber = x500name.getRDNs(BCStyle.SERIALNUMBER)[0].getFirst().getValue().toString();
+        Certificate certificateCahin[] = ks.getCertificateChain(caSerialNumber);
 
+        for (int i = certificateCahin.length - 2; i >= 0; --i) {
+            X509Certificate child = (X509Certificate) certificateCahin[i];
+            X509Certificate parent = (X509Certificate) certificateCahin[i + 1];
 
-        //chaint root -> certificate (keys)
+            child.checkValidity();
+            child.verify(parent.getPublicKey());
+            Optional<RevokedCertificate> revokedChild = revokedCertificatesRepository
+                    .findById(child.getSerialNumber().toString());
+            if (revokedChild.isPresent()) {
+                throw new CertificateRevokedException("Certificate is revoked");
+            }
+        }
 
-        return "Moze";
+        //checking date and key validation for given certificate(final result)
+        X509Certificate caCertificate = (X509Certificate) ks.getCertificate(caSerialNumber);
+        certificate.verify(caCertificate.getPublicKey());
+        certificate.checkValidity();
+
+        return "Certificate is valid";
     }
 }
