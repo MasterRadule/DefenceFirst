@@ -8,7 +8,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {ToolbarModule} from './toolbar/toolbar.module';
 import {DashboardModule} from './dashboard/dashboard.module';
 import {CertificatesModule} from './certificates/certificates.module';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {UrlInterceptor} from "./interceptors/url-interceptor";
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import {HttpClientModule} from '@angular/common/http';
     CertificatesModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
