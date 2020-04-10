@@ -35,10 +35,7 @@ import java.security.cert.Certificate;
 import java.security.cert.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Optional;
+import java.util.*;
 
 import static timejts.PKI.utils.Utilities.*;
 
@@ -303,7 +300,9 @@ public class CertificateService {
         }
 
         //check certificate revoke status
-        checkCertificateStatus(certificate.getSerialNumber().toString());
+        if (checkCertificateStatus(certificate.getSerialNumber().toString(), ks).equals("Certificate is revoked")) {
+            throw new CertificateRevokedException("Certificate is revoked");
+        }
 
         //chain root -> c (dates, revoke status and key validation)
         X500Name x500name = new JcaX509CertificateHolder(certificate).getSubject();
@@ -317,7 +316,9 @@ public class CertificateService {
 
             child.checkValidity();
             child.verify(parent.getPublicKey());
-            checkCertificateStatus(child.getSerialNumber().toString());
+            if (checkCertificateStatus(child.getSerialNumber().toString(), ks).equals("Certificate is revoked")){
+                throw new CertificateRevokedException("Certificate is revoked");
+            }
         }
 
         //checking date and key validation for given certificate(final result)
@@ -328,11 +329,40 @@ public class CertificateService {
         return true;
     }
 
-    private void checkCertificateStatus(String serialNumber) throws CertificateRevokedException {
+    public String checkCertificateStatus(String serialNumber, KeyStore ks) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        if (ks == null) {
+            ks = loadKeyStore(keystorePath, keystorePassword);
+            X509Certificate cert = (X509Certificate) ks.getCertificate(serialNumber);
+            if (cert == null) {
+                return "Unknown certificate";
+            }
+        }
+
         Optional<RevokedCertificate> r = revokedCertificatesRepository
                 .findById(serialNumber);
         if (r.isPresent()) {
-            throw new CertificateRevokedException("Certificate is revoked");
+            return "Certificate is revoked";
         }
+
+        return "Sertificate is good";
     }
+
+    public ArrayList<CertificateDTO> getRevokedCertificates() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        List<RevokedCertificate> revokedCertificates = revokedCertificatesRepository.findAll();
+        ArrayList<CertificateDTO> certificateDTOS = new ArrayList<>();
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+        X509Certificate certificate;
+        String alias, commonName, issuer;
+
+        for (RevokedCertificate r : revokedCertificates) {
+            certificate = (X509Certificate) ks.getCertificate(r.getId());
+            commonName = getCommonName(certificate);
+            issuer = getIssuerCommonName(certificate);
+            certificateDTOS.add(new CertificateDTO(r.getId(), commonName, certificate.getNotBefore(),
+                    certificate.getNotAfter(), issuer, ks.getCertificateChain(r.getId()) != null));
+        }
+
+        return certificateDTOS;
+    }
+
 }

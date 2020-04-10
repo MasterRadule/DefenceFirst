@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.services.CertificateService;
 
+import java.io.IOException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 @RestController
@@ -86,6 +90,24 @@ public class CertificateController {
     public ResponseEntity<Object> validateCertificate(@RequestBody X509Certificate certificate) {
         try {
             return new ResponseEntity<>(certificateService.validateCertificate(certificate), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/revoked")
+    public ResponseEntity<Object> getRevokedCertificates(){
+        try {
+            return new ResponseEntity<>(certificateService.getRevokedCertificates(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/revoked/{serialNumber}")
+    public ResponseEntity<Object> getCertificateStatus(@PathVariable(value = "serialNumber") String serialNumber){
+        try {
+            return new ResponseEntity<>(certificateService.checkCertificateStatus(serialNumber,null), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
