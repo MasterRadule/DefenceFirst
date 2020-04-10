@@ -35,10 +35,7 @@ import java.security.cert.Certificate;
 import java.security.cert.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Optional;
+import java.util.*;
 
 import static timejts.PKI.utils.Utilities.*;
 
@@ -335,4 +332,23 @@ public class CertificateService {
             throw new CertificateRevokedException("Certificate is revoked");
         }
     }
+
+    public ArrayList<CertificateDTO> getRevokedCertificates() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        List<RevokedCertificate> revokedCertificates = revokedCertificatesRepository.findAll();
+        ArrayList<CertificateDTO> certificateDTOS = new ArrayList<>();
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+        X509Certificate certificate;
+        String alias, commonName, issuer;
+
+        for (RevokedCertificate r : revokedCertificates) {
+            certificate = (X509Certificate) ks.getCertificate(r.getId());
+            commonName = getCommonName(certificate);
+            issuer = getIssuerCommonName(certificate);
+            certificateDTOS.add(new CertificateDTO(r.getId(), commonName, certificate.getNotBefore(),
+                    certificate.getNotAfter(), issuer, ks.getCertificateChain(r.getId()) != null));
+        }
+
+        return certificateDTOS;
+    }
+
 }
