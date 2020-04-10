@@ -4,15 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import timejts.PKI.exceptions.CertificateRevokedException;
-import timejts.PKI.exceptions.NotExistingCertificateException;
 import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.services.CertificateService;
 
-import java.io.IOException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 @RestController
