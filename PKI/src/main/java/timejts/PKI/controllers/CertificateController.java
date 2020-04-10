@@ -7,10 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.services.CertificateService;
 
-import java.io.IOException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 @RestController
@@ -77,13 +73,12 @@ public class CertificateController {
     }
 
     @PutMapping("/revoked")
-    public ResponseEntity<Object> revokeCertificate(@RequestParam String serialNumber) {
+    public ResponseEntity<Object> revokeCertificate(@RequestBody String serialNumber) {
         try {
             return new ResponseEntity<>(certificateService.revokeCertificate(serialNumber), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @PostMapping("/validate")
