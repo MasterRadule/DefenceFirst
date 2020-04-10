@@ -12,7 +12,7 @@ import {PkiApiService} from '../../core/pki-api.service';
 })
 export class CertificateListComponent implements OnInit {
   private certificates: MatTableDataSource<any>;
-  displayedColumns: string[] = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'ca', 'action'];
+  displayedColumns: string[] = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email'];
   @Input() private mode: Mode;
 
   @ViewChild(MatPaginator, {static: true}) private paginator: MatPaginator;
@@ -32,11 +32,11 @@ export class CertificateListComponent implements OnInit {
 
     switch (this.mode) {
       case Mode.ACTIVE:
-        this.displayedColumns = ['serialNumber', 'commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email'];
+        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'ca', 'action'];
         this.pkiApiService.getCertificates().subscribe(observer);
         break;
       case Mode.PENDING:
-        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'ca', 'action'];
+        this.displayedColumns = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email', 'action'];
         this.pkiApiService.getCertificateSigningRequests().subscribe(observer);
         break;
       default:
@@ -44,4 +44,34 @@ export class CertificateListComponent implements OnInit {
         this.pkiApiService.getRevokedCertificates().subscribe(observer);
     }
   }
+
+  process(row) {
+    switch (this.mode) {
+      case Mode.ACTIVE:
+        this.revoke(row);
+        break;
+      case Mode.PENDING:
+        this.create(row);
+        break;
+      default:
+        this.view(row);
+    }
+  }
+
+  revoke(row) {
+    this.pkiApiService.revokeCertificate(row.serialNumber).subscribe(data => {
+      console.log(data);
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  create(row) {
+    console.log(row.serialNumber);
+  }
+
+  view(row) {
+    console.log();
+  }
+
 }
