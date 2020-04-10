@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableEncryptableProperties
 @EnableAsync
 @EnableScheduling
-@EnableMongoRepositories
 public class PkiApplication {
 
     public static void main(String[] args) {

@@ -151,4 +151,17 @@ public class Utilities {
         return parts[1].substring(0, index);
     }
 
+    public static X500Name createSubjectX500Name(X500Name subj, String caSerialNumber) {
+        X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
+        builder.addRDN(BCStyle.CN, subj.getRDNs(BCStyle.CN)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.O, subj.getRDNs(BCStyle.O)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.OU, subj.getRDNs(BCStyle.OU)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.C, subj.getRDNs(BCStyle.C)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.EmailAddress, subj.getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.L, subj.getRDNs(BCStyle.L)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.ST, subj.getRDNs(BCStyle.ST)[0].getFirst().getValue().toString());
+        builder.addRDN(BCStyle.SERIALNUMBER, caSerialNumber);
+
+        return builder.build();
+    }
 }
