@@ -2,30 +2,28 @@ package timejts.PKI.dto;
 
 import java.util.Date;
 
-public class CertificateDTO {
+public class CertificateDetailsDTO {
 
-    private String serialNumber;
-    private String commonName;
+    private SubjectDTO subjectData;
     private Date startDate;
     private Date endDate;
     private String issuer;
     private boolean ca;
 
-    public CertificateDTO(String serialNumber, String commonName, Date startDate, Date endDate, String issuer, boolean ca) {
-        this.serialNumber = serialNumber;
-        this.commonName = commonName;
+    public CertificateDetailsDTO(SubjectDTO subjectData, Date startDate, Date endDate, String issuer, boolean ca) {
+        this.subjectData = subjectData;
         this.startDate = startDate;
         this.endDate = endDate;
         this.issuer = issuer;
         this.ca = ca;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
+    public SubjectDTO getSubjectData() {
+        return subjectData;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setSubjectData(SubjectDTO subjectData) {
+        this.subjectData = subjectData;
     }
 
     public Date getStartDate() {
@@ -42,14 +40,6 @@ public class CertificateDTO {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public String getCommonName() {
-        return commonName;
-    }
-
-    public void setCommonName(String commonName) {
-        this.commonName = commonName;
     }
 
     public String getIssuer() {

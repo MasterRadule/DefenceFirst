@@ -16,8 +16,10 @@ import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import timejts.PKI.dto.CertAuthorityDTO;
 import timejts.PKI.dto.CertificateDTO;
+import timejts.PKI.dto.CertificateDetailsDTO;
+import timejts.PKI.dto.SubjectDTO;
+import timejts.PKI.exceptions.CertificateRevokedException;
 import timejts.PKI.exceptions.*;
 import timejts.PKI.model.CertificateSigningRequest;
 import timejts.PKI.model.RevokedCertificate;
@@ -104,9 +106,12 @@ public class CertificateService {
                 .toLocalDateTime().minusMonths(3);
         Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
 
+        // Create Subject X500Name
+        X500Name subject = createSubjectX500Name(csrData.getSubject(), certificate.getSerialNumber().toString());
+
         // Set certificate extensions and generate certificate
         X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, new BigInteger(serialNumber), startDate,
-                endDate, csrData.getSubject(), csrData.getPublicKey());
+                endDate, subject, csrData.getPublicKey());
         X509CertificateHolder certHolder = addExtensionsAndBuildCertificate(certGen, certificate, contentSigner, false);
 
         // Convert to X509 certificate
@@ -117,7 +122,7 @@ public class CertificateService {
         saveKeyStore(ks, keystorePath, keystorePassword);
 
         // Create certificate file
-        File certificateFile = x509CertificateToPem(certificate, serialNumber);
+        File certificateFile = x509CertificateToPem(newCertificate, serialNumber);
 
         // Send certificate on email address
         String email = csrData.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
@@ -132,7 +137,7 @@ public class CertificateService {
         return "Please check your email. Certificate is sent to your email address.";
     }
 
-    public String createCACertificate(CertAuthorityDTO certAuth) throws KeyStoreException, IOException,
+    public String createCACertificate(SubjectDTO certAuth) throws KeyStoreException, IOException,
             UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException {
 
         // Get data about CA
@@ -199,11 +204,11 @@ public class CertificateService {
         return "Certificate signing request successfully submitted";
     }
 
-    public ArrayList<CertAuthorityDTO> getCertificateSigningRequests() throws IOException {
+    public ArrayList<SubjectDTO> getCertificateSigningRequests() throws IOException {
         ArrayList<CertificateSigningRequest> csrs = (ArrayList<CertificateSigningRequest>) csrRepository.findAll();
-        ArrayList<CertAuthorityDTO> certDTOs = new ArrayList<>();
+        ArrayList<SubjectDTO> certDTOs = new ArrayList<>();
         for (CertificateSigningRequest csr : csrs) {
-            certDTOs.add(new CertAuthorityDTO(csr.getId(), new JcaPKCS10CertificationRequest(csr.getCsr())
+            certDTOs.add(new SubjectDTO(csr.getId(), new JcaPKCS10CertificationRequest(csr.getCsr())
                     .getSubject()));
         }
 
@@ -213,15 +218,33 @@ public class CertificateService {
     public ArrayList<CertificateDTO> getCertificates() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
         ArrayList<CertificateDTO> certificates = new ArrayList<>();
+        String alias, commonName, issuer;
+        X509Certificate certificate;
 
         Enumeration<String> enumeration = ks.aliases();
         while (enumeration.hasMoreElements()) {
-            String alias = enumeration.nextElement();
-            X509Certificate certificate = (X509Certificate) ks.getCertificate(alias);
-            certificates.add(new CertificateDTO(certificate, alias, ks.getCertificateChain(alias) != null));
+            alias = enumeration.nextElement();
+            certificate = (X509Certificate) ks.getCertificate(alias);
+            commonName = getCommonName(certificate);
+            issuer = getIssuerCommonName(certificate);
+            certificates.add(new CertificateDTO(alias, commonName, certificate.getNotBefore(), certificate
+                    .getNotAfter(), issuer, ks.getCertificateChain(alias) != null));
         }
 
         return certificates;
+    }
+
+    public CertificateDetailsDTO getCertificate(String serialNumber) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException {
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+        X509Certificate certificate = (X509Certificate) ks.getCertificate(serialNumber);
+        if (certificate == null)
+            throw new NotExistingCertificateException("Certificate with serial number" + serialNumber + " doesn't exist");
+
+        SubjectDTO subjData = new SubjectDTO(new BigInteger(serialNumber), new JcaX509CertificateHolder(certificate)
+                .getSubject());
+
+        return new CertificateDetailsDTO(subjData, certificate.getNotBefore(), certificate
+                .getNotAfter(), getIssuerCommonName(certificate), ks.getCertificateChain(serialNumber) != null);
     }
 
     public String revokeCertificate(String serialNumber) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, NotExistingCertificateException, CertificateAlreadyRevokedException {
@@ -235,7 +258,7 @@ public class CertificateService {
 
         X509Certificate certificate = (X509Certificate) ks.getCertificate(serialNumber);
         if (certificate == null) {
-            throw new NotExistingCertificateException("Certificate with name" + serialNumber + " doesn't exist");
+            throw new NotExistingCertificateException("Certificate with serial number" + serialNumber + " doesn't exist");
         }
 
         saveRevokedCertificate(certificate);
@@ -245,8 +268,7 @@ public class CertificateService {
     private void saveRevokedCertificate(X509Certificate certificate) throws CertificateNotYetValidException, CertificateExpiredException, CertificateEncodingException {
         certificate.checkValidity();
         String id = certificate.getSerialNumber().toString();
-        String commonName = new JcaX509CertificateHolder(certificate).getSubject().getRDNs(BCStyle.CN)[0]
-                .getFirst().getValue().toString();
+        String commonName = getCommonName(certificate);
         RevokedCertificate certificateToBeRevoked = new RevokedCertificate(id, commonName);
         revokedCertificatesRepository.save(certificateToBeRevoked);
     }
@@ -261,5 +283,56 @@ public class CertificateService {
         } while (csr.isPresent());
 
         return serialNumber;
+    }
+
+    public boolean validateCertificate(X509Certificate certificate) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException, CorruptedCertificateException, InvalidKeyException, NoSuchProviderException, SignatureException {
+
+        //load keystore
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+
+        //check if certificate exists in keystore
+        X509Certificate certificateFromKS = (X509Certificate) ks
+                .getCertificate(certificate.getSerialNumber().toString());
+        if (certificateFromKS == null) {
+            throw new NotExistingCertificateException("Certificate doesn't exist");
+        }
+
+        //check if certificate from database is equal with given certificate
+        if (!certificateFromKS.equals(certificate)) {
+            throw new CorruptedCertificateException("Certificate is corrupted");
+        }
+
+        //check certificate revoke status
+        checkCertificateStatus(certificate.getSerialNumber().toString());
+
+        //chain root -> c (dates, revoke status and key validation)
+        X500Name x500name = new JcaX509CertificateHolder(certificate).getSubject();
+        String caSerialNumber = x500name.getRDNs(BCStyle.SERIALNUMBER)[0].getFirst().getValue().toString();
+        Certificate[] certificateChain = ks.getCertificateChain(caSerialNumber);
+        X509Certificate child, parent;
+
+        for (int i = certificateChain.length - 2; i >= 0; --i) {
+            child = (X509Certificate) certificateChain[i];
+            parent = (X509Certificate) certificateChain[i + 1];
+
+            child.checkValidity();
+            child.verify(parent.getPublicKey());
+            checkCertificateStatus(child.getSerialNumber().toString());
+        }
+
+        //checking date and key validation for given certificate(final result)
+        X509Certificate caCertificate = (X509Certificate) ks.getCertificate(caSerialNumber);
+        certificate.verify(caCertificate.getPublicKey());
+        certificate.checkValidity();
+
+        return true;
+    }
+
+    private void checkCertificateStatus(String serialNumber) throws CertificateRevokedException {
+        Optional<RevokedCertificate> r = revokedCertificatesRepository
+                .findById(serialNumber);
+        if (r.isPresent()) {
+            throw new CertificateRevokedException("Certificate is revoked");
+        }
     }
 }

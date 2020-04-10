@@ -5,7 +5,7 @@ import org.bouncycastle.asn1.x500.style.BCStyle;
 
 import java.math.BigInteger;
 
-public class CertAuthorityDTO {
+public class SubjectDTO {
 
     private String serialNumber;
     private String commonName;
@@ -16,11 +16,11 @@ public class CertAuthorityDTO {
     private String country;
     private String email;
 
-    public CertAuthorityDTO() {
+    public SubjectDTO() {
     }
 
-    public CertAuthorityDTO(String serialNumber, String commonName, String organization, String organizationalUnit,
-                            String city, String state, String country, String email) {
+    public SubjectDTO(String serialNumber, String commonName, String organization, String organizationalUnit,
+                      String city, String state, String country, String email) {
         this.serialNumber = serialNumber;
         this.commonName = commonName;
         this.organization = organization;
@@ -31,7 +31,7 @@ public class CertAuthorityDTO {
         this.email = email;
     }
 
-    public CertAuthorityDTO(BigInteger serialNumber, X500Name subject) {
+    public SubjectDTO(BigInteger serialNumber, X500Name subject) {
         this.serialNumber = serialNumber.toString();
         this.commonName = subject.getRDNs(BCStyle.CN)[0].getFirst().getValue().toString();
         this.organization = subject.getRDNs(BCStyle.O)[0].getFirst().getValue().toString();
