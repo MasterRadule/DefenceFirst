@@ -3,11 +3,13 @@ package timejts.PKI.services;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import timejts.PKI.dto.CertificateDTO;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
 import java.io.FileInputStream;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.List;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -20,9 +22,13 @@ public class RevocationTest {
 
     @Test()
     void revoke() {
-        String commonName = "defencefirst";
+        String commonName = "29264597646443857938939233571";
+        String commonName2 = "29264597683337346086358336804";
         try {
             certificateService.revokeCertificate(commonName);
+            certificateService.revokeCertificate(commonName2);
+            List<CertificateDTO> list  = certificateService.getRevokedCertificates();
+            System.out.println("123");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -33,7 +39,7 @@ public class RevocationTest {
     void checkValid() {
 
 
-        String serverCertFile = "src/main/resources/examples/sertifikat.pem";
+        String serverCertFile = "src/test/resources/examples/sertifikat.pem";
         CertificateFactory certFactory;
         FileInputStream inStream;
         try {
