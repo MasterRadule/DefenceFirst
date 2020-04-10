@@ -3,16 +3,9 @@ package timejts.PKI.services;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import timejts.PKI.exceptions.CertificateRevokedException;
-import timejts.PKI.exceptions.CorruptedCertificateException;
-import timejts.PKI.exceptions.NotExistingCertificateException;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.security.*;
-import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
@@ -35,6 +28,7 @@ public class RevocationTest {
         }
     }
 
+
     @Test
     void checkValid() {
 
@@ -54,4 +48,5 @@ public class RevocationTest {
             e.printStackTrace();
         }
     }
+
 }

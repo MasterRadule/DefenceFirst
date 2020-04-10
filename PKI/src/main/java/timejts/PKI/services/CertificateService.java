@@ -293,7 +293,7 @@ public class CertificateService {
         //check if certificate exists in keystore
         X509Certificate certificateFromKS = (X509Certificate) ks
                 .getCertificate(certificate.getSerialNumber().toString());
-        if (certificate == null) {
+        if (certificateFromKS == null) {
             throw new NotExistingCertificateException("Certificate doesn't exist");
         }
 
@@ -308,11 +308,12 @@ public class CertificateService {
         //chain root -> c (dates, revoke status and key validation)
         X500Name x500name = new JcaX509CertificateHolder(certificate).getSubject();
         String caSerialNumber = x500name.getRDNs(BCStyle.SERIALNUMBER)[0].getFirst().getValue().toString();
-        Certificate certificateCahin[] = ks.getCertificateChain(caSerialNumber);
+        Certificate[] certificateChain = ks.getCertificateChain(caSerialNumber);
+        X509Certificate child, parent;
 
-        for (int i = certificateCahin.length - 2; i >= 0; --i) {
-            X509Certificate child = (X509Certificate) certificateCahin[i];
-            X509Certificate parent = (X509Certificate) certificateCahin[i + 1];
+        for (int i = certificateChain.length - 2; i >= 0; --i) {
+            child = (X509Certificate) certificateChain[i];
+            parent = (X509Certificate) certificateChain[i + 1];
 
             child.checkValidity();
             child.verify(parent.getPublicKey());
