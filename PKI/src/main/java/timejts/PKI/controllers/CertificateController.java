@@ -103,4 +103,13 @@ public class CertificateController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/revoked/{serialNumber}")
+    public ResponseEntity<Object> getCertificateStatus(@PathVariable(value = "serialNumber") String serialNumber){
+        try {
+            return new ResponseEntity<>(certificateService.checkCertificateStatus(serialNumber,null), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

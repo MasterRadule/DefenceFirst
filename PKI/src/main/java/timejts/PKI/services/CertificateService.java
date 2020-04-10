@@ -300,7 +300,9 @@ public class CertificateService {
         }
 
         //check certificate revoke status
-        checkCertificateStatus(certificate.getSerialNumber().toString());
+        if (checkCertificateStatus(certificate.getSerialNumber().toString(), ks).equals("Certificate is revoked")) {
+            throw new CertificateRevokedException("Certificate is revoked");
+        }
 
         //chain root -> c (dates, revoke status and key validation)
         X500Name x500name = new JcaX509CertificateHolder(certificate).getSubject();
@@ -314,7 +316,9 @@ public class CertificateService {
 
             child.checkValidity();
             child.verify(parent.getPublicKey());
-            checkCertificateStatus(child.getSerialNumber().toString());
+            if (checkCertificateStatus(child.getSerialNumber().toString(), ks).equals("Certificate is revoked")){
+                throw new CertificateRevokedException("Certificate is revoked");
+            }
         }
 
         //checking date and key validation for given certificate(final result)
@@ -325,12 +329,22 @@ public class CertificateService {
         return true;
     }
 
-    private void checkCertificateStatus(String serialNumber) throws CertificateRevokedException {
+    public String checkCertificateStatus(String serialNumber, KeyStore ks) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        if (ks == null) {
+            ks = loadKeyStore(keystorePath, keystorePassword);
+            X509Certificate cert = (X509Certificate) ks.getCertificate(serialNumber);
+            if (cert == null) {
+                return "Unknown certificate";
+            }
+        }
+
         Optional<RevokedCertificate> r = revokedCertificatesRepository
                 .findById(serialNumber);
         if (r.isPresent()) {
-            throw new CertificateRevokedException("Certificate is revoked");
+            return "Certificate is revoked";
         }
+
+        return "Sertificate is good";
     }
 
     public ArrayList<CertificateDTO> getRevokedCertificates() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
