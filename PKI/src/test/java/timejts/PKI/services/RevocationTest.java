@@ -33,7 +33,7 @@ public class RevocationTest {
     void checkValid() {
 
 
-        String serverCertFile = "src/main/resources/examples/sertifikat.pem";
+        String serverCertFile = "src/test/resources/examples/sertifikat.pem";
         CertificateFactory certFactory;
         FileInputStream inStream;
         try {
