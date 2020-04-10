@@ -73,7 +73,7 @@ public class CertificateController {
     }
 
     @PutMapping("/revoked")
-    public ResponseEntity<Object> revokeCertificate(@RequestParam String serialNumber) {
+    public ResponseEntity<Object> revokeCertificate(@RequestBody String serialNumber) {
         try {
             return new ResponseEntity<>(certificateService.revokeCertificate(serialNumber), HttpStatus.OK);
         } catch (Exception e) {
