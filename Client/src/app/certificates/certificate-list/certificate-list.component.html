@@ -10,32 +10,66 @@
       <td mat-cell *matCellDef="let row">{{row.commonName}}</td>
     </ng-container>
 
-    <ng-container matColumnDef="issuer">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Issuer</th>
-      <td mat-cell *matCellDef="let row">{{row.issuer}}</td>
-    </ng-container>
+    <ng-template [ngIf]="this.mode.toString().toUpperCase() == 'PENDING'" [ngIfElse]="certificate">
+      <ng-container matColumnDef="organization">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Organization</th>
+        <td mat-cell *matCellDef="let row">{{row.organization}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="startDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>From</th>
-      <td mat-cell *matCellDef="let row">{{row.startDate|date : 'dd/MM/yyyy'}}</td>
-    </ng-container>
+      <ng-container matColumnDef="organizationalUnit">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Organizational Unit</th>
+        <td mat-cell *matCellDef="let row">{{row.organizationalUnit}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="endDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>To</th>
-      <td mat-cell *matCellDef="let row">{{row.endDate|date : 'dd/MM/yyyy'}}</td>
-    </ng-container>
+      <ng-container matColumnDef="city">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>City</th>
+        <td mat-cell *matCellDef="let row">{{row.city}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="ca">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Is CA</th>
-      <td mat-cell *matCellDef="let row">{{row.ca}}</td>
-    </ng-container>
+      <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>State</th>
+        <td mat-cell *matCellDef="let row">{{row.state}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef>Action</th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-flat-button color="primary">{{mode|modePipe}}</button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="country">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Country</th>
+        <td mat-cell *matCellDef="let row">{{row.country}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let row">{{row.email}}</td>
+      </ng-container>
+    </ng-template>
+
+    <ng-template #certificate>
+      <ng-container matColumnDef="issuer">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Issuer</th>
+        <td mat-cell *matCellDef="let row">{{row.issuer}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="startDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>From</th>
+        <td mat-cell *matCellDef="let row">{{row.startDate|date : 'dd/MM/yyyy'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="endDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>To</th>
+        <td mat-cell *matCellDef="let row">{{row.endDate|date : 'dd/MM/yyyy'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="ca">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Is CA</th>
+        <td mat-cell *matCellDef="let row">{{row.ca}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-flat-button color="primary">{{mode|modePipe}}</button>
+        </td>
+      </ng-container>
+    </ng-template>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>

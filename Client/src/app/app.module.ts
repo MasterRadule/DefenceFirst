@@ -9,7 +9,7 @@ import {ToolbarModule} from './toolbar/toolbar.module';
 import {DashboardModule} from './dashboard/dashboard.module';
 import {CertificatesModule} from './certificates/certificates.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {UrlInterceptor} from "./interceptors/url-interceptor";
+import {UrlInterceptor} from './interceptors/url-interceptor';
 
 @NgModule({
   declarations: [

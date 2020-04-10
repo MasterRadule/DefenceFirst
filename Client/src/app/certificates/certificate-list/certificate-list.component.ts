@@ -3,8 +3,7 @@ import {Mode} from '../../model/mode.enum';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
-import {PkiApiService} from "../../core/pki-api.service";
-import {Certificate} from "../../model/certificate";
+import {PkiApiService} from '../../core/pki-api.service';
 
 @Component({
   selector: 'app-certificate-list',
@@ -12,7 +11,7 @@ import {Certificate} from "../../model/certificate";
   styleUrls: ['./certificate-list.component.css']
 })
 export class CertificateListComponent implements OnInit {
-  private certificates: MatTableDataSource<Certificate>;
+  private certificates: MatTableDataSource<any>;
   displayedColumns: string[] = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'ca', 'action'];
   @Input() private mode: Mode;
 
@@ -23,14 +22,26 @@ export class CertificateListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pkiApiService.getCertificates().subscribe({
-      next: (certificates: Certificate[]) => {
-        this.certificates = new MatTableDataSource<Certificate>(certificates);
+    const observer = {
+      next: (certificates: []) => {
+        this.certificates = new MatTableDataSource<any>(certificates);
+        this.certificates.paginator = this.paginator;
+        this.certificates.sort = this.sort;
       }
-    });
+    };
 
-    this.certificates.paginator = this.paginator;
-    this.certificates.sort = this.sort;
+    switch (this.mode) {
+      case Mode.ACTIVE:
+        this.displayedColumns = ['serialNumber', 'commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email'];
+        this.pkiApiService.getCertificates().subscribe(observer);
+        break;
+      case Mode.PENDING:
+        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'ca', 'action'];
+        this.pkiApiService.getCertificateSigningRequests().subscribe(observer);
+        break;
+      default:
+        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'ca', 'action'];
+        this.pkiApiService.getRevokedCertificates().subscribe(observer);
+    }
   }
-
 }

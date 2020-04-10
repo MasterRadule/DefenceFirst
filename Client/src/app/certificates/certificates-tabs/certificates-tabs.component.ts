@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Mode} from '../../model/mode.enum';
+import {MatTabChangeEvent} from "@angular/material/tabs";
 
 @Component({
   selector: 'app-certificates-tabs',
