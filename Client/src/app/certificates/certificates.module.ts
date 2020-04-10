@@ -11,13 +11,18 @@ import {FlexLayoutModule, FlexModule} from '@angular/flex-layout';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {CaCreationFormComponent} from './ca-creation-form/ca-creation-form.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatInputModule} from "@angular/material";
+
 
 
 @NgModule({
-  declarations: [CertificateListComponent, ModePipe, CertificatesTabsComponent],
+  declarations: [CertificateListComponent, ModePipe, CertificatesTabsComponent, CaCreationFormComponent],
   exports: [
     CertificatesTabsComponent,
-    CertificateListComponent
+    CertificateListComponent,
+    CaCreationFormComponent
   ],
   imports: [
     CommonModule,
@@ -29,6 +34,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatSortModule,
     MatTableModule,
     MatPaginatorModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
   ]
 })
 export class CertificatesModule {

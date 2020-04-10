@@ -11,7 +11,7 @@ export class CertificatesTabsComponent implements OnInit {
   private pending = Mode.PENDING;
   private active = Mode.ACTIVE;
   private revoked = Mode.REVOKED;
-
+  p
   constructor() {
   }
 
