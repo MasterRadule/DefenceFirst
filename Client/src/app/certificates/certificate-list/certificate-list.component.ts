@@ -4,6 +4,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import {PkiApiService} from '../../core/pki-api.service';
+import {SnackbarService} from '../../core/snackbar.service';
 
 @Component({
   selector: 'app-certificate-list',
@@ -12,13 +13,13 @@ import {PkiApiService} from '../../core/pki-api.service';
 })
 export class CertificateListComponent implements OnInit {
   private certificates: MatTableDataSource<any>;
-  displayedColumns: string[] = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email'];
+  displayedColumns: string[];
   @Input() private mode: Mode;
 
   @ViewChild(MatPaginator, {static: true}) private paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) private sort: MatSort;
 
-  constructor(private pkiApiService: PkiApiService) {
+  constructor(private pkiApiService: PkiApiService, private snackbarService: SnackbarService) {
   }
 
   ngOnInit() {
@@ -45,7 +46,7 @@ export class CertificateListComponent implements OnInit {
     }
   }
 
-  process(row) {
+  private process(row) {
     switch (this.mode) {
       case Mode.ACTIVE:
         this.revoke(row);
@@ -58,19 +59,21 @@ export class CertificateListComponent implements OnInit {
     }
   }
 
-  revoke(row) {
-    this.pkiApiService.revokeCertificate(row.serialNumber).subscribe(data => {
-      console.log(data);
-    }, error => {
-      console.log(error);
+  private revoke(row) {
+    this.pkiApiService.revokeCertificate(row.serialNumber).subscribe({
+      next: (message: string) => {
+        // more actions will be added
+        this.snackbarService.displayMessage(message);
+      },
+      error: (message: string) => this.snackbarService.displayMessage(message)
     });
   }
 
-  create(row) {
+  private create(row) {
     console.log(row.serialNumber);
   }
 
-  view(row) {
+  private view(row) {
     console.log();
   }
 
