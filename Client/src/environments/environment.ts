@@ -4,7 +4,11 @@
 
 export const environment = {
   production: false,
-  baseURL: 'https://localhost:8443/api'
+  baseURL: 'https://localhost:8443/api',
+  initOptionsKeycloak: {
+    url: 'http://localhost:8081/auth', realm: 'defence-first', clientId: 'defence-first-client'
+  },
+  keycloakLogoutURL : `http://localhost:8081/auth/realms/defence-first/protocol/openid-connect/logout?redirect_uri=${document.baseURI}`
 };
 
 /*

@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-toolbar',
@@ -13,4 +14,7 @@ export class ToolbarComponent implements OnInit {
   ngOnInit() {
   }
 
+  logout() {
+    window.location.href = environment.keycloakLogoutURL;
+  }
 }
