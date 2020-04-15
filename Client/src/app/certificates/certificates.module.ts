@@ -12,13 +12,14 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {CaCreationFormComponent} from './ca-creation-form/ca-creation-form.component';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatInputModule} from "@angular/material";
-
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatCheckboxModule, MatInputModule, MatSnackBarModule} from '@angular/material';
+import {CertificateViewComponent} from './certificate-view/certificate-view.component';
+import {ToolbarModule} from '../toolbar/toolbar.module';
 
 
 @NgModule({
-  declarations: [CertificateListComponent, ModePipe, CertificatesTabsComponent, CaCreationFormComponent],
+  declarations: [CertificateListComponent, ModePipe, CertificatesTabsComponent, CaCreationFormComponent, CertificateViewComponent],
   exports: [
     CertificatesTabsComponent,
     CertificateListComponent,
@@ -31,12 +32,16 @@ import {MatInputModule} from "@angular/material";
     MatTabsModule,
     MatButtonModule,
     FlexLayoutModule,
+    FlexModule,
     MatSortModule,
     MatTableModule,
     MatPaginatorModule,
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
+    MatSnackBarModule,
+    ToolbarModule,
+    MatCheckboxModule,
   ]
 })
 export class CertificatesModule {
