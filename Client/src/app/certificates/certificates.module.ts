@@ -16,6 +16,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule, MatInputModule, MatSnackBarModule} from '@angular/material';
 import {CertificateViewComponent} from './certificate-view/certificate-view.component';
 import {ToolbarModule} from '../toolbar/toolbar.module';
+import {RouterModule} from '@angular/router';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import {ToolbarModule} from '../toolbar/toolbar.module';
     MatSnackBarModule,
     ToolbarModule,
     MatCheckboxModule,
+    RouterModule,
   ]
 })
 export class CertificatesModule {

@@ -57,22 +57,17 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>To</th>
         <td mat-cell *matCellDef="let row">{{row.endDate|date : 'dd/MM/yyyy'}}</td>
       </ng-container>
-
-      <ng-container matColumnDef="ca">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>CA</th>
-        <td mat-cell *matCellDef="let row">{{row.ca}}</td>
-      </ng-container>
     </ng-template>
 
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>Action</th>
       <td mat-cell *matCellDef="let row">
-        <button mat-flat-button color="primary" (click)="process(row)">{{mode|modePipe}}</button>
+        <button *ngIf="!row.ca" mat-flat-button color="primary" (click)="process(row)">{{mode|modePipe}}</button>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="redirectToCertView($event, row.serialNumber)"></tr>
   </table>
   <mat-paginator [pageSizeOptions]="[6]" [hidePageSize]="true"></mat-paginator>
 </div>

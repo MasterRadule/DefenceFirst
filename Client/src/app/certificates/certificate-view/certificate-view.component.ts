@@ -10,17 +10,28 @@ import {MatSnackBar} from '@angular/material';
   styleUrls: ['./certificate-view.component.css']
 })
 export class CertificateViewComponent implements OnInit {
-  certificate: CertificateDetails;
+  certificate: CertificateDetails = {
+    subjectData: {
+      serialNumber: '',
+      commonName: '',
+      organization: '',
+      organizationalUnit: '',
+      country: '',
+      city: '',
+      state: '',
+      email: ''
+    }, startDate: null, endDate: null, issuer: '', ca: false
+  };
 
   constructor(private route: ActivatedRoute, private pkiApiService: PkiApiService, private snackBar: MatSnackBar) {
+  }
+
+  ngOnInit() {
     this.route.params.subscribe(params => {
       if (params.serialNumber) {
         this.getCertificate(params.serialNumber);
       }
     });
-  }
-
-  ngOnInit() {
   }
 
   getCertificate(serialNumber: string) {

@@ -52,6 +52,9 @@ public class CertificateService {
     @Value("${server.ssl.key-alias}")
     private String root;
 
+    @Value("${spring.mail.username}")
+    private String rootEmail;
+
     @Autowired
     private EmailService emailService;
 
@@ -206,8 +209,8 @@ public class CertificateService {
         ArrayList<CertificateSigningRequest> csrs = (ArrayList<CertificateSigningRequest>) csrRepository.findAll();
         ArrayList<SubjectDTO> certDTOs = new ArrayList<>();
         for (CertificateSigningRequest csr : csrs) {
-            certDTOs.add(new SubjectDTO(csr.getId(), new JcaPKCS10CertificationRequest(csr.getCsr())
-                    .getSubject()));
+            certDTOs.add(new SubjectDTO(csr.getId().toString(), new JcaPKCS10CertificationRequest(csr.getCsr())
+                    .getSubject(), root, rootEmail));
         }
 
         return certDTOs;
@@ -242,8 +245,8 @@ public class CertificateService {
         if (certificate == null)
             throw new NotExistingCertificateException("Certificate with serial number" + serialNumber + " doesn't exist");
 
-        SubjectDTO subjData = new SubjectDTO(new BigInteger(serialNumber), new JcaX509CertificateHolder(certificate)
-                .getSubject());
+        SubjectDTO subjData = new SubjectDTO(serialNumber, new JcaX509CertificateHolder(certificate)
+                .getSubject(), root, rootEmail);
 
         return new CertificateDetailsDTO(subjData, certificate.getNotBefore(), certificate
                 .getNotAfter(), getIssuerCommonName(certificate), ks.getCertificateChain(serialNumber) != null);

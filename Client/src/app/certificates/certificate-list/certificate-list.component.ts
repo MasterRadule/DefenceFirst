@@ -4,6 +4,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import {PkiApiService} from '../../core/pki-api.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-certificate-list',
@@ -18,7 +19,7 @@ export class CertificateListComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) private paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) private sort: MatSort;
 
-  constructor(private pkiApiService: PkiApiService) {
+  constructor(private pkiApiService: PkiApiService, private router: Router) {
   }
 
   ngOnInit() {
@@ -32,7 +33,7 @@ export class CertificateListComponent implements OnInit {
 
     switch (this.mode) {
       case Mode.ACTIVE:
-        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'ca', 'action'];
+        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'action'];
         this.pkiApiService.getCertificates().subscribe(observer);
         break;
       case Mode.PENDING:
@@ -40,7 +41,7 @@ export class CertificateListComponent implements OnInit {
         this.pkiApiService.getCertificateSigningRequests().subscribe(observer);
         break;
       default:
-        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'ca', 'action'];
+        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'action'];
         this.pkiApiService.getRevokedCertificates().subscribe(observer);
     }
   }
@@ -71,7 +72,13 @@ export class CertificateListComponent implements OnInit {
   }
 
   view(row) {
-    console.log();
+    console.log(row);
+  }
+
+  redirectToCertView($event, serialNumber) {
+    if (!$event.target.classList.contains('mat-button-wrapper')) {
+      this.router.navigate(['/certificate', serialNumber]);
+    }
   }
 
 }
