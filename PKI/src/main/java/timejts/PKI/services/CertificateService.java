@@ -15,10 +15,9 @@ import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
-import timejts.PKI.dto.CertificateDTO;
-import timejts.PKI.dto.CertificateDetailsDTO;
-import timejts.PKI.dto.SubjectDTO;
+import timejts.PKI.dto.*;
 import timejts.PKI.exceptions.CertificateRevokedException;
 import timejts.PKI.exceptions.*;
 import timejts.PKI.model.CertificateSigningRequest;
@@ -64,10 +63,31 @@ public class CertificateService {
     @Autowired
     private CertificateSigningRequestRepository csrRepository;
 
+    public String createNonCACertificate(NonCACertificateCreationDTO creationDTO) throws IOException, CertificateException,
+            NoSuchAlgorithmException, CANotValidException, InvalidKeyException, UnrecoverableEntryException,
+            CSRDoesNotExistException, CACertificateDoesNotExistException, ValidCertificateAlreadyExistsException,
+            OperatorCreationException, KeyStoreException, InvalidCertificateDateException {
 
-    public Object createNonCACertificate(String serialNumber, String caSerialNumber) throws KeyStoreException, IOException,
+        Pair<CreationDataDTO, Boolean> data = processData(creationDTO.getCreationData());
+
+        return createNonCACertificate(creationDTO.getSerialNumber(), creationDTO
+                .getCaSerialNumber(), data.getFirst(), data.getSecond());
+    }
+
+    public String createCACertificate(CACertificateCreationDTO creationDTO) throws IOException, CertificateException,
+            NoSuchAlgorithmException, UnrecoverableEntryException, OperatorCreationException, KeyStoreException,
+            InvalidCertificateDateException {
+
+        Pair<CreationDataDTO, Boolean> data = processData(creationDTO.getCreationData());
+
+        return createCACertificate(creationDTO.getCertAuthData(), data.getFirst(), data.getSecond());
+    }
+
+    private String createNonCACertificate(String serialNumber, String caSerialNumber, CreationDataDTO creationData,
+                                          boolean defaultExtensions) throws KeyStoreException, IOException,
             CertificateException, CANotValidException, UnrecoverableEntryException, NoSuchAlgorithmException,
-            OperatorCreationException, ValidCertificateAlreadyExistsException, CSRDoesNotExistException, InvalidKeyException, CACertificateDoesNotExistException {
+            OperatorCreationException, ValidCertificateAlreadyExistsException, CSRDoesNotExistException,
+            InvalidKeyException, CACertificateDoesNotExistException, InvalidCertificateDateException {
 
         // Load keystore
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
@@ -79,7 +99,7 @@ public class CertificateService {
         }
 
         // Get CA certificate and private key and check validity of CA certificate
-        JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
+        JcaContentSignerBuilder builder = new JcaContentSignerBuilder(creationData.getSigAlgorithm());
         BouncyCastleProvider bcp = new BouncyCastleProvider();
         builder = builder.setProvider(bcp);
         certificate = (X509Certificate) ks.getCertificate(caSerialNumber);
@@ -102,18 +122,33 @@ public class CertificateService {
         JcaPKCS10CertificationRequest csrData = new JcaPKCS10CertificationRequest(csr.getCsr());
 
         // Generate serial number and set start/end date
-        Date startDate = new Date();
-        LocalDateTime endLocalDate = certificate.getNotAfter().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDateTime().minusMonths(3);
-        Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
+        Date endDate;
+        if (creationData.getEndDate() == null) {
+            LocalDateTime endLocalDate = certificate.getNotAfter().toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDateTime().minusMonths(3);
+            endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
+        } else {
+            endDate = creationData.getEndDate();
+            checkCertificateDates(creationData.getStartDate(), endDate, certificate.getNotAfter());
+        }
 
         // Create Subject X500Name
         X500Name subject = createSubjectX500Name(csrData.getSubject(), certificate.getSerialNumber().toString());
+        String email = csrData.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
+        String issuerEmail = issuerName.getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
 
         // Set certificate extensions and generate certificate
-        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, new BigInteger(serialNumber), startDate,
-                endDate, subject, csrData.getPublicKey());
-        X509CertificateHolder certHolder = addExtensionsAndBuildCertificate(certGen, certificate, contentSigner, false);
+        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, new BigInteger(serialNumber),
+                creationData.getStartDate(), endDate, subject, csrData.getPublicKey());
+        addBasicExtensions(certGen, false);
+        if (!defaultExtensions) {
+            if (creationData.isAltNames()) {
+                addAlternativeNamesExtensions(certGen, email, issuerEmail);
+            } else {
+                addKeyIdentifierExtensions(certGen, csrData.getPublicKey(), certificate.getPublicKey());
+            }
+        }
+        X509CertificateHolder certHolder = certGen.build(contentSigner);
 
         // Convert to X509 certificate
         X509Certificate newCertificate = convertToX509Certificate(certHolder);
@@ -126,8 +161,6 @@ public class CertificateService {
         File certificateFile = x509CertificateToPem(newCertificate, serialNumber);
 
         // Send certificate on email address
-        String email = csrData.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
-
         try {
             emailService.sendEmailWithCertificate(email, certificateFile);
         } catch (MessagingException ignored) {
@@ -135,11 +168,13 @@ public class CertificateService {
 
         csrRepository.delete(csr);
 
-        return "Please check your email. Certificate is sent to your email address.";
+        return "Certificate for " + getCommonName(newCertificate) + " successfully created";
     }
 
-    public String createCACertificate(SubjectDTO certAuth) throws KeyStoreException, IOException,
-            UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException {
+    private String createCACertificate(SubjectDTO certAuth, CreationDataDTO creationData, boolean defaultExtensions)
+            throws KeyStoreException, IOException,
+            UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException,
+            InvalidCertificateDateException {
 
         // Get data about CA
         X500Name subjectCA = generateX500Name(certAuth);
@@ -148,7 +183,7 @@ public class CertificateService {
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
 
         // Get root certificate and private key
-        JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
+        JcaContentSignerBuilder builder = new JcaContentSignerBuilder(creationData.getSigAlgorithm());
         BouncyCastleProvider bcp = new BouncyCastleProvider();
         builder = builder.setProvider(bcp);
         X509Certificate cert = (X509Certificate) ks.getCertificate(root);
@@ -165,16 +200,28 @@ public class CertificateService {
 
         // Generate serial number and set start/end date
         BigInteger serialNumber = getSerialNumber();
-        Date dt = new Date();
-        LocalDateTime endLocalDate = dt.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
-                .plusYears(2).plusMonths(6);
-        Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
+        Date endDate;
+        if (creationData.getEndDate() == null) {
+            LocalDateTime endLocalDate = creationData.getStartDate().toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDateTime().plusYears(2).plusMonths(6);
+            endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
+        } else {
+            endDate = creationData.getEndDate();
+            checkCertificateDates(creationData.getStartDate(), endDate, cert.getNotAfter());
+        }
 
         // Set certificate extensions and generate certificate
-        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, dt, endDate,
-                subjectCA, kp.getPublic());
-        X509CertificateHolder certHolder = addExtensionsAndBuildCertificate(certGen, cert,
-                contentSigner, true);
+        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, creationData
+                .getStartDate(), endDate, subjectCA, kp.getPublic());
+        addBasicExtensions(certGen, true);
+        if (!defaultExtensions) {
+            if (creationData.isAltNames()) {
+                addAlternativeNamesExtensions(certGen, certAuth.getEmail(), rootEmail);
+            } else {
+                addKeyIdentifierExtensions(certGen, kp.getPublic(), cert.getPublicKey());
+            }
+        }
+        X509CertificateHolder certHolder = certGen.build(contentSigner);
 
         // Convert to X509 certificate
         X509Certificate newCertificate = convertToX509Certificate(certHolder);
@@ -202,7 +249,8 @@ public class CertificateService {
         CertificateSigningRequest csrObj = new CertificateSigningRequest(null, csr.getEncoded());
         csrRepository.save(csrObj);
 
-        return "Certificate signing request successfully submitted";
+        return "Certificate signing request successfully submitted. " +
+                "Your certificate will be sent to email address at the earliest.";
     }
 
     public ArrayList<SubjectDTO> getCertificateSigningRequests() throws IOException {
@@ -362,7 +410,7 @@ public class CertificateService {
         ArrayList<CertificateDTO> certificateDTOS = new ArrayList<>();
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
         X509Certificate certificate;
-        String alias, commonName, issuer;
+        String commonName, issuer;
 
         for (RevokedCertificate r : revokedCertificates) {
             certificate = (X509Certificate) ks.getCertificate(r.getId());

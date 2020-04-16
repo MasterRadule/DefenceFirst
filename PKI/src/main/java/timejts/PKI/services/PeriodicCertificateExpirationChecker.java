@@ -7,13 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import timejts.PKI.dto.CACertificateCreationDTO;
+import timejts.PKI.exceptions.InvalidCertificateDateException;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
+import java.security.*;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -64,12 +63,15 @@ public class PeriodicCertificateExpirationChecker {
     }
 
     private void checkCACertificate(X509Certificate certificate, Calendar now, Calendar other) throws CertificateException,
-            OperatorCreationException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, IOException {
+            OperatorCreationException, UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException,
+            IOException, InvalidCertificateDateException {
+
         other.setTime(certificate.getNotAfter());
 
         if (other.after(now) && other.get(Calendar.MONTH) - now.get(Calendar.MONTH) < 3) {
             // create new certificate with 2 years and 3 months expiration date
-            certificateService.createCACertificate(extractDataFromCertificate(certificate));
+            CACertificateCreationDTO caDTO = new CACertificateCreationDTO(extractDataFromCertificate(certificate), null);
+            certificateService.createCACertificate(caDTO);
         }
     }
 
