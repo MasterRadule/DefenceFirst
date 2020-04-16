@@ -11,11 +11,8 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaContentVerifierProviderBuilder;
-import org.bouncycastle.pkcs.PKCS10CertificationRequest;
-import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
-import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,9 +26,7 @@ import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
-import javax.security.auth.x500.X500Principal;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -41,6 +36,7 @@ import java.security.cert.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static timejts.PKI.utils.Utilities.*;
 
@@ -55,6 +51,9 @@ public class CertificateService {
 
     @Value("${server.ssl.key-alias}")
     private String root;
+
+    @Value("${spring.mail.username}")
+    private String rootEmail;
 
     @Autowired
     private EmailService emailService;
@@ -210,8 +209,8 @@ public class CertificateService {
         ArrayList<CertificateSigningRequest> csrs = (ArrayList<CertificateSigningRequest>) csrRepository.findAll();
         ArrayList<SubjectDTO> certDTOs = new ArrayList<>();
         for (CertificateSigningRequest csr : csrs) {
-            certDTOs.add(new SubjectDTO(csr.getId(), new JcaPKCS10CertificationRequest(csr.getCsr())
-                    .getSubject()));
+            certDTOs.add(new SubjectDTO(csr.getId().toString(), new JcaPKCS10CertificationRequest(csr.getCsr())
+                    .getSubject(), root, rootEmail));
         }
 
         return certDTOs;
@@ -219,6 +218,8 @@ public class CertificateService {
 
     public ArrayList<CertificateDTO> getCertificates() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+        List<String> revokedSerNums = revokedCertificatesRepository.findAll().stream().map(RevokedCertificate::getId)
+                .collect(Collectors.toList());
         ArrayList<CertificateDTO> certificates = new ArrayList<>();
         String alias, commonName, issuer;
         X509Certificate certificate;
@@ -226,11 +227,13 @@ public class CertificateService {
         Enumeration<String> enumeration = ks.aliases();
         while (enumeration.hasMoreElements()) {
             alias = enumeration.nextElement();
-            certificate = (X509Certificate) ks.getCertificate(alias);
-            commonName = getCommonName(certificate);
-            issuer = getIssuerCommonName(certificate);
-            certificates.add(new CertificateDTO(alias, commonName, certificate.getNotBefore(), certificate
-                    .getNotAfter(), issuer, ks.getCertificateChain(alias) != null));
+            if (!revokedSerNums.contains(alias)) {
+                certificate = (X509Certificate) ks.getCertificate(alias);
+                commonName = getCommonName(certificate);
+                issuer = getIssuerCommonName(certificate);
+                certificates.add(new CertificateDTO(alias, commonName, certificate.getNotBefore(), certificate
+                        .getNotAfter(), issuer, ks.getCertificateChain(alias) != null));
+            }
         }
 
         return certificates;
@@ -242,8 +245,8 @@ public class CertificateService {
         if (certificate == null)
             throw new NotExistingCertificateException("Certificate with serial number" + serialNumber + " doesn't exist");
 
-        SubjectDTO subjData = new SubjectDTO(new BigInteger(serialNumber), new JcaX509CertificateHolder(certificate)
-                .getSubject());
+        SubjectDTO subjData = new SubjectDTO(serialNumber, new JcaX509CertificateHolder(certificate)
+                .getSubject(), root, rootEmail);
 
         return new CertificateDetailsDTO(subjData, certificate.getNotBefore(), certificate
                 .getNotAfter(), getIssuerCommonName(certificate), ks.getCertificateChain(serialNumber) != null);
@@ -323,7 +326,7 @@ public class CertificateService {
 
             child.checkValidity();
             child.verify(parent.getPublicKey());
-            if (checkCertificateStatus(child.getSerialNumber().toString(), ks).equals("Certificate is revoked")){
+            if (checkCertificateStatus(child.getSerialNumber().toString(), ks).equals("Certificate is revoked")) {
                 throw new CertificateRevokedException("Certificate is revoked");
             }
         }
