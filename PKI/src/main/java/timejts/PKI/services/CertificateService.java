@@ -11,17 +11,12 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaContentVerifierProviderBuilder;
-import org.bouncycastle.pkcs.PKCS10CertificationRequest;
-import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
-import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import timejts.PKI.dto.CertificateDTO;
-import timejts.PKI.dto.CertificateDetailsDTO;
-import timejts.PKI.dto.SubjectDTO;
+import timejts.PKI.dto.*;
 import timejts.PKI.exceptions.CertificateRevokedException;
 import timejts.PKI.exceptions.*;
 import timejts.PKI.model.CertificateSigningRequest;
@@ -29,9 +24,7 @@ import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
-import javax.security.auth.x500.X500Principal;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -56,6 +49,9 @@ public class CertificateService {
     @Value("${server.ssl.key-alias}")
     private String root;
 
+    @Value("${spring.mail.username}")
+    private String rootEmail;
+
     @Autowired
     private EmailService emailService;
 
@@ -65,8 +61,40 @@ public class CertificateService {
     @Autowired
     private CertificateSigningRequestRepository csrRepository;
 
+    public Object createNonCACertificate(NonCACertificateCreationDTO creationDTO) throws IOException, CertificateException, NoSuchAlgorithmException, CANotValidException, InvalidKeyException, UnrecoverableEntryException, CSRDoesNotExistException, CACertificateDoesNotExistException, ValidCertificateAlreadyExistsException, OperatorCreationException, KeyStoreException {
+        CreationDataDTO creationData;
+        boolean defaultExtensions;
+        if (creationDTO.getCreationData() == null) {
+            creationData = new CreationDataDTO("SHA256WithRSAEncryption",
+                    new Date(), null, false);
+            defaultExtensions = true;
+        } else {
+            creationData = creationDTO.getCreationData();
+            defaultExtensions = false;
+        }
 
-    public Object createNonCACertificate(String serialNumber, String caSerialNumber) throws KeyStoreException, IOException,
+        return createNonCACertificate(creationDTO.getSerialNumber(), creationDTO
+                .getCaSerialNumber(), creationData, defaultExtensions);
+    }
+
+    public Object createCACertificate(CACertificateCreationDTO creationDTO) throws IOException, CertificateException,
+            NoSuchAlgorithmException, UnrecoverableEntryException, OperatorCreationException, KeyStoreException {
+        CreationDataDTO creationData;
+        boolean defaultExtensions;
+        if (creationDTO.getCreationData() == null) {
+            creationData = new CreationDataDTO("SHA256WithRSAEncryption",
+                    new Date(), null, false);
+            defaultExtensions = true;
+        } else {
+            creationData = creationDTO.getCreationData();
+            defaultExtensions = false;
+        }
+
+        return createCACertificate(creationDTO.getCertAuthData(), creationData, defaultExtensions);
+    }
+
+    private Object createNonCACertificate(String serialNumber, String caSerialNumber, CreationDataDTO creationData,
+                                          boolean defaultExtensions) throws KeyStoreException, IOException,
             CertificateException, CANotValidException, UnrecoverableEntryException, NoSuchAlgorithmException,
             OperatorCreationException, ValidCertificateAlreadyExistsException, CSRDoesNotExistException, InvalidKeyException, CACertificateDoesNotExistException {
 
@@ -80,7 +108,7 @@ public class CertificateService {
         }
 
         // Get CA certificate and private key and check validity of CA certificate
-        JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
+        JcaContentSignerBuilder builder = new JcaContentSignerBuilder(creationData.getSigAlgorithm());
         BouncyCastleProvider bcp = new BouncyCastleProvider();
         builder = builder.setProvider(bcp);
         certificate = (X509Certificate) ks.getCertificate(caSerialNumber);
@@ -103,18 +131,34 @@ public class CertificateService {
         JcaPKCS10CertificationRequest csrData = new JcaPKCS10CertificationRequest(csr.getCsr());
 
         // Generate serial number and set start/end date
-        Date startDate = new Date();
-        LocalDateTime endLocalDate = certificate.getNotAfter().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDateTime().minusMonths(3);
-        Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
+        Date endDate;
+        if (creationData.getEndDate() == null) {
+            LocalDateTime endLocalDate = certificate.getNotAfter().toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDateTime().minusMonths(3);
+            endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
+        } else {
+            endDate = creationData.getEndDate();
+        }
 
         // Create Subject X500Name
         X500Name subject = createSubjectX500Name(csrData.getSubject(), certificate.getSerialNumber().toString());
 
+        String email = csrData.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
+        String issuerEmail = issuerName.getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
+
         // Set certificate extensions and generate certificate
-        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, new BigInteger(serialNumber), startDate,
-                endDate, subject, csrData.getPublicKey());
-        X509CertificateHolder certHolder = addExtensionsAndBuildCertificate(certGen, certificate, contentSigner, false);
+        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, new BigInteger(serialNumber),
+                creationData.getStartDate(), endDate, subject, csrData.getPublicKey());
+        addBasicExtensions(certGen, false);
+        if (!defaultExtensions) {
+            if (creationData.isAltNames()) {
+                addAlternativeNamesExtensions(certGen, email, issuerEmail);
+            } else {
+                addKeyIdentifierExtensions(certGen, csrData.getPublicKey(), certificate.getPublicKey());
+            }
+        }
+
+        X509CertificateHolder certHolder = certGen.build(contentSigner);
 
         // Convert to X509 certificate
         X509Certificate newCertificate = convertToX509Certificate(certHolder);
@@ -127,8 +171,6 @@ public class CertificateService {
         File certificateFile = x509CertificateToPem(newCertificate, serialNumber);
 
         // Send certificate on email address
-        String email = csrData.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
-
         try {
             emailService.sendEmailWithCertificate(email, certificateFile);
         } catch (MessagingException ignored) {
@@ -139,7 +181,7 @@ public class CertificateService {
         return "Please check your email. Certificate is sent to your email address.";
     }
 
-    public String createCACertificate(SubjectDTO certAuth) throws KeyStoreException, IOException,
+    private String createCACertificate(SubjectDTO certAuth, CreationDataDTO creationData, boolean defaultExtensions) throws KeyStoreException, IOException,
             UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException {
 
         // Get data about CA
@@ -149,7 +191,7 @@ public class CertificateService {
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
 
         // Get root certificate and private key
-        JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
+        JcaContentSignerBuilder builder = new JcaContentSignerBuilder(creationData.getSigAlgorithm());
         BouncyCastleProvider bcp = new BouncyCastleProvider();
         builder = builder.setProvider(bcp);
         X509Certificate cert = (X509Certificate) ks.getCertificate(root);
@@ -166,16 +208,28 @@ public class CertificateService {
 
         // Generate serial number and set start/end date
         BigInteger serialNumber = getSerialNumber();
-        Date dt = new Date();
-        LocalDateTime endLocalDate = dt.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
-                .plusYears(2).plusMonths(6);
-        Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
+        Date endDate;
+        if (creationData.getEndDate() == null) {
+            LocalDateTime endLocalDate = creationData.getStartDate().toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDateTime().plusYears(2).plusMonths(6);
+            endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
+        } else {
+            endDate = creationData.getEndDate();
+        }
 
         // Set certificate extensions and generate certificate
-        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, dt, endDate,
-                subjectCA, kp.getPublic());
-        X509CertificateHolder certHolder = addExtensionsAndBuildCertificate(certGen, cert,
-                contentSigner, true);
+        X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(issuerName, serialNumber, creationData
+                .getStartDate(), endDate, subjectCA, kp.getPublic());
+        addBasicExtensions(certGen, true);
+        if (!defaultExtensions) {
+            if (creationData.isAltNames()) {
+                addAlternativeNamesExtensions(certGen, certAuth.getEmail(), rootEmail);
+            } else {
+                addKeyIdentifierExtensions(certGen, kp.getPublic(), cert.getPublicKey());
+            }
+        }
+
+        X509CertificateHolder certHolder = certGen.build(contentSigner);
 
         // Convert to X509 certificate
         X509Certificate newCertificate = convertToX509Certificate(certHolder);
@@ -323,7 +377,7 @@ public class CertificateService {
 
             child.checkValidity();
             child.verify(parent.getPublicKey());
-            if (checkCertificateStatus(child.getSerialNumber().toString(), ks).equals("Certificate is revoked")){
+            if (checkCertificateStatus(child.getSerialNumber().toString(), ks).equals("Certificate is revoked")) {
                 throw new CertificateRevokedException("Certificate is revoked");
             }
         }
@@ -359,7 +413,7 @@ public class CertificateService {
         ArrayList<CertificateDTO> certificateDTOS = new ArrayList<>();
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
         X509Certificate certificate;
-        String alias, commonName, issuer;
+        String commonName, issuer;
 
         for (RevokedCertificate r : revokedCertificates) {
             certificate = (X509Certificate) ks.getCertificate(r.getId());
