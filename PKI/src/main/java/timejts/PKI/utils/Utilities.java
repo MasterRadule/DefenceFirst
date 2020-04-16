@@ -15,9 +15,11 @@ import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.jce.X509KeyUsage;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
+import timejts.PKI.dto.CreationDataDTO;
 import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.exceptions.CANotValidException;
+import timejts.PKI.exceptions.InvalidCertificateDateException;
 
 import java.io.*;
 import java.security.KeyStore;
@@ -40,8 +42,17 @@ import static org.bouncycastle.asn1.x509.X509Extensions.SubjectAlternativeName;
 
 public class Utilities {
 
-    @Value("${serial-numbers-file}")
-    private static String serialNumbersFile;
+    public static Pair<CreationDataDTO, Boolean> processData(CreationDataDTO creationDTO) throws InvalidCertificateDateException {
+        if (creationDTO == null) {
+            CreationDataDTO creationData = new CreationDataDTO("SHA256WithRSAEncryption",
+                    new Date(), null, false);
+            return Pair.of(creationData, true);
+        } else {
+            if (creationDTO.getStartDate().compareTo(creationDTO.getEndDate()) >= 0)
+                throw new InvalidCertificateDateException("Certificate start date must be after than expiration date");
+            return Pair.of(creationDTO, true);
+        }
+    }
 
     public static X500Name generateX500Name(SubjectDTO certAuth) {
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
@@ -62,6 +73,22 @@ public class Utilities {
         long monthsBetween = ChronoUnit.MONTHS.between(todayDate, endDate);
         if (monthsBetween <= 3)
             throw new CANotValidException("CA certificate will have been invalid in less than 3 months");
+    }
+
+    public static void checkCertificateDates(Date startDate, Date endDate, Date caEndDate) throws InvalidCertificateDateException {
+        if (startDate.compareTo(new Date()) < 0)
+            throw new InvalidCertificateDateException("Certificate start date must be after than or equal to today's date");
+        else if (endDate.compareTo(caEndDate) >= 0) {
+            throw new InvalidCertificateDateException("Certificate expiration date must be before than CA expiration date");
+        }
+        LocalDate endLocalDate = Instant.ofEpochMilli(endDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate caEndLocalDate = Instant.ofEpochMilli(caEndDate.getTime()).atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        long monthsBetween = ChronoUnit.MONTHS.between(endLocalDate, caEndLocalDate);
+        if (monthsBetween <= 3)
+            throw new InvalidCertificateDateException("Difference between certificate and " +
+                    "CA expiration date is less than 3 months");
+
     }
 
     public static File x509CertificateToPem(X509Certificate cert, String commonName) throws IOException {

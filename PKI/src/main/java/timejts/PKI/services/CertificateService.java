@@ -15,6 +15,7 @@ import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import timejts.PKI.dto.*;
 import timejts.PKI.exceptions.CertificateRevokedException;
@@ -61,42 +62,31 @@ public class CertificateService {
     @Autowired
     private CertificateSigningRequestRepository csrRepository;
 
-    public Object createNonCACertificate(NonCACertificateCreationDTO creationDTO) throws IOException, CertificateException, NoSuchAlgorithmException, CANotValidException, InvalidKeyException, UnrecoverableEntryException, CSRDoesNotExistException, CACertificateDoesNotExistException, ValidCertificateAlreadyExistsException, OperatorCreationException, KeyStoreException {
-        CreationDataDTO creationData;
-        boolean defaultExtensions;
-        if (creationDTO.getCreationData() == null) {
-            creationData = new CreationDataDTO("SHA256WithRSAEncryption",
-                    new Date(), null, false);
-            defaultExtensions = true;
-        } else {
-            creationData = creationDTO.getCreationData();
-            defaultExtensions = false;
-        }
+    public String createNonCACertificate(NonCACertificateCreationDTO creationDTO) throws IOException, CertificateException,
+            NoSuchAlgorithmException, CANotValidException, InvalidKeyException, UnrecoverableEntryException,
+            CSRDoesNotExistException, CACertificateDoesNotExistException, ValidCertificateAlreadyExistsException,
+            OperatorCreationException, KeyStoreException, InvalidCertificateDateException {
+
+        Pair<CreationDataDTO, Boolean> data = processData(creationDTO.getCreationData());
 
         return createNonCACertificate(creationDTO.getSerialNumber(), creationDTO
-                .getCaSerialNumber(), creationData, defaultExtensions);
+                .getCaSerialNumber(), data.getFirst(), data.getSecond());
     }
 
-    public Object createCACertificate(CACertificateCreationDTO creationDTO) throws IOException, CertificateException,
-            NoSuchAlgorithmException, UnrecoverableEntryException, OperatorCreationException, KeyStoreException {
-        CreationDataDTO creationData;
-        boolean defaultExtensions;
-        if (creationDTO.getCreationData() == null) {
-            creationData = new CreationDataDTO("SHA256WithRSAEncryption",
-                    new Date(), null, false);
-            defaultExtensions = true;
-        } else {
-            creationData = creationDTO.getCreationData();
-            defaultExtensions = false;
-        }
+    public String createCACertificate(CACertificateCreationDTO creationDTO) throws IOException, CertificateException,
+            NoSuchAlgorithmException, UnrecoverableEntryException, OperatorCreationException, KeyStoreException,
+            InvalidCertificateDateException {
 
-        return createCACertificate(creationDTO.getCertAuthData(), creationData, defaultExtensions);
+        Pair<CreationDataDTO, Boolean> data = processData(creationDTO.getCreationData());
+
+        return createCACertificate(creationDTO.getCertAuthData(), data.getFirst(), data.getSecond());
     }
 
-    private Object createNonCACertificate(String serialNumber, String caSerialNumber, CreationDataDTO creationData,
+    private String createNonCACertificate(String serialNumber, String caSerialNumber, CreationDataDTO creationData,
                                           boolean defaultExtensions) throws KeyStoreException, IOException,
             CertificateException, CANotValidException, UnrecoverableEntryException, NoSuchAlgorithmException,
-            OperatorCreationException, ValidCertificateAlreadyExistsException, CSRDoesNotExistException, InvalidKeyException, CACertificateDoesNotExistException {
+            OperatorCreationException, ValidCertificateAlreadyExistsException, CSRDoesNotExistException,
+            InvalidKeyException, CACertificateDoesNotExistException, InvalidCertificateDateException {
 
         // Load keystore
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
@@ -138,11 +128,11 @@ public class CertificateService {
             endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
         } else {
             endDate = creationData.getEndDate();
+            checkCertificateDates(creationData.getStartDate(), endDate, certificate.getNotAfter());
         }
 
         // Create Subject X500Name
         X500Name subject = createSubjectX500Name(csrData.getSubject(), certificate.getSerialNumber().toString());
-
         String email = csrData.getSubject().getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
         String issuerEmail = issuerName.getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
 
@@ -157,7 +147,6 @@ public class CertificateService {
                 addKeyIdentifierExtensions(certGen, csrData.getPublicKey(), certificate.getPublicKey());
             }
         }
-
         X509CertificateHolder certHolder = certGen.build(contentSigner);
 
         // Convert to X509 certificate
@@ -178,11 +167,13 @@ public class CertificateService {
 
         csrRepository.delete(csr);
 
-        return "Please check your email. Certificate is sent to your email address.";
+        return "Certificate for " + getCommonName(newCertificate) + " successfully created";
     }
 
-    private String createCACertificate(SubjectDTO certAuth, CreationDataDTO creationData, boolean defaultExtensions) throws KeyStoreException, IOException,
-            UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException {
+    private String createCACertificate(SubjectDTO certAuth, CreationDataDTO creationData, boolean defaultExtensions)
+            throws KeyStoreException, IOException,
+            UnrecoverableKeyException, NoSuchAlgorithmException, OperatorCreationException, CertificateException,
+            InvalidCertificateDateException {
 
         // Get data about CA
         X500Name subjectCA = generateX500Name(certAuth);
@@ -215,6 +206,7 @@ public class CertificateService {
             endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
         } else {
             endDate = creationData.getEndDate();
+            checkCertificateDates(creationData.getStartDate(), endDate, cert.getNotAfter());
         }
 
         // Set certificate extensions and generate certificate
@@ -228,7 +220,6 @@ public class CertificateService {
                 addKeyIdentifierExtensions(certGen, kp.getPublic(), cert.getPublicKey());
             }
         }
-
         X509CertificateHolder certHolder = certGen.build(contentSigner);
 
         // Convert to X509 certificate
@@ -257,7 +248,8 @@ public class CertificateService {
         CertificateSigningRequest csrObj = new CertificateSigningRequest(null, csr.getEncoded());
         csrRepository.save(csrObj);
 
-        return "Certificate signing request successfully submitted";
+        return "Certificate signing request successfully submitted. " +
+                "Your certificate will be sent to email address at the earliest.";
     }
 
     public ArrayList<SubjectDTO> getCertificateSigningRequests() throws IOException {

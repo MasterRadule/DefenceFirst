@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import timejts.PKI.dto.CACertificateCreationDTO;
 import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.exceptions.*;
 import timejts.PKI.utils.Utilities;
@@ -43,11 +44,16 @@ public class CertificateServiceTests {
     private CertificateService certificateService;
 
     @Test
-    void generateCertificate() throws OperatorCreationException, UnrecoverableEntryException, NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException, DigitalSignatureInvalidException, InvalidKeyException, PKCSException, CSRDoesNotExistException, CANotValidException, CACertificateDoesNotExistException, ValidCertificateAlreadyExistsException {
+    void generateCertificate() throws OperatorCreationException, UnrecoverableEntryException, NoSuchAlgorithmException,
+            KeyStoreException, CertificateException, IOException, DigitalSignatureInvalidException, InvalidKeyException,
+            PKCSException, CSRDoesNotExistException, CANotValidException, CACertificateDoesNotExistException,
+            ValidCertificateAlreadyExistsException, InvalidCertificateDateException {
+
         SubjectDTO caDTO1 = new SubjectDTO(null, "Asia Chamber",
                 "Asia DefenceFirst", "Beijing corp.",
                 "Beijing", "Beijing", "CN", "master.daca09@gmail.com");
-        String ca1 = certificateService.createCACertificate(caDTO1);
+        CACertificateCreationDTO caCreationDTO = new CACertificateCreationDTO(caDTO1, null);
+        String ca1 = certificateService.createCACertificate(caCreationDTO);
 
         KeyPairGenerator keyGen1 = null;
         try {
