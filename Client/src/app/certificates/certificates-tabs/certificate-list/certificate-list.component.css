@@ -1,6 +1,6 @@
 #certificates-table {
   margin-top: 2%;
-  width: 90%;
+  width: 70%;
   margin-right: auto;
   margin-left: auto;
 }
@@ -9,15 +9,7 @@
   width: 100%;
 }
 
-#certificates-table td {
-}
-
-#certificates-table th {
-  text-align: center;
-}
-
 .mat-row:hover {
-  background-color: #0074D9;
+  background: whitesmoke;
   cursor: pointer;
-  color: white;
 }

@@ -1,10 +1,10 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {Mode} from '../../model/mode.enum';
+import {Mode} from '../../../model/mode.enum';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
-import {PkiApiService} from '../../core/pki-api.service';
-import {SnackbarService} from '../../core/snackbar.service';
+import {PkiApiService} from '../../../core/pki-api.service';
+import {SnackbarService} from '../../../core/snackbar.service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -15,6 +15,13 @@ import {Router} from '@angular/router';
 export class CertificateListComponent implements OnInit {
   private certificates: MatTableDataSource<any>;
   displayedColumns: string[];
+  private observer = {
+    next: (certificates: []) => {
+      this.certificates = new MatTableDataSource<any>(certificates);
+      this.certificates.paginator = this.paginator;
+      this.certificates.sort = this.sort;
+    }
+  };
   @Input() private mode: Mode;
 
   @ViewChild(MatPaginator, {static: true}) private paginator: MatPaginator;
@@ -24,33 +31,30 @@ export class CertificateListComponent implements OnInit {
   }
 
   ngOnInit() {
-    const observer = {
-      next: (certificates: []) => {
-        this.certificates = new MatTableDataSource<any>(certificates);
-        this.certificates.paginator = this.paginator;
-        this.certificates.sort = this.sort;
-      }
-    };
-
     switch (this.mode) {
       case Mode.ACTIVE:
-        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'action'];
-        this.pkiApiService.getCertificates().subscribe(observer);
+        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate'];
+        this.getData();
         break;
       case Mode.PENDING:
-        this.displayedColumns = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email', 'action'];
-        this.pkiApiService.getCertificateSigningRequests().subscribe(observer);
+        this.displayedColumns = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email'];
+        this.getData();
         break;
       default:
-        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'action'];
-        this.pkiApiService.getRevokedCertificates().subscribe(observer);
+        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate'];
+        this.getData();
     }
+  }
+
+  private getData() {
+    this.pkiApiService.getCertificates().subscribe(this.observer);
   }
 
   private process(row) {
     switch (this.mode) {
       case Mode.ACTIVE:
         this.revoke(row);
+        this.getData();
         break;
       case Mode.PENDING:
         this.create(row);
@@ -63,7 +67,6 @@ export class CertificateListComponent implements OnInit {
   private revoke(row) {
     this.pkiApiService.revokeCertificate(row.serialNumber).subscribe({
       next: (message: string) => {
-        // more actions will be added
         this.snackbarService.displayMessage(message);
       },
       error: (message: string) => this.snackbarService.displayMessage(message)
@@ -76,10 +79,6 @@ export class CertificateListComponent implements OnInit {
 
   private view(row) {
     console.log();
-
-  redirectToCertView($event, serialNumber) {
-    if (!$event.target.classList.contains('mat-button-wrapper')) {
-      this.router.navigate(['/certificate', serialNumber]);
   }
 
 }

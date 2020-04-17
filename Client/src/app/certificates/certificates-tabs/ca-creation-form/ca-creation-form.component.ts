@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'src/app/model/subject';
-import { PkiApiService } from '../../core/pki-api.service';
+import { PkiApiService } from '../../../core/pki-api.service';
 
 
 @Component({

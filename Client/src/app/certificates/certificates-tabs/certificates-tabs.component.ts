@@ -16,5 +16,4 @@ export class CertificatesTabsComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }
