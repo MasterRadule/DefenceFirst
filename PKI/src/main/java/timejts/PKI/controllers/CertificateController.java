@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import timejts.PKI.dto.SubjectDTO;
+import timejts.PKI.dto.CACertificateCreationDTO;
+import timejts.PKI.dto.NonCACertificateCreationDTO;
 import timejts.PKI.services.CertificateService;
 
 import java.security.cert.X509Certificate;
@@ -26,20 +27,18 @@ public class CertificateController {
     }
 
     @PostMapping("/non-ca")
-    public ResponseEntity<Object> createNonCACertificate(@RequestParam String serialNumber,
-                                                         @RequestParam String caSerialNumber) {
+    public ResponseEntity<Object> createNonCACertificate(@RequestBody NonCACertificateCreationDTO creationDTO) {
         try {
-            return new ResponseEntity<>(certificateService
-                    .createNonCACertificate(serialNumber, caSerialNumber), HttpStatus.CREATED);
+            return new ResponseEntity<>(certificateService.createNonCACertificate(creationDTO), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/ca")
-    public ResponseEntity<Object> createCACertificate(@RequestBody SubjectDTO certAuth) {
+    public ResponseEntity<Object> createCACertificate(@RequestBody CACertificateCreationDTO creationDTO) {
         try {
-            return new ResponseEntity<>(certificateService.createCACertificate(certAuth), HttpStatus.CREATED);
+            return new ResponseEntity<>(certificateService.createCACertificate(creationDTO), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -91,7 +90,7 @@ public class CertificateController {
     }
 
     @GetMapping("/revoked")
-    public ResponseEntity<Object> getRevokedCertificates(){
+    public ResponseEntity<Object> getRevokedCertificates() {
         try {
             return new ResponseEntity<>(certificateService.getRevokedCertificates(), HttpStatus.OK);
         } catch (Exception e) {
@@ -100,9 +99,9 @@ public class CertificateController {
     }
 
     @GetMapping("/revoked/{serialNumber}")
-    public ResponseEntity<Object> getCertificateStatus(@PathVariable(value = "serialNumber") String serialNumber){
+    public ResponseEntity<Object> getCertificateStatus(@PathVariable(value = "serialNumber") String serialNumber) {
         try {
-            return new ResponseEntity<>(certificateService.checkCertificateStatus(serialNumber,null), HttpStatus.OK);
+            return new ResponseEntity<>(certificateService.checkCertificateStatus(serialNumber, null), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

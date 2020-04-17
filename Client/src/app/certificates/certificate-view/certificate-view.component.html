@@ -1,0 +1,56 @@
+<app-toolbar></app-toolbar>
+<form id="dataForm" fxLayout="column" fxLayoutGap="30px" fxLayoutAlign="center center">
+  <div fxLayout="row wrap" fxLayoutGap="125px" class="dataDiv">
+    <mat-form-field>
+      <mat-label>Common name</mat-label>
+      <input class="dataField" value="{{certificate.subjectData.commonName}}" name="commonName" matInput disabled>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Organization</mat-label>
+      <input class="dataField" value="{{certificate.subjectData.organization}}" name="organization" matInput disabled>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="125px" class="dataDiv">
+    <mat-form-field>
+      <mat-label>Organizational unit</mat-label>
+      <input class="dataField" value="{{certificate.subjectData.organizationalUnit}}" name="organizationalUnit" matInput
+             disabled>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>City</mat-label>
+      <input class="dataField" value="{{certificate.subjectData.city}}" name="city" matInput disabled>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="125px" class="dataDiv">
+    <mat-form-field>
+      <mat-label>State</mat-label>
+      <input class="dataField" value="{{certificate.subjectData.state}}, {{certificate.subjectData.country}}"
+             name="state" matInput disabled>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email address</mat-label>
+      <input class="dataField" value="{{certificate.subjectData.email}}" name="email" matInput disabled>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="125px" class="dataDiv">
+    <mat-form-field>
+      <mat-label>Creation date</mat-label>
+      <input class="dataField" value="{{certificate.startDate|date : 'dd/MM/yyyy'}}" name="startDate" matInput disabled>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Expiration date</mat-label>
+      <input class="dataField" value="{{certificate.endDate|date : 'dd/MM/yyyy'}}" name="endDate" matInput disabled>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="125px" class="dataDiv">
+    <mat-form-field>
+      <mat-label>Issuer</mat-label>
+      <input class="dataField" value="{{certificate.issuer}}" name="issuer" matInput disabled>
+    </mat-form-field>
+    <mat-checkbox class="dataField" [(ngModel)]="certificate.ca" name="ca" disabled>Certificate Authority</mat-checkbox>
+  </div>
+</form>

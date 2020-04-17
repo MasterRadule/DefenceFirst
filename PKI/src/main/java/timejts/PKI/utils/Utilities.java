@@ -1,7 +1,6 @@
 package timejts.PKI.utils;
 
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
@@ -12,18 +11,21 @@ import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
+import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.jce.X509KeyUsage;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
-import org.bouncycastle.operator.ContentSigner;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
+import timejts.PKI.dto.CreationDataDTO;
 import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.exceptions.CANotValidException;
+import timejts.PKI.exceptions.InvalidCertificateDateException;
 
 import java.io.*;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -31,13 +33,26 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
+import static org.bouncycastle.asn1.x509.X509Extensions.IssuerAlternativeName;
+import static org.bouncycastle.asn1.x509.X509Extensions.SubjectAlternativeName;
+
 public class Utilities {
 
-    @Value("${serial-numbers-file}")
-    private static String serialNumbersFile;
+    public static Pair<CreationDataDTO, Boolean> processData(CreationDataDTO creationDTO) throws InvalidCertificateDateException {
+        if (creationDTO == null) {
+            CreationDataDTO creationData = new CreationDataDTO("SHA256WithRSAEncryption",
+                    new Date(), null, false);
+            return Pair.of(creationData, true);
+        } else {
+            if (creationDTO.getStartDate().compareTo(creationDTO.getEndDate()) >= 0)
+                throw new InvalidCertificateDateException("Certificate start date must be after than expiration date");
+            return Pair.of(creationDTO, true);
+        }
+    }
 
     public static X500Name generateX500Name(SubjectDTO certAuth) {
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
@@ -60,6 +75,22 @@ public class Utilities {
             throw new CANotValidException("CA certificate will have been invalid in less than 3 months");
     }
 
+    public static void checkCertificateDates(Date startDate, Date endDate, Date caEndDate) throws InvalidCertificateDateException {
+        if (startDate.compareTo(new Date()) < 0)
+            throw new InvalidCertificateDateException("Certificate start date must be after than or equal to today's date");
+        else if (endDate.compareTo(caEndDate) >= 0) {
+            throw new InvalidCertificateDateException("Certificate expiration date must be before than CA expiration date");
+        }
+        LocalDate endLocalDate = Instant.ofEpochMilli(endDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate caEndLocalDate = Instant.ofEpochMilli(caEndDate.getTime()).atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        long monthsBetween = ChronoUnit.MONTHS.between(endLocalDate, caEndLocalDate);
+        if (monthsBetween <= 3)
+            throw new InvalidCertificateDateException("Difference between certificate and " +
+                    "CA expiration date is less than 3 months");
+
+    }
+
     public static File x509CertificateToPem(X509Certificate cert, String commonName) throws IOException {
         File f = new File(commonName + ".pem");
         FileWriter fileWriter = new FileWriter(f);
@@ -70,33 +101,48 @@ public class Utilities {
         return f;
     }
 
-    public static X509CertificateHolder addExtensionsAndBuildCertificate(X509v3CertificateBuilder certGen, X509Certificate cert,
-                                                                         ContentSigner contentSigner, boolean ca) throws CertIOException {
-
+    public static void addBasicExtensions(X509v3CertificateBuilder certGen, boolean ca) throws CertIOException {
         // Basic constraints
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, new BasicConstraints(ca));
+        certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(ca));
 
         // Key Usage
         int keyUsage = X509KeyUsage.digitalSignature | X509KeyUsage.keyEncipherment;
         if (ca)
             keyUsage = keyUsage | X509KeyUsage.keyCertSign;
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.15"), true, new X509KeyUsage(keyUsage));
+        certGen.addExtension(X509Extensions.KeyUsage, true, new X509KeyUsage(keyUsage));
 
         // Extended Key Usage
         Vector<KeyPurposeId> extendedKeyUsages = new Vector<>();
         extendedKeyUsages.add(KeyPurposeId.id_kp_serverAuth);
         extendedKeyUsages.add(KeyPurposeId.id_kp_clientAuth);
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.37"), false,
+        certGen.addExtension(X509Extensions.ExtendedKeyUsage, false,
                 new ExtendedKeyUsage(extendedKeyUsages));
+    }
 
-        // Authority Key Identifier
-        byte[] encoded = cert.getPublicKey().getEncoded();
-        SubjectPublicKeyInfo subjectPublicKeyInfo = new SubjectPublicKeyInfo(ASN1Sequence.getInstance(encoded));
-        certGen.addExtension(new ASN1ObjectIdentifier("2.5.29.35"), false,
-                new AuthorityKeyIdentifier(subjectPublicKeyInfo));
+    public static void addAlternativeNamesExtensions(X509v3CertificateBuilder certGen, String subjEmail, String issuerEmail)
+            throws CertIOException {
+        ArrayList<GeneralName> generalNames = new ArrayList<>();
+        generalNames.add(new GeneralName(GeneralName.rfc822Name, subjEmail));
+        generalNames.add(new GeneralName(GeneralName.iPAddress, "127.0.0.1"));
+        GeneralNames altNamesSeq = GeneralNames
+                .getInstance(new DERSequence(generalNames.toArray(new GeneralName[]{})));
+        certGen.addExtension(SubjectAlternativeName, false, altNamesSeq);
 
-        // Build certificate
-        return certGen.build(contentSigner);
+        generalNames.clear();
+        generalNames.add(new GeneralName(GeneralName.rfc822Name, issuerEmail));
+        generalNames.add(new GeneralName(GeneralName.iPAddress, "127.0.0.1"));
+        altNamesSeq = GeneralNames
+                .getInstance(new DERSequence(generalNames.toArray(new GeneralName[]{})));
+        certGen.addExtension(IssuerAlternativeName, false, altNamesSeq);
+    }
+
+    public static void addKeyIdentifierExtensions(X509v3CertificateBuilder certGen, PublicKey subjKey, PublicKey issuerKey)
+            throws IOException, NoSuchAlgorithmException {
+        JcaX509ExtensionUtils extensionUtils = new JcaX509ExtensionUtils();
+        certGen.addExtension(X509Extensions.SubjectKeyIdentifier, false, extensionUtils
+                .createSubjectKeyIdentifier(subjKey));
+        certGen.addExtension(X509Extensions.AuthorityKeyIdentifier, false, extensionUtils
+                .createAuthorityKeyIdentifier(issuerKey));
     }
 
     public static X509Certificate convertToX509Certificate(X509CertificateHolder certHolder) throws CertificateException {

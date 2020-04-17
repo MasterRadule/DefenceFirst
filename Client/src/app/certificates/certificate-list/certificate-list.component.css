@@ -8,3 +8,16 @@
 #certificates-table table {
   width: 100%;
 }
+
+#certificates-table td {
+}
+
+#certificates-table th {
+  text-align: center;
+}
+
+.mat-row:hover {
+  background-color: #0074D9;
+  cursor: pointer;
+  color: white;
+}

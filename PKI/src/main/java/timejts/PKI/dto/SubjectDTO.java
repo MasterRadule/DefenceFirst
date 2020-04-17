@@ -2,8 +2,7 @@ package timejts.PKI.dto;
 
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
-
-import java.math.BigInteger;
+import org.springframework.beans.factory.annotation.Value;
 
 public class SubjectDTO {
 
@@ -31,15 +30,16 @@ public class SubjectDTO {
         this.email = email;
     }
 
-    public SubjectDTO(BigInteger serialNumber, X500Name subject) {
-        this.serialNumber = serialNumber.toString();
+    public SubjectDTO(String serialNumber, X500Name subject, String root, String rootEmail) {
+        this.serialNumber = serialNumber;
         this.commonName = subject.getRDNs(BCStyle.CN)[0].getFirst().getValue().toString();
         this.organization = subject.getRDNs(BCStyle.O)[0].getFirst().getValue().toString();
         this.organizationalUnit = subject.getRDNs(BCStyle.OU)[0].getFirst().getValue().toString();
         this.city = subject.getRDNs(BCStyle.L)[0].getFirst().getValue().toString();
         this.state = subject.getRDNs(BCStyle.ST)[0].getFirst().getValue().toString();
         this.country = subject.getRDNs(BCStyle.C)[0].getFirst().getValue().toString();
-        this.email = subject.getRDNs(BCStyle.EmailAddress)[0].getFirst().getValue().toString();
+        this.email = serialNumber.equals(root) ? rootEmail : subject.getRDNs(BCStyle.EmailAddress)[0].getFirst()
+                .getValue().toString();
     }
 
     public String getSerialNumber() {

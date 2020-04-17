@@ -5,6 +5,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import {PkiApiService} from '../../core/pki-api.service';
 import {SnackbarService} from '../../core/snackbar.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-certificate-list',
@@ -19,7 +20,7 @@ export class CertificateListComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) private paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) private sort: MatSort;
 
-  constructor(private pkiApiService: PkiApiService, private snackbarService: SnackbarService) {
+  constructor(private pkiApiService: PkiApiService, private router: Router, private snackbarService: SnackbarService) {
   }
 
   ngOnInit() {
@@ -33,7 +34,7 @@ export class CertificateListComponent implements OnInit {
 
     switch (this.mode) {
       case Mode.ACTIVE:
-        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'ca', 'action'];
+        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'action'];
         this.pkiApiService.getCertificates().subscribe(observer);
         break;
       case Mode.PENDING:
@@ -41,7 +42,7 @@ export class CertificateListComponent implements OnInit {
         this.pkiApiService.getCertificateSigningRequests().subscribe(observer);
         break;
       default:
-        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'ca', 'action'];
+        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'action'];
         this.pkiApiService.getRevokedCertificates().subscribe(observer);
     }
   }
@@ -75,6 +76,10 @@ export class CertificateListComponent implements OnInit {
 
   private view(row) {
     console.log();
+
+  redirectToCertView($event, serialNumber) {
+    if (!$event.target.classList.contains('mat-button-wrapper')) {
+      this.router.navigate(['/certificate', serialNumber]);
   }
 
 }
