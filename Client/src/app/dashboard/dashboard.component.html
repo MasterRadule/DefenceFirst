@@ -1,7 +1,2 @@
-<div [ngSwitch]="content">
-  <app-toolbar></app-toolbar>
-  <!-- divs should be added for logs and alarms-->
-  <div *ngSwitchCase="'certificates'">
-    <app-certificates-tabs></app-certificates-tabs>
-  </div>
-</div>
+<app-toolbar></app-toolbar>
+<router-outlet name="dashboard-content"></router-outlet>

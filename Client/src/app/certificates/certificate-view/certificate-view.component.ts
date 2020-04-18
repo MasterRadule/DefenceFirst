@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {CertificateDetails} from '../../../model/certificate-details';
-import {PkiApiService} from '../../../core/pki-api.service';
+import {CertificateDetails} from '../../model/certificate-details';
+import {PkiApiService} from '../../core/pki-api.service';
 import {ActivatedRoute} from '@angular/router';
-import {SnackbarService} from '../../../core/snackbar.service';
+import {SnackbarService} from '../../core/snackbar.service';
 import {Location} from '@angular/common';
 
 @Component({

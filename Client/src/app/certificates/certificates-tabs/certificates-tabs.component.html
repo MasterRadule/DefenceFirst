@@ -1,20 +1,5 @@
-<mat-tab-group>
-  <mat-tab label="Certificate signing requests">
-    <ng-template matTabContent>
-      <app-certificate-list [mode]="pending"></app-certificate-list>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="Active certificates">
-    <ng-template matTabContent>
-      <app-certificate-list [mode]="active"></app-certificate-list>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="Revoked certificates">
-    <ng-template matTabContent>
-      <app-certificate-list [mode]="revoked"></app-certificate-list>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="Create certificate authority">
-    <app-ca-creation-form></app-ca-creation-form>
-  </mat-tab>
-</mat-tab-group>
+<nav mat-tab-nav-bar>
+  <a mat-tab-link [routerLink]="['/dashboard/certificates/csrs']">Certificate signing requests</a>
+  <a mat-tab-link [routerLink]="['/dashboard/certificates/active']">Active certificates</a>
+  <a mat-tab-link [routerLink]="['/dashboard/certificates/revoked']">Revoked certificates</a>
+</nav>

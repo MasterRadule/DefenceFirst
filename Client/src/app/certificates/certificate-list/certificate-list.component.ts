@@ -1,11 +1,10 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {Mode} from '../../../model/mode.enum';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
-import {PkiApiService} from '../../../core/pki-api.service';
-import {SnackbarService} from '../../../core/snackbar.service';
-import {Router} from '@angular/router';
+import {PkiApiService} from '../../core/pki-api.service';
+import {SnackbarService} from '../../core/snackbar.service';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 
 @Component({
   selector: 'app-certificate-list',
@@ -15,6 +14,7 @@ import {Router} from '@angular/router';
 export class CertificateListComponent implements OnInit {
   private certificates: MatTableDataSource<any>;
   displayedColumns: string[];
+  private content: string;
   private observer = {
     next: (certificates: []) => {
       this.certificates = new MatTableDataSource<any>(certificates);
@@ -22,28 +22,25 @@ export class CertificateListComponent implements OnInit {
       this.certificates.sort = this.sort;
     }
   };
-  @Input() private mode: Mode;
 
   @ViewChild(MatPaginator, {static: true}) private paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) private sort: MatSort;
 
-  constructor(private pkiApiService: PkiApiService, private router: Router, private snackbarService: SnackbarService) {
+  constructor(private activatedRoute: ActivatedRoute, private pkiApiService: PkiApiService, private router: Router,
+              private snackbarService: SnackbarService) {
   }
 
   ngOnInit() {
-    switch (this.mode) {
-      case Mode.ACTIVE:
-        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate'];
+    this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
+        this.content = params.get('tab-content');
+        if (this.content === 'csrs') {
+          this.displayedColumns = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email'];
+        } else {
+          this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate'];
+        }
         this.getData();
-        break;
-      case Mode.PENDING:
-        this.displayedColumns = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email'];
-        this.getData();
-        break;
-      default:
-        this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate'];
-        this.getData();
-    }
+      }
+    );
   }
 
   private getData() {
@@ -51,12 +48,12 @@ export class CertificateListComponent implements OnInit {
   }
 
   private process(row) {
-    switch (this.mode) {
-      case Mode.ACTIVE:
+    switch (this.content) {
+      case 'active':
         this.revoke(row);
         this.getData();
         break;
-      case Mode.PENDING:
+      case 'revoked':
         this.create(row);
         break;
       default:

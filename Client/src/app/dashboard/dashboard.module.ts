@@ -3,15 +3,17 @@ import {CommonModule} from '@angular/common';
 import {DashboardComponent} from './dashboard.component';
 import {ToolbarModule} from '../toolbar/toolbar.module';
 import {CertificatesModule} from '../certificates/certificates.module';
+import {RouterModule} from "@angular/router";
 
 
 @NgModule({
   declarations: [DashboardComponent],
-    imports: [
-        CommonModule,
-        ToolbarModule,
-        CertificatesModule
-    ],
+  imports: [
+    CommonModule,
+    ToolbarModule,
+    CertificatesModule,
+    RouterModule
+  ],
   exports: [DashboardComponent]
 })
 export class DashboardModule {

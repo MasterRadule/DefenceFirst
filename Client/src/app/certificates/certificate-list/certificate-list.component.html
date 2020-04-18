@@ -6,7 +6,7 @@
       <td mat-cell *matCellDef="let row">{{row.commonName}}</td>
     </ng-container>
 
-    <ng-template [ngIf]="this.mode == 0" [ngIfElse]="certificate">
+    <ng-template [ngIf]="this.content === 'csrs'" [ngIfElse]="certificate">
       <ng-container matColumnDef="organization">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Organization</th>
         <td mat-cell *matCellDef="let row">{{row.organization}}</td>
