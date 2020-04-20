@@ -16,7 +16,8 @@ import {MatCheckboxModule, MatInputModule, MatSnackBarModule} from '@angular/mat
 import {CertificateViewComponent} from './certificate-view/certificate-view.component';
 import {ToolbarModule} from '../toolbar/toolbar.module';
 import {RouterModule} from '@angular/router';
-import { CertificatesComponent } from './certificates.component';
+import {CertificatesComponent} from './certificates.component';
+import {routes} from "../routing/certificates-routes";
 
 
 @NgModule({
@@ -24,7 +25,9 @@ import { CertificatesComponent } from './certificates.component';
   exports: [
     CertificatesTabsComponent,
     CertificateListComponent,
-    CaCreationFormComponent
+    CaCreationFormComponent,
+    CertificateViewComponent,
+    CertificatesComponent
   ],
   imports: [
     CommonModule,
@@ -43,7 +46,7 @@ import { CertificatesComponent } from './certificates.component';
     MatSnackBarModule,
     ToolbarModule,
     MatCheckboxModule,
-    RouterModule,
+    RouterModule.forChild(routes)
   ]
 })
 export class CertificatesModule {
