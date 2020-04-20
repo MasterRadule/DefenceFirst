@@ -44,8 +44,18 @@ export class CertificateListComponent implements OnInit {
   }
 
   private getData() {
-    this.pkiApiService.getCertificates().subscribe(this.observer);
+    switch (this.content) {
+      case 'csrs':
+        this.pkiApiService.getCertificateSigningRequests().subscribe(this.observer);
+        break;
+      case 'active':
+        this.pkiApiService.getCertificates().subscribe(this.observer);
+        break;
+      default:
+        this.pkiApiService.getRevokedCertificates().subscribe(this.observer);
+    }
   }
+
 
   private process(row) {
     switch (this.content) {

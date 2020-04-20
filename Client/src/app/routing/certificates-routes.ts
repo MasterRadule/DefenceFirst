@@ -6,7 +6,6 @@ export const routes: Routes = [
   {
     path: '',
     component: CertificatesComponent,
-    outlet: 'dashboard-content',
     children: [
       {
         path: '',
@@ -16,7 +15,6 @@ export const routes: Routes = [
       {
         path: ':tab-content',
         component: CertificateListComponent,
-        outlet: 'certificates-tab-content'
       }
     ]
   }

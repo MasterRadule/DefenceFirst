@@ -1,5 +1,9 @@
 <nav mat-tab-nav-bar>
-  <a mat-tab-link [routerLink]="['/dashboard/certificates/csrs']">Certificate signing requests</a>
-  <a mat-tab-link [routerLink]="['/dashboard/certificates/active']">Active certificates</a>
-  <a mat-tab-link [routerLink]="['/dashboard/certificates/revoked']">Revoked certificates</a>
+  <a mat-tab-link [routerLink]="['/dashboard/certificates/csrs']"
+     [active]="this.router.url === '/dashboard/certificates/csrs'">Certificate signing
+    requests</a>
+  <a mat-tab-link [routerLink]="['/dashboard/certificates/active']"
+     [active]="this.router.url === '/dashboard/certificates/active'">Active certificates</a>
+  <a mat-tab-link [routerLink]="['/dashboard/certificates/revoked']"
+     [active]="this.router.url === '/dashboard/certificates/revoked'">Revoked certificates</a>
 </nav>
