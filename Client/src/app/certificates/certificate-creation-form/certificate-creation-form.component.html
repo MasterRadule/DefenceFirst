@@ -1,0 +1,80 @@
+<h1 mat-dialog-title fxLayoutAlign="center" *ngIf="data.ca; else createClient">Create CA</h1>
+<ng-template #createClient>Create client certificate</ng-template>
+<div mat-dialog-content>
+  <form [formGroup]="form" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="2%">
+    <div formGroupName="subject" fxLayout="column">
+      <mat-form-field>
+        <input matInput type="text" placeholder="Common name" [readonly]="!data.ca" formControlName="commonName">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Organization name" [readonly]="!data.ca"
+               formControlName="organizationName">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Organizational unit" [readonly]="!data.ca"
+               formControlName="organizationalUnit">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="City" [readonly]="!data.ca" formControlName="city">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="State" [readonly]="!data.ca" formControlName="state">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Country" [readonly]="!data.ca" formControlName="country">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="E-mail" [readonly]="!data.ca" formControlName="email">
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column">
+      <p *ngIf="data.ca; else clientKeyUsage">Key usage: Digital Signature, Key Encipherment, Key Certificate
+        Signing</p>
+      <ng-template #clientKeyUsage>Key usage: Digital Signature, Key Encipherment</ng-template>
+      <p>Extended key usage: Server Authentication, Client Authentication</p>
+
+      <mat-checkbox (change)="toggleManual()">Manual
+        configuration
+      </mat-checkbox>
+
+      <div formGroupName="manual" fxLayout="column">
+        <mat-form-field>
+          <mat-label>Start date</mat-label>
+          <input matInput [matDatepicker]="picker1" formControlName="startDate" [required]="this.manual">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>End date</mat-label>
+          <input matInput [matDatepicker]="picker2" formControlName="endDate" [required]="this.manual">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Algorithm</mat-label>
+          <mat-select [required]="this.manual" formControlName="algorithm">
+            <mat-option *ngFor="let algorithm of this.algorithms" [value]="algorithm">{{algorithm}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Extensions</mat-label>
+          <mat-select [required]="this.manual" formControlName="extensions">
+            <mat-option [value]="false">Subject Key Identifier, Authority Key Identifier</mat-option>
+            <mat-option [value]="true">Subject Alternative Name, Issuer Alternative Name</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutGap="1%" fxLayoutAlign="center">
+  <button mat-raised-button (click)="this.dialogRef.close()">Close</button>
+  <button mat-raised-button color="primary">Create</button>
+</div>

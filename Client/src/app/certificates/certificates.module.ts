@@ -10,7 +10,6 @@ import {FlexLayoutModule, FlexModule} from '@angular/flex-layout';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import {CaCreationFormComponent} from './ca-creation-form/ca-creation-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule, MatInputModule, MatSnackBarModule} from '@angular/material';
 import {CertificateViewComponent} from './certificate-view/certificate-view.component';
@@ -20,11 +19,15 @@ import {CertificatesComponent} from './certificates.component';
 import {routes} from '../routing/certificates-routes';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatDialogModule} from "@angular/material/dialog";
+import {CertificateCreationFormComponent} from "./certificate-creation-form/certificate-creation-form.component";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatMomentDateModule} from "@angular/material-moment-adapter";
+import {MatSelectModule} from "@angular/material/select";
 
 
 @NgModule({
   declarations: [CertificateListComponent, CertificatesTabsComponent,
-    CertificateViewComponent, CertificatesComponent, CaCreationFormComponent],
+    CertificateViewComponent, CertificatesComponent, CertificateCreationFormComponent],
   exports: [
     CertificatesTabsComponent,
     CertificateListComponent,
@@ -50,9 +53,12 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatCheckboxModule,
     RouterModule.forChild(routes),
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    MatSelectModule
   ],
-  entryComponents: [CaCreationFormComponent]
+  entryComponents: [CertificateCreationFormComponent]
 })
 export class CertificatesModule {
 }

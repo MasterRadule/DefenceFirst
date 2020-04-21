@@ -6,7 +6,8 @@ import {PkiApiService} from '../../core/pki-api.service';
 import {SnackbarService} from '../../core/snackbar.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {MatDialog} from "@angular/material/dialog";
-import {CaCreationFormComponent} from "../ca-creation-form/ca-creation-form.component";
+import {CertificateCreationFormComponent} from "../certificate-creation-form/certificate-creation-form.component";
+import {Subject} from "../../model/subject";
 
 @Component({
   selector: 'app-certificate-list',
@@ -85,8 +86,9 @@ export class CertificateListComponent implements OnInit {
   }
 
   private openDialog() {
-    this.dialog.open(CaCreationFormComponent, {
-      width: '30%'
+    this.dialog.open(CertificateCreationFormComponent, {
+      width: '70%',
+      data: {subject: {} as Subject, ca: true}
     });
   }
 
