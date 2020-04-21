@@ -26,6 +26,15 @@ public class CertificateController {
         }
     }
 
+    @GetMapping("/csr/{serialNumber}")
+    public ResponseEntity<Object> getCSR(@PathVariable(value = "serialNumber") String serialNumber) {
+        try {
+            return new ResponseEntity<>(certificateService.getCertificateSigningRequest(serialNumber), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/non-ca")
     public ResponseEntity<Object> createNonCACertificate(@RequestBody NonCACertificateCreationDTO creationDTO) {
         try {
@@ -56,7 +65,16 @@ public class CertificateController {
     @GetMapping
     public ResponseEntity<Object> getCertificates() {
         try {
-            return new ResponseEntity<>(certificateService.getCertificates(), HttpStatus.OK);
+            return new ResponseEntity<>(certificateService.getCertificates(false), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/ca")
+    public ResponseEntity<Object> getCACertificates() {
+        try {
+            return new ResponseEntity<>(certificateService.getCertificates(true), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

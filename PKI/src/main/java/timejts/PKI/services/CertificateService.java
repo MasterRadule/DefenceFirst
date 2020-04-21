@@ -25,6 +25,7 @@ import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
+import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import java.io.File;
 import java.io.IOException;
@@ -264,7 +265,16 @@ public class CertificateService {
         return certDTOs;
     }
 
-    public ArrayList<CertificateDTO> getCertificates() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
+    public SubjectDTO getCertificateSigningRequest(String serialNumber) throws CSRDoesNotExistException, IOException {
+        CertificateSigningRequest csr = csrRepository.findById(new BigInteger(serialNumber))
+                .orElseThrow(() -> new CSRDoesNotExistException("Certificate signing request " +
+                        "with given serial number does not exist"));
+
+        return new SubjectDTO(csr.getId().toString(), new JcaPKCS10CertificationRequest(csr.getCsr())
+                .getSubject(), root, rootEmail);
+    }
+
+    public ArrayList<CertificateDTO> getCertificates(boolean ca) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
         List<String> revokedSerNums = revokedCertificatesRepository.findAll().stream().map(RevokedCertificate::getId)
                 .collect(Collectors.toList());
@@ -275,7 +285,7 @@ public class CertificateService {
         Enumeration<String> enumeration = ks.aliases();
         while (enumeration.hasMoreElements()) {
             alias = enumeration.nextElement();
-            if (!revokedSerNums.contains(alias)) {
+            if (!revokedSerNums.contains(alias) && (!ca || ks.getCertificateChain(alias) != null)) {
                 certificate = (X509Certificate) ks.getCertificate(alias);
                 commonName = getCommonName(certificate);
                 issuer = getIssuerCommonName(certificate);
@@ -422,5 +432,4 @@ public class CertificateService {
 
         return certificateDTOS;
     }
-
 }
