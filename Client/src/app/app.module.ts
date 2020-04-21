@@ -10,7 +10,7 @@ import {DashboardModule} from './dashboard/dashboard.module';
 import {CertificatesModule} from './certificates/certificates.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {UrlInterceptor} from './interceptors/url-interceptor';
-import {LogsModule} from "./logs/logs.module";
+import {LogsModule} from './logs/logs.module';
 
 
 @NgModule({

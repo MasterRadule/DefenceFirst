@@ -1,6 +1,7 @@
 import {Routes} from '@angular/router';
-import {CertificateListComponent} from "../certificates/certificate-list/certificate-list.component";
-import {CertificatesComponent} from "../certificates/certificates.component";
+import {CertificateListComponent} from '../certificates/certificate-list/certificate-list.component';
+import {CertificatesComponent} from '../certificates/certificates.component';
+import {CertificateViewComponent} from "../certificates/certificate-view/certificate-view.component";
 
 export const routes: Routes = [
   {
@@ -13,8 +14,12 @@ export const routes: Routes = [
         redirectTo: 'csrs'
       },
       {
+        path: ':tab-content/:serial-number',
+        component: CertificateViewComponent
+      },
+      {
         path: ':tab-content',
-        component: CertificateListComponent,
+        component: CertificateListComponent
       }
     ]
   }

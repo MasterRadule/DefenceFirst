@@ -13,3 +13,10 @@
   background: whitesmoke;
   cursor: pointer;
 }
+
+#add {
+  display: block;
+  position: fixed;
+  right: 0.5%;
+  bottom: 1%;
+}

@@ -17,11 +17,13 @@ import {CertificateViewComponent} from './certificate-view/certificate-view.comp
 import {ToolbarModule} from '../toolbar/toolbar.module';
 import {RouterModule} from '@angular/router';
 import {CertificatesComponent} from './certificates.component';
-import {routes} from "../routing/certificates-routes";
+import {routes} from '../routing/certificates-routes';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 
 @NgModule({
-  declarations: [CertificateListComponent, CertificatesTabsComponent, CaCreationFormComponent, CertificateViewComponent, CertificatesComponent],
+  declarations: [CertificateListComponent, CertificatesTabsComponent, CaCreationFormComponent,
+    CertificateViewComponent, CertificatesComponent],
   exports: [
     CertificatesTabsComponent,
     CertificateListComponent,
@@ -46,7 +48,8 @@ import {routes} from "../routing/certificates-routes";
     MatSnackBarModule,
     ToolbarModule,
     MatCheckboxModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    MatTooltipModule
   ]
 })
 export class CertificatesModule {

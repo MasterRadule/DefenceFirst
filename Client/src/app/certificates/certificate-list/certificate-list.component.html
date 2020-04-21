@@ -61,7 +61,10 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-        routerLink="/dashboard/certificates/{{row.serialNumber}}"></tr>
+        routerLink="/dashboard/certificates/{{this.content}}/{{row.serialNumber}}"></tr>
   </table>
   <mat-paginator [pageSizeOptions]="[6]" [hidePageSize]="true"></mat-paginator>
 </div>
+<button id="add" matTooltip="Create CA certificate" *ngIf="this.content === 'active'" mat-fab color="primary">
+  <mat-icon>add</mat-icon>
+</button>

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CertificateDetails} from '../../model/certificate-details';
 import {PkiApiService} from '../../core/pki-api.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import {SnackbarService} from '../../core/snackbar.service';
 import {Location} from '@angular/common';
 
@@ -29,11 +29,9 @@ export class CertificateViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      if (params.serialNumber) {
-        this.getCertificate(params.serialNumber);
-      }
-    });
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.getCertificate(params.get('serial-number'));
+    })
   }
 
   private getCertificate(serialNumber: string) {
