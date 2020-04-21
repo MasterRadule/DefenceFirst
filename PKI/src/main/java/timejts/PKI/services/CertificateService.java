@@ -1,16 +1,26 @@
 package timejts.PKI.services;
 
+import org.bouncycastle.asn1.DEROctetString;
+import org.bouncycastle.asn1.ocsp.OCSPObjectIdentifiers;
+import org.bouncycastle.asn1.ocsp.OCSPResponse;
+import org.bouncycastle.asn1.ocsp.OCSPResponseStatus;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.bouncycastle.asn1.x509.Extensions;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+import org.bouncycastle.cert.ocsp.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.DigestCalculator;
+import org.bouncycastle.operator.DigestCalculatorProvider;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.operator.jcajce.JcaContentVerifierProviderBuilder;
+import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
 import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -421,6 +431,82 @@ public class CertificateService {
         }
 
         return certificateDTOS;
+    }
+
+    //this is only for test
+    public OCSPReq generateOCSPRequest(X509Certificate issuerCert, BigInteger serialNumber) throws OperatorCreationException, CertificateEncodingException, OCSPException {
+        Security.addProvider(new BouncyCastleProvider());
+
+        JcaDigestCalculatorProviderBuilder digestCalculatorProviderBuilder = new JcaDigestCalculatorProviderBuilder();
+        DigestCalculatorProvider digestCalculatorProvider = digestCalculatorProviderBuilder.build();
+        DigestCalculator digestCalculator = digestCalculatorProvider.get(CertificateID.HASH_SHA1);
+
+        CertificateID id = new CertificateID(digestCalculator, new JcaX509CertificateHolder(issuerCert), serialNumber);
+
+        OCSPReqBuilder gen = new OCSPReqBuilder();
+        gen.addRequest(id);
+
+        // ???????
+        BigInteger nonce = BigInteger.valueOf(System.currentTimeMillis());
+        org.bouncycastle.asn1.x509.Extension ext = new org.bouncycastle.asn1.x509.Extension(OCSPObjectIdentifiers.id_pkix_ocsp_nonce,
+                false, new DEROctetString(nonce.toByteArray()));
+        gen.setRequestExtensions(new Extensions(new org.bouncycastle.asn1.x509.Extension[]{ext}));
+
+        return gen.build();
+    }
+
+    public OCSPResp generateOCSPResponse(OCSPReq request) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, SignatureException, NoSuchProviderException, InvalidKeyException, IOException, OCSPException, OperatorCreationException, UnrecoverableKeyException {
+
+        JcaDigestCalculatorProviderBuilder digestCalculatorProviderBuilder = new JcaDigestCalculatorProviderBuilder();
+        DigestCalculatorProvider digestCalculatorProvider = digestCalculatorProviderBuilder.build();
+        DigestCalculator digestCalculator = digestCalculatorProvider.get(CertificateID.HASH_SHA1);
+
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+        X509Certificate cert = (X509Certificate) ks.getCertificate(root);
+
+        BasicOCSPRespBuilder basicOCSPRespBuilder = new BasicOCSPRespBuilder((SubjectPublicKeyInfo) cert.getPublicKey(), digestCalculator);
+
+        Req[] requests = request.getRequestList();
+        CertificateID certId = requests[0].getCertID();
+        if (!request.isSigned()) {
+            return new OCSPResp(new OCSPResponse(new OCSPResponseStatus(OCSPResponseStatus.SIG_REQUIRED), null));
+        }
+
+        X509CertificateHolder[] certHolder = request.getCerts();
+        X509Certificate issuerCertificate = convertToX509Certificate(certHolder[0]);
+
+        BouncyCastleProvider bcp = new BouncyCastleProvider();
+        boolean signatureValid = request.isSignatureValid(new JcaContentVerifierProviderBuilder()
+                .setProvider(bcp).build(issuerCertificate.getPublicKey()));
+        if (!signatureValid) {
+            return new OCSPResp(new OCSPResponse(new OCSPResponseStatus(OCSPResponseStatus.MALFORMED_REQUEST), null));
+        }
+        try {
+            validateCertificate(issuerCertificate);
+        } catch (NotExistingCertificateException | CertificateRevokedException e) {
+            return new OCSPResp(new OCSPResponse(new OCSPResponseStatus(OCSPResponseStatus.UNAUTHORIZED), null));
+        } catch (CorruptedCertificateException e) {
+            return new OCSPResp(new OCSPResponse(new OCSPResponseStatus(OCSPResponseStatus.MALFORMED_REQUEST), null));
+        }
+
+        Optional<RevokedCertificate> r = revokedCertificatesRepository
+                .findById(certId.toString());
+        if (r.isPresent()) {
+            basicOCSPRespBuilder.addResponse(certId,
+                    new RevokedStatus(new Date(), org.bouncycastle.asn1.x509.CRLReason.privilegeWithdrawn));
+        } else {
+            basicOCSPRespBuilder.addResponse(certId, CertificateStatus.GOOD);
+        }
+
+        JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
+        PrivateKey privKey = (PrivateKey) ks.getKey(root, keystorePassword.toCharArray());
+        builder = builder.setProvider(bcp);
+        ContentSigner contentSigner = builder.build(privKey);
+
+        BasicOCSPResp response = basicOCSPRespBuilder.build(contentSigner, certHolder, new Date());
+        OCSPRespBuilder respBuilder = new OCSPRespBuilder();
+        return respBuilder.build(OCSPRespBuilder.SUCCESSFUL, response);
+
     }
 
 }

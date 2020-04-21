@@ -1,5 +1,6 @@
 package timejts.PKI.controllers;
 
+import org.bouncycastle.cert.ocsp.OCSPReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -98,10 +99,10 @@ public class CertificateController {
         }
     }
 
-    @GetMapping("/revoked/{serialNumber}")
-    public ResponseEntity<Object> getCertificateStatus(@PathVariable(value = "serialNumber") String serialNumber) {
+    @PostMapping("/ocsp")
+    public ResponseEntity<Object> checkRevokationStatus(@RequestBody OCSPReq ocspReq) {
         try {
-            return new ResponseEntity<>(certificateService.checkCertificateStatus(serialNumber, null), HttpStatus.OK);
+            return new ResponseEntity<>(certificateService.generateOCSPResponse(ocspReq), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
