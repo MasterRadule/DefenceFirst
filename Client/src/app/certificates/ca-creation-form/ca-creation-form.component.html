@@ -1,49 +1,52 @@
-<div class="container" fxLayout="column" fxLayoutAlign="center center">
-  <form [formGroup]="caCreationForm" (submit)="onCreateCASubmit()">
-      <div class="input-field">
-          <mat-form-field>
-              <input id="commonName-input" matInput type="text" placeholder="Common name" formControlName="commonName">
-          </mat-form-field>
-      </div>
+<h1 mat-dialog-title fxLayoutAlign="center">Create CA</h1>
+<div mat-dialog-content fxLayoutAlign="center">
+  <form [formGroup]="caCreationForm">
+    <div class="input-field">
+      <mat-form-field>
+        <input id="commonName-input" matInput type="text" placeholder="Common name" formControlName="commonName">
+      </mat-form-field>
+    </div>
 
-      <div class="input-field">
-          <mat-form-field>
-              <input id="organization-input" matInput type="text" placeholder="Organization name" formControlName="organization">
-          </mat-form-field>
-      </div>
+    <div class="input-field">
+      <mat-form-field>
+        <input id="organization-input" matInput type="text" placeholder="Organization name"
+               formControlName="organization">
+      </mat-form-field>
+    </div>
 
-      <div class="input-field">
-          <mat-form-field>
-              <input id="organizationalUnit-input" matInput type="text" placeholder="Organizational unit" formControlName="organizationalUnit">
-          </mat-form-field>
-      </div>
+    <div class="input-field">
+      <mat-form-field>
+        <input id="organizationalUnit-input" matInput type="text" placeholder="Organizational unit"
+               formControlName="organizationalUnit">
+      </mat-form-field>
+    </div>
 
-      <div class="input-field">
-          <mat-form-field>
-              <input id="city-input" matInput type="text" placeholder="City" formControlName="city">
-          </mat-form-field>
-      </div>
+    <div class="input-field">
+      <mat-form-field>
+        <input id="city-input" matInput type="text" placeholder="City" formControlName="city">
+      </mat-form-field>
+    </div>
 
-      <div class="input-field">
-          <mat-form-field>
-              <input id="state-input" matInput type="text" placeholder="State" formControlName="state">
-          </mat-form-field>
-      </div>
+    <div class="input-field">
+      <mat-form-field>
+        <input id="state-input" matInput type="text" placeholder="State" formControlName="state">
+      </mat-form-field>
+    </div>
 
-      <div class="input-field">
-          <mat-form-field>
-              <input id="country-input" matInput type="text" placeholder="Country" formControlName="country">
-          </mat-form-field>
-      </div>
+    <div class="input-field">
+      <mat-form-field>
+        <input id="country-input" matInput type="text" placeholder="Country" formControlName="country">
+      </mat-form-field>
+    </div>
 
-      <div class="input-field">
-          <mat-form-field>
-              <input id="email-input" matInput type="text" placeholder="E-mail" formControlName="email">
-          </mat-form-field>
-      </div>
-
-      <button class="submit-button" id="add-btn" type="submit" mat-raised-button color="primary" [disabled]="caCreationForm.invalid">
-          Add CA certificate
-      </button>
+    <div class="input-field">
+      <mat-form-field>
+        <input id="email-input" matInput type="text" placeholder="E-mail" formControlName="email">
+      </mat-form-field>
+    </div>
   </form>
+</div>
+<div mat-dialog-actions fxLayoutAlign="center">
+  <button mat-button (click)="this.dialogRef.close()">Close</button>
+  <button mat-button [disabled]="caCreationForm.invalid" (click)="onCreateCASubmit()">Submit</button>
 </div>

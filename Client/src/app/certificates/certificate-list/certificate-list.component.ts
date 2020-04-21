@@ -5,6 +5,8 @@ import {MatPaginator} from '@angular/material/paginator';
 import {PkiApiService} from '../../core/pki-api.service';
 import {SnackbarService} from '../../core/snackbar.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {MatDialog} from "@angular/material/dialog";
+import {CaCreationFormComponent} from "../ca-creation-form/ca-creation-form.component";
 
 @Component({
   selector: 'app-certificate-list',
@@ -27,7 +29,7 @@ export class CertificateListComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) private sort: MatSort;
 
   constructor(private activatedRoute: ActivatedRoute, private pkiApiService: PkiApiService, private router: Router,
-              private snackbarService: SnackbarService) {
+              private snackbarService: SnackbarService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -66,8 +68,6 @@ export class CertificateListComponent implements OnInit {
       case 'revoked':
         this.create(row);
         break;
-      default:
-        this.view(row);
     }
   }
 
@@ -84,8 +84,10 @@ export class CertificateListComponent implements OnInit {
     console.log(row.serialNumber);
   }
 
-  private view(row) {
-    console.log();
+  private openDialog() {
+    this.dialog.open(CaCreationFormComponent, {
+      width: '30%'
+    });
   }
 
 }

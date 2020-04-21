@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'src/app/model/subject';
-import { PkiApiService } from '../../core/pki-api.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Subject} from 'src/app/model/subject';
+import {PkiApiService} from '../../core/pki-api.service';
+import {MatDialogRef} from "@angular/material/dialog";
+import {SnackbarService} from "../../core/snackbar.service";
 
 
 @Component({
@@ -11,15 +13,17 @@ import { PkiApiService } from '../../core/pki-api.service';
 })
 export class CaCreationFormComponent implements OnInit {
 
-  caCreationForm: FormGroup;
+  private caCreationForm: FormGroup;
 
 
-  constructor(private fb: FormBuilder,
-              private pkiApiService: PkiApiService, ) { }
+  constructor(private fb: FormBuilder, private pkiApiService: PkiApiService, private snackbarService: SnackbarService,
+              private dialogRef: MatDialogRef<CaCreationFormComponent>) {
+  }
 
   ngOnInit() {
     this.createForm();
   }
+
 
   private createForm(): void {
     this.caCreationForm = this.fb.group({
@@ -46,10 +50,9 @@ export class CaCreationFormComponent implements OnInit {
     };
 
     this.pkiApiService.createCACertificate(subjectDto).subscribe(data => {
-      console.log(data);
+      this.snackbarService.displayMessage(data as string);
     }, error => {
-      console.log(error);
+      this.snackbarService.displayMessage(error);
     });
-
   }
 }
