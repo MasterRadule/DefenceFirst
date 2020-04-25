@@ -41,4 +41,8 @@ export class PkiApiService {
   getRevokedCertificates() {
     return this.http.get('certificates/revoked');
   }
+
+  getCACertificates() {
+    return this.http.get('certificates/ca');
+  }
 }

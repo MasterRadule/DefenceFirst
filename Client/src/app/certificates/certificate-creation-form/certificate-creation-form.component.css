@@ -1,1 +1,17 @@
+@import '~js-datepicker/dist/datepicker.min.css';
 
+#algorithm {
+  width: 45%;
+}
+
+#extensions {
+  width: 80%;
+}
+
+#main-form {
+  margin-left: 4%;
+}
+
+#second-column {
+  margin-top: 5px;
+}
