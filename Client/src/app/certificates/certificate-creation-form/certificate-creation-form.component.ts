@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {PkiApiService} from '../../core/pki-api.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {SnackbarService} from "../../core/snackbar.service";
@@ -7,6 +7,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Certificate} from "../../model/certificate";
 import datepicker from 'js-datepicker';
 import * as moment from 'moment';
+import {CaCertificateCreation} from "../../model/caCertificateCreation";
+import {Subject} from '../../model/subject';
 
 
 @Component({
@@ -14,7 +16,7 @@ import * as moment from 'moment';
   templateUrl: './certificate-creation-form.component.html',
   styleUrls: ['./certificate-creation-form.component.css']
 })
-export class CertificateCreationFormComponent implements OnInit, AfterViewInit {
+export class CertificateCreationFormComponent implements OnInit, AfterViewInit, OnDestroy{
   private form: FormGroup;
   private manual: boolean = false;
   private algorithms = ['sha1WithRSAEncryption', 'sha256WithRSAEncryption', 'sha512WithRSAEncryption', 'dsa-with-sha256',
@@ -25,6 +27,7 @@ export class CertificateCreationFormComponent implements OnInit, AfterViewInit {
 
   private startDate;
   private endDate;
+  private maxDate: Date = new Date(2030, 3, 7);
 
   private CAs: Certificate[];
 
@@ -55,6 +58,8 @@ export class CertificateCreationFormComponent implements OnInit, AfterViewInit {
         input.value = moment(date).format('L');
       }
     });
+
+    this.endDate.setMax(new Date(2030, 3, 7));
   }
 
 
@@ -70,8 +75,10 @@ export class CertificateCreationFormComponent implements OnInit, AfterViewInit {
         email: [this.data.subject.email, [Validators.email, Validators.required]]
       }),
       manual: this.formBuilder.group({
-        algorithm: {value: '', disabled: !this.manual},
-        extensions: {value: '', disabled: !this.manual}
+        startDate: [{value: '', disabled: !this.manual}, Validators.required],
+        endDate: [{value: '', disabled: !this.manual }, Validators.required],
+        algorithm: [{value: '', disabled: !this.manual}, [Validators.required]],
+        extensions: [{value: '', disabled: !this.manual}, [Validators.required]]
       })
     });
   }
@@ -79,11 +86,10 @@ export class CertificateCreationFormComponent implements OnInit, AfterViewInit {
   private toggleManual() {
     if (this.manual) {
       this.manual = false;
-      this.form.controls['manual'].disable()
+      this.form.controls['manual'].disable();
     } else {
       this.manual = true;
-      this.form.controls['manual'].enable()
-      this.form.controls['manual'].get('endDate').disable();
+      this.form.controls['manual'].enable();
     }
     this.form.controls['manual'].reset();
   }
@@ -98,5 +104,26 @@ export class CertificateCreationFormComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  ngOnDestroy(): void {
+    this.startDate.remove();
+    this.endDate.remove();
+  }
+
+  private submitCertificate() {
+    const subject: Subject = this.form.controls.subject.value;
+    let a: CaCertificateCreation = null;
+    if (this.manual) {
+      a = this.form.controls.manual.value;
+    }
+    console.log(subject);
+    console.log(a);
+  }
+
+
+
+
+
+
 
 }

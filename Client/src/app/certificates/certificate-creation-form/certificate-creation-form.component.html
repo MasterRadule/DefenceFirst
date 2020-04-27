@@ -51,12 +51,25 @@
 
       <div formGroupName="manual" fxLayout="column">
         <div fxLayout="row" fxLayoutGap="4%">
-          <mat-form-field>
+          <!--<mat-form-field >
             <input matInput #startDate>
           </mat-form-field>
           <mat-form-field>
-            <input matInput #endDate>
+            <input matInput  #endDate>
           </mat-form-field>
+          -->
+          <mat-form-field>
+            <input matInput [matDatepicker]="myDatepicker" id="start-date-input" formControlName="startDate" placeholder="Start date">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput [matDatepicker]="myDatepicker2" [max]="maxDate" id="end-date-input" formControlName="endDate" placeholder="End date">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker2"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker2></mat-datepicker>
+          </mat-form-field>
+
         </div>
 
         <mat-form-field id="extensions">
@@ -79,5 +92,5 @@
 </div>
 <div mat-dialog-actions fxLayout="row" fxLayoutGap="1%" fxLayoutAlign="center">
   <button mat-raised-button (click)="this.dialogRef.close()">Close</button>
-  <button mat-raised-button color="primary">Create</button>
+  <button mat-raised-button (click)="submitCertificate() "color="primary" [disabled]='!form.valid'>Create</button>
 </div>
