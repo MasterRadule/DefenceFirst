@@ -9,7 +9,7 @@
 
       <mat-form-field>
         <input matInput type="text" placeholder="Organization name" [readonly]="!data.ca"
-               formControlName="organizationName">
+               formControlName="organization">
       </mat-form-field>
 
       <mat-form-field>
@@ -52,24 +52,32 @@
       <div formGroupName="manual" fxLayout="column">
         <div fxLayout="row" fxLayoutGap="4%">
           <mat-form-field>
-            <input matInput #startDate>
+            <input matInput (dateChange)="setMinEnd($event)" [matDatepicker]="myDatepicker" [min]="minDateStart" [max]="maxDateStart" id="start-date-input" formControlName="startDate" placeholder="Start date">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker></mat-datepicker>
           </mat-form-field>
+
+
           <mat-form-field>
-            <input matInput #endDate>
+            <input matInput [matDatepicker]="myDatepicker2" [min]="minDateEnd" [max]="maxDateEnd" id="end-date-input" formControlName="endDate" placeholder="End date">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker2" [disabled]='this.pickerDisable'></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker2></mat-datepicker>
           </mat-form-field>
+
+
         </div>
 
-        <mat-form-field id="extensions">
+        <mat-form-field id="altNames">
           <mat-label>Extensions</mat-label>
-          <mat-select [required]="this.manual" formControlName="extensions">
+          <mat-select [required]="this.manual" formControlName="altNames">
             <mat-option [value]="false">Subject Key Identifier, Authority Key Identifier</mat-option>
             <mat-option [value]="true">Subject Alternative Name, Issuer Alternative Name</mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field id="algorithm">
+        <mat-form-field id="sigAlgorithm">
           <mat-label>Algorithm</mat-label>
-          <mat-select [required]="this.manual" formControlName="algorithm">
+          <mat-select [required]="this.manual" formControlName="sigAlgorithm">
             <mat-option *ngFor="let algorithm of this.algorithms" [value]="algorithm">{{algorithm}}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -79,5 +87,5 @@
 </div>
 <div mat-dialog-actions fxLayout="row" fxLayoutGap="1%" fxLayoutAlign="center">
   <button mat-raised-button (click)="this.dialogRef.close()">Close</button>
-  <button mat-raised-button color="primary">Create</button>
+  <button mat-raised-button (click)="submitCertificate()" color="primary" [disabled]='!form.valid'>Create</button>
 </div>
