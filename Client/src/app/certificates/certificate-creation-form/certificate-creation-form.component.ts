@@ -9,9 +9,10 @@ import datepicker from 'js-datepicker';
 import * as moment from 'moment';
 import {DateAdapter, MatDatepickerInputEvent} from '@angular/material';
 import {Subject} from '../../model/subject';
+import {CreationData} from '../../model/creationData';
 import {CaCertificateCreation} from '../../model/caCertificateCreation';
-import {CreationData} from "../../model/creationData";
-import {Data} from "@angular/router";
+import {Data} from '@angular/router';
+import {NonCACreationData} from "../../model/nonCACertificateCreation";
 
 
 @Component({
@@ -30,6 +31,7 @@ export class CertificateCreationFormComponent implements OnInit {
   private minDateEnd: Date;
   private maxDateStart: Date;
   private pickerDisable = true;
+  private caSerialNumber = null;
   private CAs: Certificate[];
 
   constructor(private pkiApiService: PkiApiService, private snackbarService: SnackbarService,
@@ -114,23 +116,45 @@ export class CertificateCreationFormComponent implements OnInit {
 
   private submitCertificate() {
     const subjectData: Subject = this.form.controls.subject.value;
-    let manualData: CaCertificateCreation = null;
+
+    let manualData: CreationData = null;
     if (this.manual) {
       manualData = this.form.controls.manual.value;
     }
 
-    const certificate: CreationData = {
-      certAuthData: subjectData,
-      creationData: manualData
-    };
+    if (this.data.ca) {
+      const certificate: CaCertificateCreation = {
+        certAuthData: subjectData,
+        creationData: manualData
+      };
 
-    console.log(certificate);
-    /*
-    this.pkiApiService.createCACertificate(certificate).subscribe({
-      error: (message: string) => {
-        this.snackbarService.displayMessage(message);
-      }
-    });
-    */
+      this.pkiApiService.createCACertificate(certificate).subscribe({
+        error: (message: string) => {
+          this.snackbarService.displayMessage(message);
+        }
+      });
+    } else {
+      const certificate: NonCACreationData = {
+        serialNumber: this.data.subject.serialNumber,
+        caSerialNumber: this.caSerialNumber,
+        creationData: manualData
+      };
+      console.log(certificate);
+      this.pkiApiService.createNonCACertificate(certificate).subscribe({
+        next: (message: any) => {
+          this.snackbarService.displayMessage(message);
+        },
+        error: (message: any) => {
+          this.snackbarService.displayMessage(message);
+        }
+      });
+
+    }
+
+    this.dialogRef.close();
+
+  }
+  private caChanged($event): void {
+    this.caSerialNumber = $event.value;
   }
 }

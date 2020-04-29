@@ -1,7 +1,6 @@
-import {Subject} from './subject';
-import {CaCertificateCreation} from './caCertificateCreation';
-
 export interface CreationData {
-  creationData: CaCertificateCreation;
-  certAuthData: Subject;
+  sigAlgorithm: string;
+  startDate: Date;
+  endDate: Date;
+  altNames: boolean;
 }

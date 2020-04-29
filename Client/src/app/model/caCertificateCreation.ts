@@ -1,6 +1,7 @@
+import {Subject} from './subject';
+import {CreationData} from './creationData';
+
 export interface CaCertificateCreation {
-  sigAlgorithm: string;
-  startDate: Date;
-  endDate: Date;
-  altNames: boolean;
+  creationData: CreationData;
+  certAuthData: Subject;
 }

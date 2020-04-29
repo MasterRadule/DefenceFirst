@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import {PkiApiService} from '../../core/pki-api.service';
@@ -20,17 +20,22 @@ export class CertificateListComponent implements OnInit {
   private content: string;
   private observer = {
     next: (certificates: []) => {
-      this.certificates = new MatTableDataSource<any>(certificates);
-      this.certificates.paginator = this.paginator;
-      this.certificates.sort = this.sort;
+      if (!this.certificates) {
+        this.certificates = new MatTableDataSource<any>(certificates);
+        this.certificates.paginator = this.paginator;
+        this.certificates.sort = this.sort;
+      } else {
+        this.certificates.data = certificates;
+      }
     }
   };
 
   @ViewChild(MatPaginator, {static: true}) private paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) private sort: MatSort;
+  @ViewChild(MatTable, {static: true}) table: MatTable<any>;
 
   constructor(private activatedRoute: ActivatedRoute, private pkiApiService: PkiApiService, private router: Router,
-              private snackbarService: SnackbarService, private dialog: MatDialog) {
+              private snackbarService: SnackbarService, private dialog: MatDialog, private changeDetectorRefs: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -87,9 +92,13 @@ export class CertificateListComponent implements OnInit {
 
   private openDialog(subject: Subject = {} as Subject, ca: boolean = true) {
     console.log(subject);
-    this.dialog.open(CertificateCreationFormComponent, {
+    const dialogRef = this.dialog.open(CertificateCreationFormComponent, {
       width: '70%',
       data: {subject, ca}
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.getData();
+      this.table.renderRows();
     });
   }
 
