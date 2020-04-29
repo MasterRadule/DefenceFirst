@@ -1,5 +1,7 @@
 <h1 mat-dialog-title fxLayoutAlign="center" *ngIf="data.ca; else createClient">Create CA</h1>
-<ng-template #createClient>Create client certificate</ng-template>
+<ng-template #createClient>
+  <h1 mat-dialog-title fxLayoutAlign="center">Create client certificate</h1>
+</ng-template>
 <div mat-dialog-content>
   <form id='main-form' [formGroup]="form" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="8%">
     <div formGroupName="subject" fxLayout="column">
@@ -32,6 +34,14 @@
       <mat-form-field>
         <input matInput type="text" placeholder="E-mail" [readonly]="!data.ca" formControlName="email">
       </mat-form-field>
+
+      <mat-form-field *ngIf="!data.ca">
+        <mat-label>CA</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let ca of CAs" [value]="ca.serialNumber">{{ca.commonName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
     </div>
 
     <div fxLayout="column" id='second-column'>
@@ -42,12 +52,6 @@
 
       <mat-checkbox (change)="toggleManual()">Manual configuration</mat-checkbox>
 
-      <mat-form-field *ngIf="!data.ca">
-        <mat-label>CA</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let ca of CAs" [value]="ca.serialNumber">{{ca.commonName}}</mat-option>
-        </mat-select>
-      </mat-form-field>
 
       <div formGroupName="manual" fxLayout="column">
         <div fxLayout="row" fxLayoutGap="4%">
@@ -87,5 +91,5 @@
 </div>
 <div mat-dialog-actions fxLayout="row" fxLayoutGap="1%" fxLayoutAlign="center">
   <button mat-raised-button (click)="this.dialogRef.close()">Close</button>
-  <button mat-raised-button (click)="submitCertificate()" color="primary" [disabled]='!form.valid'>Create</button>
+  <button mat-raised-button (click)="submitCertificate()" color="primary" [disabled]='!form.valid' >Create</button>
 </div>

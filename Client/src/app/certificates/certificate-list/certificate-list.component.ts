@@ -85,10 +85,11 @@ export class CertificateListComponent implements OnInit {
     console.log(row.serialNumber);
   }
 
-  private openDialog() {
+  private openDialog(subject: Subject = {} as Subject, ca: boolean = true) {
+    console.log(subject);
     this.dialog.open(CertificateCreationFormComponent, {
       width: '70%',
-      data: {subject: {} as Subject, ca: true}
+      data: {subject, ca}
     });
   }
 

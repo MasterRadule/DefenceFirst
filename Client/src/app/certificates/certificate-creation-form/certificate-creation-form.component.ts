@@ -125,11 +125,12 @@ export class CertificateCreationFormComponent implements OnInit {
     };
 
     console.log(certificate);
-
+    /*
     this.pkiApiService.createCACertificate(certificate).subscribe({
       error: (message: string) => {
         this.snackbarService.displayMessage(message);
       }
     });
+    */
   }
 }
