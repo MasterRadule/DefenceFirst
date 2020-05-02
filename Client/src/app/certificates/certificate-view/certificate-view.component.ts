@@ -31,7 +31,7 @@ export class CertificateViewComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.getCertificate(params.get('serial-number'));
-    })
+    });
   }
 
   private getCertificate(serialNumber: string) {

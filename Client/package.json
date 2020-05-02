@@ -24,7 +24,6 @@
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
     "hammerjs": "^2.0.8",
-    "js-datepicker": "^5.10.0",
     "moment": "^2.24.0",
     "pkijs": "^2.1.87",
     "rxjs": "~6.4.0",
