@@ -1,28 +1,35 @@
 import {Routes} from '@angular/router';
 import {DashboardComponent} from '../dashboard/dashboard.component';
-import {CertificateViewComponent} from '../certificates/certificate-view/certificate-view.component';
+import {AlarmsComponent} from '../alarms/alarms.component';
+import {LogsComponent} from '../logs/logs.component';
 
 export const routes: Routes = [
   {
-    path: 'dashboard/:content',
-    component: DashboardComponent
-  },
-  {
     path: 'dashboard',
-    redirectTo: 'dashboard/logs',
-    pathMatch: 'full'
-  },
-  {
-    path: 'certificate/:serialNumber',
-    component: CertificateViewComponent
+    component: DashboardComponent,
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'logs'
+      },
+      {
+        path: 'alarms',
+        component: AlarmsComponent,
+      },
+      {
+        path: 'logs',
+        component: LogsComponent
+      },
+      {
+        path: 'certificates',
+        loadChildren: () => import('../certificates/certificates.module').then(c => c.CertificatesModule)
+      }
+    ]
   },
   {
     path: '',
-    redirectTo: 'dashboard/logs',
-    pathMatch: 'full'
-  },
-  {
-    path: '**',
-    redirectTo: 'dashboard/logs'
+    pathMatch: 'full',
+    redirectTo: '/dashboard/logs'
   }
 ];

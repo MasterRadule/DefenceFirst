@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Mode} from '../../model/mode.enum';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-certificates-tabs',
@@ -8,14 +7,10 @@ import {MatTabChangeEvent} from '@angular/material/tabs';
   styleUrls: ['./certificates-tabs.component.css']
 })
 export class CertificatesTabsComponent implements OnInit {
-  private pending = Mode.PENDING;
-  private active = Mode.ACTIVE;
-  private revoked = Mode.REVOKED;
-  p
-  constructor() {
+
+  constructor(private router: Router) {
   }
 
   ngOnInit() {
   }
-
 }

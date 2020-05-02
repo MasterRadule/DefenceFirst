@@ -1,56 +1,56 @@
-<app-toolbar></app-toolbar>
-<form id="dataForm" fxLayout="column" fxLayoutGap="30px" fxLayoutAlign="center center">
-  <div fxLayout="row wrap" fxLayoutGap="125px" class="dataDiv">
+<form fxLayout="row" fxLayoutGap="3%" fxLayoutAlign="center">
+  <div fxLayout="column">
     <mat-form-field>
       <mat-label>Common name</mat-label>
-      <input class="dataField" value="{{certificate.subjectData.commonName}}" name="commonName" matInput disabled>
+      <input value="{{certificate.subjectData.commonName}}" name="commonName" matInput readonly>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>Organization</mat-label>
-      <input class="dataField" value="{{certificate.subjectData.organization}}" name="organization" matInput disabled>
-    </mat-form-field>
-  </div>
 
-  <div fxLayout="row wrap" fxLayoutGap="125px" class="dataDiv">
     <mat-form-field>
       <mat-label>Organizational unit</mat-label>
-      <input class="dataField" value="{{certificate.subjectData.organizationalUnit}}" name="organizationalUnit" matInput
-             disabled>
+      <input value="{{certificate.subjectData.organizationalUnit}}" name="organizationalUnit" matInput
+             readonly>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>City</mat-label>
-      <input class="dataField" value="{{certificate.subjectData.city}}" name="city" matInput disabled>
-    </mat-form-field>
-  </div>
 
-  <div fxLayout="row wrap" fxLayoutGap="125px" class="dataDiv">
     <mat-form-field>
       <mat-label>State</mat-label>
-      <input class="dataField" value="{{certificate.subjectData.state}}, {{certificate.subjectData.country}}"
-             name="state" matInput disabled>
+      <input value="{{certificate.subjectData.state}}, {{certificate.subjectData.country}}"
+             name="state" matInput readonly>
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>Email address</mat-label>
-      <input class="dataField" value="{{certificate.subjectData.email}}" name="email" matInput disabled>
-    </mat-form-field>
-  </div>
 
-  <div fxLayout="row wrap" fxLayoutGap="125px" class="dataDiv">
     <mat-form-field>
       <mat-label>Creation date</mat-label>
-      <input class="dataField" value="{{certificate.startDate|date : 'dd/MM/yyyy'}}" name="startDate" matInput disabled>
+      <input value="{{certificate.startDate|date : 'dd/MM/yyyy'}}" name="startDate" matInput readonly>
     </mat-form-field>
+
     <mat-form-field>
-      <mat-label>Expiration date</mat-label>
-      <input class="dataField" value="{{certificate.endDate|date : 'dd/MM/yyyy'}}" name="endDate" matInput disabled>
+      <mat-label>Issuer</mat-label>
+      <input value="{{certificate.issuer}}" name="issuer" matInput readonly>
     </mat-form-field>
   </div>
 
-  <div fxLayout="row wrap" fxLayoutGap="125px" class="dataDiv">
+  <div fxLayout="column">
     <mat-form-field>
-      <mat-label>Issuer</mat-label>
-      <input class="dataField" value="{{certificate.issuer}}" name="issuer" matInput disabled>
+      <mat-label>Organization</mat-label>
+      <input value="{{certificate.subjectData.organization}}" name="organization" matInput readonly>
     </mat-form-field>
-    <mat-checkbox class="dataField" [(ngModel)]="certificate.ca" name="ca" disabled>Certificate Authority</mat-checkbox>
+
+    <mat-form-field>
+      <mat-label>City</mat-label>
+      <input value="{{certificate.subjectData.city}}" name="city" matInput readonly>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Email address</mat-label>
+      <input value="{{certificate.subjectData.email}}" name="email" matInput readonly>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Expiration date</mat-label>
+      <input value="{{certificate.endDate|date : 'dd/MM/yyyy'}}" name="endDate" matInput readonly>
+    </mat-form-field>
+
+    <mat-checkbox [(ngModel)]="certificate.ca" name="ca" (click)="$event.preventDefault()">Certificate Authority
+    </mat-checkbox>
   </div>
 </form>
+<button mat-raised-button color="primary" (click)="this.location.back()">Back</button>

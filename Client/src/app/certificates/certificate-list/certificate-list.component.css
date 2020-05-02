@@ -1,28 +1,22 @@
-table {
-  width: 100%;
-}
-
-td, th {
-  width: 25%;
-}
-
 #certificates-table {
   margin-top: 2%;
-  width: 90%;
+  width: 70%;
   margin-right: auto;
   margin-left: auto;
 }
 
-#certificates-table td {
-  padding: 10px;
-}
-
-#certificates-table th {
-  text-align: center;
+#certificates-table table {
+  width: 100%;
 }
 
 .mat-row:hover {
-  background-color: #0074D9;
+  background: whitesmoke;
   cursor: pointer;
-  color: white;
+}
+
+#add {
+  display: block;
+  position: fixed;
+  right: 0.5%;
+  bottom: 1%;
 }

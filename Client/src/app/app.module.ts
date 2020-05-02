@@ -10,9 +10,7 @@ import {DashboardModule} from './dashboard/dashboard.module';
 import {CertificatesModule} from './certificates/certificates.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {UrlInterceptor} from './interceptors/url-interceptor';
-import { CaCreationFormComponent } from './certificates/ca-creation-form/ca-creation-form.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {MatButtonModule, MatInputModule} from '@angular/material';
+import {LogsModule} from './logs/logs.module';
 
 
 @NgModule({
@@ -29,6 +27,7 @@ import {MatButtonModule, MatInputModule} from '@angular/material';
     DashboardModule,
     CertificatesModule,
     HttpClientModule,
+    LogsModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true}],
   bootstrap: [AppComponent]

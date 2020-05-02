@@ -1,11 +1,9 @@
-.dataField {
-  color: black;
+form {
+  margin-top: 2%;
 }
 
-#dataForm {
-  margin-top: 5%;
-}
-
-.mat-form-field, .mat-checkbox {
-  width: 30vw;
+button {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
 }

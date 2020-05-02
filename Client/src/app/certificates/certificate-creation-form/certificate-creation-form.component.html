@@ -1,0 +1,94 @@
+<h1 mat-dialog-title fxLayoutAlign="center" *ngIf="data.ca; else createClient">Create CA</h1>
+<ng-template #createClient>
+  <h1 mat-dialog-title fxLayoutAlign="center">Create client certificate</h1>
+</ng-template>
+<div mat-dialog-content>
+  <form id='main-form' [formGroup]="form" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="8%">
+    <div formGroupName="subject" fxLayout="column">
+      <mat-form-field>
+        <input matInput type="text" placeholder="Common name" [readonly]="!data.ca" formControlName="commonName">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Organization name" [readonly]="!data.ca"
+               formControlName="organization">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Organizational unit" [readonly]="!data.ca"
+               formControlName="organizationalUnit">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="City" [readonly]="!data.ca" formControlName="city">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="State" [readonly]="!data.ca" formControlName="state">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="Country" [readonly]="!data.ca" formControlName="country">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput type="text" placeholder="E-mail" [readonly]="!data.ca" formControlName="email">
+      </mat-form-field>
+
+      <mat-form-field *ngIf="!data.ca">
+        <mat-label>CA</mat-label>
+        <mat-select (selectionChange)=caChanged($event)>
+          <mat-option  *ngFor="let ca of CAs" [value]="ca.serialNumber">{{ca.commonName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column" id='second-column'>
+      <p *ngIf="data.ca; else clientKeyUsage">Key usage: Digital Signature, Key Encipherment, Key Certificate
+        Signing</p>
+      <ng-template #clientKeyUsage>Key usage: Digital Signature, Key Encipherment</ng-template>
+      <p>Extended key usage: Server Authentication, Client Authentication</p>
+
+      <mat-checkbox (change)="toggleManual()">Manual configuration</mat-checkbox>
+
+
+      <div formGroupName="manual" fxLayout="column">
+        <div fxLayout="row" fxLayoutGap="4%">
+          <mat-form-field>
+            <input matInput (dateChange)="setMinEnd($event)" [matDatepicker]="myDatepicker" [min]="minDateStart" [max]="maxDateStart" id="start-date-input" formControlName="startDate" placeholder="Start date">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker></mat-datepicker>
+          </mat-form-field>
+
+
+          <mat-form-field>
+            <input matInput [matDatepicker]="myDatepicker2" [min]="minDateEnd" [max]="maxDateEnd" id="end-date-input" formControlName="endDate" placeholder="End date">
+            <mat-datepicker-toggle matSuffix [for]="myDatepicker2" [disabled]='this.pickerDisable'></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker2></mat-datepicker>
+          </mat-form-field>
+
+
+        </div>
+
+        <mat-form-field id="altNames">
+          <mat-label>Extensions</mat-label>
+          <mat-select [required]="this.manual" formControlName="altNames">
+            <mat-option [value]="false">Subject Key Identifier, Authority Key Identifier</mat-option>
+            <mat-option [value]="true">Subject Alternative Name, Issuer Alternative Name</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field id="sigAlgorithm">
+          <mat-label>Algorithm</mat-label>
+          <mat-select [required]="this.manual" formControlName="sigAlgorithm">
+            <mat-option *ngFor="let algorithm of this.algorithms" [value]="algorithm">{{algorithm}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutGap="1%" fxLayoutAlign="center">
+  <button mat-raised-button (click)="this.dialogRef.close()">Close</button>
+  <button mat-raised-button (click)="submitCertificate()" color="primary" [disabled]='(!form.valid) || (!data.ca && caSerialNumber == null)' >Create</button>
+</div>

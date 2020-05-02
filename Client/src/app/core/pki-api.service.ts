@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Subject} from '../model/subject';
+import {CaCertificateCreation} from '../model/caCertificateCreation';
+import {NonCACreationData} from '../model/nonCACertificateCreation';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,11 @@ export class PkiApiService {
     return this.http.post('certificates/csr', csrData);
   }
 
-  createNonCACertificate(serialNumber: string, caSerialNumber: string) {
-    return this.http.post('certificates/non-ca', {serialNumber, caSerialNumber});
+  createNonCACertificate(certificateData: NonCACreationData) {
+    return this.http.post('certificates/non-ca', certificateData, {responseType: 'text'});
   }
 
-  createCACertificate(certAuth: Subject) {
+  createCACertificate(certAuth: CaCertificateCreation) {
     return this.http.post('certificates/ca', certAuth);
   }
 
@@ -40,5 +41,9 @@ export class PkiApiService {
 
   getRevokedCertificates() {
     return this.http.get('certificates/revoked');
+  }
+
+  getCACertificates() {
+    return this.http.get('certificates/ca');
   }
 }
