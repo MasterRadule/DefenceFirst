@@ -17,12 +17,12 @@ import {ToolbarModule} from '../toolbar/toolbar.module';
 import {RouterModule} from '@angular/router';
 import {CertificatesComponent} from './certificates.component';
 import {routes} from '../routing/certificates-routes';
-import {MatTooltipModule} from "@angular/material/tooltip";
-import {MatDialogModule} from "@angular/material/dialog";
-import {CertificateCreationFormComponent} from "./certificate-creation-form/certificate-creation-form.component";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatMomentDateModule} from "@angular/material-moment-adapter";
-import {MatSelectModule} from "@angular/material/select";
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDialogModule} from '@angular/material/dialog';
+import {CertificateCreationFormComponent} from './certificate-creation-form/certificate-creation-form.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({

@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Subject} from '../model/subject';
-import {CaCertificateCreation} from "../model/caCertificateCreation";
-import {NonCACreationData} from "../model/nonCACertificateCreation";
+import {CaCertificateCreation} from '../model/caCertificateCreation';
+import {NonCACreationData} from '../model/nonCACertificateCreation';
 
 @Injectable({
   providedIn: 'root'

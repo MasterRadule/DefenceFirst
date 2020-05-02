@@ -5,9 +5,9 @@ import {MatPaginator} from '@angular/material/paginator';
 import {PkiApiService} from '../../core/pki-api.service';
 import {SnackbarService} from '../../core/snackbar.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {MatDialog} from "@angular/material/dialog";
-import {CertificateCreationFormComponent} from "../certificate-creation-form/certificate-creation-form.component";
-import {Subject} from "../../model/subject";
+import {MatDialog} from '@angular/material/dialog';
+import {CertificateCreationFormComponent} from '../certificate-creation-form/certificate-creation-form.component';
+import {Subject} from '../../model/subject';
 
 @Component({
   selector: 'app-certificate-list',
@@ -15,18 +15,18 @@ import {Subject} from "../../model/subject";
   styleUrls: ['./certificate-list.component.css']
 })
 export class CertificateListComponent implements OnInit {
-  private certificates: MatTableDataSource<any>;
+  private certificates: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   displayedColumns: string[];
   private content: string;
   private observer = {
     next: (certificates: []) => {
-      if (!this.certificates) {
-        this.certificates = new MatTableDataSource<any>(certificates);
-        this.certificates.paginator = this.paginator;
-        this.certificates.sort = this.sort;
-      } else {
-        this.certificates.data = certificates;
-      }
+      this.certificates.data = certificates;
+      this.changeDetectorRef.detectChanges();
+      this.certificates.paginator = this.paginator;
+      this.certificates.sort = this.sort;
+    },
+    error: () => {
+      this.snackbarService.displayMessage('Failed to load data');
     }
   };
 
@@ -35,7 +35,8 @@ export class CertificateListComponent implements OnInit {
   @ViewChild(MatTable, {static: true}) table: MatTable<any>;
 
   constructor(private activatedRoute: ActivatedRoute, private pkiApiService: PkiApiService, private router: Router,
-              private snackbarService: SnackbarService, private dialog: MatDialog, private changeDetectorRefs: ChangeDetectorRef) {
+              private snackbarService: SnackbarService, private dialog: MatDialog,
+              private changeDetectorRef: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -64,19 +65,6 @@ export class CertificateListComponent implements OnInit {
     }
   }
 
-
-  private process(row) {
-    switch (this.content) {
-      case 'active':
-        this.revoke(row);
-        this.getData();
-        break;
-      case 'revoked':
-        this.create(row);
-        break;
-    }
-  }
-
   private revoke(row) {
     this.pkiApiService.revokeCertificate(row.serialNumber).subscribe({
       next: (message: string) => {
@@ -86,9 +74,6 @@ export class CertificateListComponent implements OnInit {
     });
   }
 
-  private create(row) {
-    console.log(row.serialNumber);
-  }
 
   private openDialog(subject: Subject = {} as Subject, ca: boolean = true) {
     console.log(subject);
@@ -98,7 +83,6 @@ export class CertificateListComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(() => {
       this.getData();
-      this.table.renderRows();
     });
   }
 

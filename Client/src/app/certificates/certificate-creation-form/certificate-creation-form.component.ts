@@ -1,18 +1,16 @@
-import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {PkiApiService} from '../../core/pki-api.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SnackbarService} from '../../core/snackbar.service';
 import {DialogData} from '../../model/dialog-data';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Certificate} from '../../model/certificate';
-import datepicker from 'js-datepicker';
 import * as moment from 'moment';
 import {DateAdapter, MatDatepickerInputEvent} from '@angular/material';
 import {Subject} from '../../model/subject';
 import {CreationData} from '../../model/creationData';
 import {CaCertificateCreation} from '../../model/caCertificateCreation';
-import {Data} from '@angular/router';
-import {NonCACreationData} from "../../model/nonCACertificateCreation";
+import {NonCACreationData} from '../../model/nonCACertificateCreation';
 
 
 @Component({
@@ -49,13 +47,12 @@ export class CertificateCreationFormComponent implements OnInit {
       this.getCASelectOptions();
     }
 
-
     this.minDateStart = new Date();
     this.maxDateEnd = new Date(2030, 3, 7);
 
     this.maxDateStart = moment(this.maxDateEnd).subtract(3, 'months').toDate();
-
   }
+
   private initializeForm() {
     this.form = this.formBuilder.group({
       subject: this.formBuilder.group({
@@ -69,7 +66,7 @@ export class CertificateCreationFormComponent implements OnInit {
       }),
       manual: this.formBuilder.group({
         startDate: [{value: '', disabled: !this.manual}, Validators.required],
-        endDate: [{value: '', disabled: !this.manual }, Validators.required],
+        endDate: [{value: '', disabled: !this.manual}, Validators.required],
         sigAlgorithm: [{value: '', disabled: !this.manual}, Validators.required],
         altNames: [{value: '', disabled: !this.manual}, Validators.required]
       })
@@ -96,17 +93,6 @@ export class CertificateCreationFormComponent implements OnInit {
         this.snackbarService.displayMessage('Failed to initialize CA select');
       }
     });
-  }
-
-  // consider deleting
-  private dateValidateEnd(group: FormGroup): any {
-    if (group) {
-      const date = moment(group.get('startDate').value).add(3, 'months').toDate();
-      if (group.get('endDate').value > date) {
-        return {validEndStart : true};
-      }
-      return null;
-    }
   }
 
   private setMinEnd(event: MatDatepickerInputEvent<Date>) {
@@ -139,7 +125,7 @@ export class CertificateCreationFormComponent implements OnInit {
         caSerialNumber: this.caSerialNumber,
         creationData: manualData
       };
-      console.log(certificate);
+
       this.pkiApiService.createNonCACertificate(certificate).subscribe({
         next: (message: any) => {
           this.snackbarService.displayMessage(message);
@@ -148,13 +134,12 @@ export class CertificateCreationFormComponent implements OnInit {
           this.snackbarService.displayMessage(message);
         }
       });
-
     }
 
     this.dialogRef.close();
-
   }
-  private caChanged($event): void {
+
+  private caChanged($event) {
     this.caSerialNumber = $event.value;
   }
 }
