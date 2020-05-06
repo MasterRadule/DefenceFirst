@@ -112,6 +112,7 @@ public class CertificateController {
         try {
             return new ResponseEntity<>(certificateService.getRevokedCertificates(), HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

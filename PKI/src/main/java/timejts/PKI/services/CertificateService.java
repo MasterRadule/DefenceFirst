@@ -25,7 +25,6 @@ import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import java.io.File;
 import java.io.IOException;
@@ -251,7 +250,7 @@ public class CertificateService {
         csrRepository.save(csrObj);
 
         return "Certificate signing request successfully submitted. " +
-                "Your certificate will be sent to email address at the earliest.";
+                "Your certificate will be sent to your email address.";
     }
 
     public ArrayList<SubjectDTO> getCertificateSigningRequests() throws IOException {
@@ -324,14 +323,14 @@ public class CertificateService {
             throw new NotExistingCertificateException("Certificate with serial number" + serialNumber + " doesn't exist");
         }
 
-        saveRevokedCertificate(certificate);
+        saveRevokedCertificate(certificate); // TODO: save additional information in mongo db
         ks.deleteEntry(serialNumber);
         saveKeyStore(ks, keystorePath, keystorePassword);
         return "Certificate successfully revoked";
     }
 
     private void saveRevokedCertificate(X509Certificate certificate) throws CertificateNotYetValidException, CertificateExpiredException, CertificateEncodingException {
-        certificate.checkValidity();
+        certificate.checkValidity(); // TODO: should be removed
         String id = certificate.getSerialNumber().toString();
         String commonName = getCommonName(certificate);
         RevokedCertificate certificateToBeRevoked = new RevokedCertificate(id, commonName);
@@ -422,6 +421,7 @@ public class CertificateService {
         X509Certificate certificate;
         String commonName, issuer;
 
+        // TODO: change according to new model for RevokedCertificate
         for (RevokedCertificate r : revokedCertificates) {
             certificate = (X509Certificate) ks.getCertificate(r.getId());
             commonName = getCommonName(certificate);
