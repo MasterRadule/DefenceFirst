@@ -323,17 +323,19 @@ public class CertificateService {
             throw new NotExistingCertificateException("Certificate with serial number" + serialNumber + " doesn't exist");
         }
 
-        saveRevokedCertificate(certificate); // TODO: save additional information in mongo db
+        saveRevokedCertificate(certificate);
         ks.deleteEntry(serialNumber);
         saveKeyStore(ks, keystorePath, keystorePassword);
         return "Certificate successfully revoked";
     }
 
     private void saveRevokedCertificate(X509Certificate certificate) throws CertificateNotYetValidException, CertificateExpiredException, CertificateEncodingException {
-        certificate.checkValidity(); // TODO: should be removed
         String id = certificate.getSerialNumber().toString();
         String commonName = getCommonName(certificate);
-        RevokedCertificate certificateToBeRevoked = new RevokedCertificate(id, commonName);
+        Date startDate = certificate.getNotBefore();
+        Date endDate = certificate.getNotAfter();
+        String issuer = getIssuerCommonName(certificate);
+        RevokedCertificate certificateToBeRevoked = new RevokedCertificate(id, commonName, startDate, endDate, issuer);
         revokedCertificatesRepository.save(certificateToBeRevoked);
     }
 
@@ -414,22 +416,7 @@ public class CertificateService {
         return "Sertificate is good";
     }
 
-    public ArrayList<CertificateDTO> getRevokedCertificates() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
-        List<RevokedCertificate> revokedCertificates = revokedCertificatesRepository.findAll();
-        ArrayList<CertificateDTO> certificateDTOS = new ArrayList<>();
-        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
-        X509Certificate certificate;
-        String commonName, issuer;
-
-        // TODO: change according to new model for RevokedCertificate
-        for (RevokedCertificate r : revokedCertificates) {
-            certificate = (X509Certificate) ks.getCertificate(r.getId());
-            commonName = getCommonName(certificate);
-            issuer = getIssuerCommonName(certificate);
-            certificateDTOS.add(new CertificateDTO(r.getId(), commonName, certificate.getNotBefore(),
-                    certificate.getNotAfter(), issuer, ks.getCertificateChain(r.getId()) != null));
-        }
-
-        return certificateDTOS;
+    public List<CertificateDTO> getRevokedCertificates() {
+        return revokedCertificatesRepository.findAll().stream().map(r -> new CertificateDTO(r)).collect(Collectors.toList());
     }
 }
