@@ -61,7 +61,7 @@ export class CertificateCreationFormComponent implements OnInit {
         organizationalUnit: [this.data.subject.organizationalUnit, Validators.required],
         city: [this.data.subject.city, Validators.required],
         state: [this.data.subject.state, Validators.required],
-        country: [this.data.subject.country, Validators.required],
+        country: [this.data.subject.country, [Validators.required, Validators.maxLength(2)]],
         email: [this.data.subject.email, [Validators.email, Validators.required]]
       }),
       manual: this.formBuilder.group({

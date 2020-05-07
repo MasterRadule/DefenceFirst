@@ -1,12 +1,20 @@
 package timejts.PKI.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class CreationDataDTO {
 
+    @NotBlank(message = "Signature algorithm must be provided")
     private String sigAlgorithm;
+
+    @NotNull(message = "Certificate start date must be provided")
     private Date startDate;
+
+    @NotNull(message = "Certificate expiration date must be provided")
     private Date endDate;
+
     private boolean altNames;
 
     public CreationDataDTO(String sigAlgorithm, Date startDate, Date endDate, boolean altNames) {

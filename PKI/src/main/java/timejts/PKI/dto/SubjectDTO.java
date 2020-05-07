@@ -2,17 +2,34 @@ package timejts.PKI.dto;
 
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.springframework.beans.factory.annotation.Value;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class SubjectDTO {
 
     private String serialNumber;
+
+    @NotBlank(message = "Common name must be provided")
     private String commonName;
+
+    @NotBlank(message = "Organization must be provided")
     private String organization;
+
+    @NotBlank(message = "Organizational unit must be provided")
     private String organizationalUnit;
+
+    @NotBlank(message = "City must be provided")
     private String city;
+
+    @NotBlank(message = "State must be provided")
     private String state;
+
+    @Size(min = 2, max = 2, message = "Country code must be two-letter word")
     private String country;
+
+    @Email
     private String email;
 
     public SubjectDTO() {

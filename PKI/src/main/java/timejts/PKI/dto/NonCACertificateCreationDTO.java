@@ -1,9 +1,17 @@
 package timejts.PKI.dto;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+
 public class NonCACertificateCreationDTO {
 
+    @NotBlank(message = "Serial number must be provided")
     private String serialNumber;
+
+    @NotBlank(message = "CA serial number must be provided")
     private String caSerialNumber;
+
+    @Valid
     private CreationDataDTO creationData;
 
     public NonCACertificateCreationDTO(String serialNumber, String caSerialNumber, CreationDataDTO creationData) {
