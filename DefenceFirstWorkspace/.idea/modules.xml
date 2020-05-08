@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Config-Server/Config-Server.iml" filepath="$PROJECT_DIR$/../Config-Server/Config-Server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Gateway/Gateway.iml" filepath="$PROJECT_DIR$/../Gateway/Gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../PKI/PKI.iml" filepath="$PROJECT_DIR$/../PKI/PKI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Service-Registry/Service-Registry.iml" filepath="$PROJECT_DIR$/../Service-Registry/Service-Registry.iml" />
+    </modules>
+  </component>
+</project>
