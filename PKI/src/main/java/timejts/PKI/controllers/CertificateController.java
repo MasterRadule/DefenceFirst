@@ -8,6 +8,7 @@ import timejts.PKI.dto.CACertificateCreationDTO;
 import timejts.PKI.dto.NonCACertificateCreationDTO;
 import timejts.PKI.services.CertificateService;
 
+import javax.validation.Valid;
 import java.security.cert.X509Certificate;
 
 @RestController
@@ -36,7 +37,7 @@ public class CertificateController {
     }
 
     @PostMapping("/non-ca")
-    public ResponseEntity<Object> createNonCACertificate(@RequestBody NonCACertificateCreationDTO creationDTO) {
+    public ResponseEntity<Object> createNonCACertificate(@Valid @RequestBody NonCACertificateCreationDTO creationDTO) {
         try {
             return new ResponseEntity<>(certificateService.createNonCACertificate(creationDTO), HttpStatus.CREATED);
         } catch (Exception e) {
@@ -45,7 +46,7 @@ public class CertificateController {
     }
 
     @PostMapping("/ca")
-    public ResponseEntity<Object> createCACertificate(@RequestBody CACertificateCreationDTO creationDTO) {
+    public ResponseEntity<Object> createCACertificate(@Valid @RequestBody CACertificateCreationDTO creationDTO) {
         try {
             return new ResponseEntity<>(certificateService.createCACertificate(creationDTO), HttpStatus.CREATED);
         } catch (Exception e) {

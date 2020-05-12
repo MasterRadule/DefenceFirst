@@ -73,7 +73,7 @@ public class CertificateServiceTests {
         PKCS10CertificationRequest csr = p10Builder.build(signer);
         certificateService.submitCSR(csr.getEncoded());
 
-        Date dt = new Date();
+        /*Date dt = new Date();
         LocalDateTime startLocalDate = dt.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plusMonths(6);
         Date startDate = Date.from(startLocalDate.atZone(ZoneId.systemDefault()).toInstant());
 
@@ -82,7 +82,7 @@ public class CertificateServiceTests {
         // String nonCA2 = certificateService.createNonCACertificate(caDTO.get(0).getSerialNumber(), ca1, startDate, false).toString();
 
         // System.out.println(nonCA1);
-        // System.out.println(nonCA2);
+        // System.out.println(nonCA2);*/
     }
 
     @Test
