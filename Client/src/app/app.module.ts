@@ -11,6 +11,8 @@ import {CertificatesModule} from './certificates/certificates.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {UrlInterceptor} from './interceptors/url-interceptor';
 import {LogsModule} from './logs/logs.module';
+import {LoginModule} from "./login/login.module";
+import {TokenInterceptor} from "./interceptors/token-interceptor";
 
 
 @NgModule({
@@ -27,9 +29,13 @@ import {LogsModule} from './logs/logs.module';
     DashboardModule,
     CertificatesModule,
     HttpClientModule,
-    LogsModule
+    LogsModule,
+    LoginModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true}],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

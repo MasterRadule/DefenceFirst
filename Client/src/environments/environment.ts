@@ -4,7 +4,12 @@
 
 export const environment = {
   production: false,
-  baseURL: 'https://localhost:9092/api'
+  baseURL: 'https://localhost:9092/api',
+  client_id: 'Defence First Client',
+  client_secret: 'f838e554-6ed4-4935-af58-bf68ccd514a7',
+  grant_type: 'password',
+  realm: 'Defence First Realm',
+  keycloak_port: 8180
 };
 
 /*

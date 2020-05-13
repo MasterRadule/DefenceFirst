@@ -2,11 +2,14 @@ import {Routes} from '@angular/router';
 import {DashboardComponent} from '../dashboard/dashboard.component';
 import {AlarmsComponent} from '../alarms/alarms.component';
 import {LogsComponent} from '../logs/logs.component';
+import {LoginComponent} from "../login/login.component";
+import {AuthGuard} from "../guards/auth.guard";
 
 export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -28,8 +31,12 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/dashboard/logs'
+    redirectTo: '/login'
   }
 ];

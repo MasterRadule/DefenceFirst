@@ -1,0 +1,11 @@
+<form fxLayout="column" [formGroup]="this.formGroup" fxLayoutAlign="center center" (submit)="this.login()">
+  <mat-form-field>
+    <input matInput type="text" placeholder="Username" formControlName="username">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="password" placeholder="Password" formControlName="password">
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="!this.formGroup.valid">Login</button>
+</form>

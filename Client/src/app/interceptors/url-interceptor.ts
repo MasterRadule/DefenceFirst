@@ -14,6 +14,9 @@ export class UrlInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (req.headers.get('skip'))
+      return next.handle(req.clone({headers: req.headers.delete('skip')}));
+
     return next.handle(req.clone({url: `${this.baseURL}/${req.url}`}));
   }
 }
