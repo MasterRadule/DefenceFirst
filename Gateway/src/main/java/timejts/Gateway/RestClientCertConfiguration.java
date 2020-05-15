@@ -26,10 +26,10 @@ public class RestClientCertConfiguration {
         SSLContext sslContext = SSLContextBuilder
                 .create()
                 .loadKeyMaterial(ResourceUtils
-                        .getFile("src/main/resources/static/keystore/zull-keystore.jks"), "zuulpass"
+                        .getFile("../Gateway/src/main/resources/static/keystore/zull-keystore.jks"), "zuulpass"
                         .toCharArray(), "zuulpass".toCharArray())
                 .loadTrustMaterial(ResourceUtils
-                        .getFile("src/main/resources/static/keystore/truststore.jks"), "gatewaytruststorepass"
+                        .getFile("../Gateway/src/main/resources/static/keystore/truststore.jks"), "gatewaytruststorepass"
                         .toCharArray())
                 .build();
 
@@ -40,7 +40,7 @@ public class RestClientCertConfiguration {
         return new RestTemplate(factory);
     }
 
-    @Bean
+   /* @Bean
     public void setUpSSLContext() throws NoSuchAlgorithmException, KeyStoreException, IOException, CertificateException, KeyManagementException, UnrecoverableKeyException {
         TrustManagerFactory tmf = TrustManagerFactory
                 .getInstance(TrustManagerFactory.getDefaultAlgorithm());
@@ -87,12 +87,12 @@ public class RestClientCertConfiguration {
             @Override
             public void checkServerTrusted(X509Certificate[] chain,
                                            String authType) throws CertificateException {
-                /*try {
+                try {
                     finalMyTm.checkServerTrusted(chain, authType);
                 } catch (CertificateException e) {
                     // This will throw another CertificateException if this fails too.
                     finalDefaultTm.checkServerTrusted(chain, authType);
-                }*/
+                }
             }
 
             @Override
@@ -117,6 +117,7 @@ public class RestClientCertConfiguration {
         SSLContext.setDefault(sslContext);
         HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
     }
+    */
 
     /*@PostConstruct
     public void whenGETanHTTPSResource_thenCorrectResponse() throws Exception {
