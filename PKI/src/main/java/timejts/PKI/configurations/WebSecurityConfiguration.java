@@ -14,7 +14,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable();
         http.headers()
                 .addHeaderWriter(new StaticHeadersWriter("X-Content-Security-Policy",
                         "default-src 'self'"))
