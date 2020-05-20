@@ -115,6 +115,9 @@ export class CertificateCreationFormComponent implements OnInit {
       };
 
       this.pkiApiService.createCACertificate(certificate).subscribe({
+        next: (message: any) => {
+          this.snackbarService.displayMessage(message);
+        },
         error: (message: string) => {
           this.snackbarService.displayMessage(message);
         }

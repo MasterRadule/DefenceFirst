@@ -61,8 +61,15 @@
         <td mat-cell *matCellDef="let row">{{row.endDate|date : 'dd/MM/yyyy'}}</td>
       </ng-container>
 
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let row">
+          <button *ngIf="!row.ca" mat-flat-button color="primary" (click)="revoke(row)">Revoke</button>
+        </td>
+      </ng-container>
+
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-          routerLink="/dashboard/certificates/{{this.content}}/{{row.serialNumber}}"></tr>
+          (click)="redirectToCertView($event, row.serialNumber)"></tr>
     </ng-template>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

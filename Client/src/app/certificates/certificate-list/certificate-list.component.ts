@@ -45,7 +45,7 @@ export class CertificateListComponent implements OnInit {
         if (this.content === 'csrs') {
           this.displayedColumns = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email'];
         } else {
-          this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate'];
+          this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'action'];
         }
         this.getData();
       }
@@ -67,10 +67,13 @@ export class CertificateListComponent implements OnInit {
 
   private revoke(row) {
     this.pkiApiService.revokeCertificate(row.serialNumber).subscribe({
-      next: (message: string) => {
+      next: (message: any) => {
         this.snackbarService.displayMessage(message);
+        this.getData();
       },
-      error: (message: string) => this.snackbarService.displayMessage(message)
+      error: (message: any) => {
+        this.snackbarService.displayMessage(message);
+      }
     });
   }
 
@@ -84,6 +87,12 @@ export class CertificateListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       this.getData();
     });
+  }
+
+  redirectToCertView($event, serialNumber) {
+    if (!$event.target.classList.contains('mat-button-wrapper')) {
+      this.router.navigate([`/dashboard/certificates/${this.content}/${serialNumber}`]);
+    }
   }
 
 }
