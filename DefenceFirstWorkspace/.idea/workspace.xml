@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8aad2c6d-856f-4e87-84b2-15470f7ec44c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/certificates/certificate-creation-form/certificate-creation-form.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/certificates/certificate-creation-form/certificate-creation-form.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/NonCACertificateCreationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/NonCACertificateCreationDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/SubjectDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/SubjectDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/exceptions/InvalidRevocationException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/certificates/certificate-list/certificate-list.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/certificates/certificate-list/certificate-list.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/certificates/certificate-list/certificate-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/certificates/certificate-list/certificate-list.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/services/CertificateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/services/CertificateService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PKI/src/test/resources/examples/29265996049563850812855439007.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PKI/src/test/resources/examples/sertifikat.pem" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/../Config-Server/target/" />
     <ignored path="$PROJECT_DIR$/../Service-Registry/target/" />
@@ -23,17 +27,7 @@
     <favorites_list name="DefenceFirstWorkspace" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/SubjectDTO.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="142">
-              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -52,6 +46,14 @@
       <find>revokecER</find>
       <find>createNon</find>
       <find>createn</find>
+      <find>exception</find>
+      <find>saveRev</find>
+      <find>revoke</find>
+      <find>revokeCert</find>
+      <find>chain</find>
+      <find>CertificateRevokedEx</find>
+      <find>CertificateAlrea</find>
+      <find>CertificateAlreadyRev</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -64,11 +66,12 @@
         <option value="$PROJECT_DIR$/../Gateway/src/main/resources/application.properties" />
         <option value="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/RestClientCertConfiguration.java" />
         <option value="$PROJECT_DIR$/../PKI/src/main/resources/application.properties" />
-        <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/services/CertificateService.java" />
         <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java" />
         <option value="$PROJECT_DIR$/../PKI/src/test/java/timejts/PKI/services/CertificateServiceTests.java" />
         <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/SubjectDTO.java" />
         <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/NonCACertificateCreationDTO.java" />
+        <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/services/CertificateService.java" />
+        <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/exceptions/InvalidRevocationException.java" />
       </list>
     </option>
   </component>
@@ -91,52 +94,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="dto" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="ProjectPane" />
       <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
@@ -186,7 +144,7 @@
     </option>
     <option name="contentProportion" value="0.2176617" />
   </component>
-  <component name="RunManager" selected="Spring Boot.GatewayApplication">
+  <component name="RunManager" selected="Spring Boot.PkiApplication">
     <configuration default="true" type="CompoundRunConfigurationType">
       <toRun name="ServiceRegistryApplication" type="SpringBootApplicationConfigurationType" />
       <toRun name="ConfigServerApplication" type="SpringBootApplicationConfigurationType" />
@@ -291,7 +249,7 @@
       <workItem from="1589494451340" duration="4633000" />
       <workItem from="1589533249986" duration="4276000" />
       <workItem from="1589620715153" duration="104000" />
-      <workItem from="1589966502502" duration="10335000" />
+      <workItem from="1589966502502" duration="12181000" />
     </task>
     <servers />
   </component>
@@ -301,7 +259,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45539000" />
+    <option name="totallyTimeSpent" value="47385000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -314,7 +272,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Image Layers" order="0" />
       <window_info id="Capture Tool" order="1" />
@@ -333,13 +290,13 @@
       <window_info anchor="bottom" id="Database Changes" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32922733" />
       <window_info anchor="bottom" id="Message" order="8" />
-      <window_info anchor="bottom" id="Find" order="9" />
+      <window_info anchor="bottom" id="Find" order="9" weight="0.3289689" />
       <window_info anchor="bottom" id="Run" order="10" weight="0.45008183" />
       <window_info anchor="bottom" id="Debug" order="11" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="12" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="13" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="14" weight="0.32922733" />
-      <window_info active="true" anchor="bottom" id="Run Dashboard" order="15" sideWeight="0.49924356" visible="true" weight="0.38297874" />
+      <window_info active="true" anchor="bottom" id="Run Dashboard" order="15" sideWeight="0.49924356" visible="true" weight="0.31423897" />
       <window_info anchor="right" id="Palette" order="0" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Database" order="2" />
@@ -479,42 +436,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/PkiApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
-          <folding>
-            <element signature="e#600#601#0" expanded="true" />
-            <element signature="e#665#666#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../PKI/src/main/resources/application.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="16" column="53" lean-forward="true" selection-start-line="16" selection-start-column="53" selection-end-line="16" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/services/CertificateService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="326" column="26" selection-start-line="326" selection-start-column="26" selection-end-line="326" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../PKI/src/test/java/timejts/PKI/services/CertificateServiceTests.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="41" column="9" lean-forward="true" selection-start-line="41" selection-start-column="9" selection-end-line="41" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="91">
-          <caret line="35" column="9" lean-forward="true" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -553,17 +478,84 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/NonCACertificateCreationDTO.java">
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/SubjectDTO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
+        <state relative-caret-position="244">
+          <caret line="28" column="27" lean-forward="true" selection-start-line="28" selection-start-column="27" selection-end-line="28" selection-end-column="27" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/SubjectDTO.java">
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/NonCACertificateCreationDTO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+        <state relative-caret-position="68">
+          <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/PkiApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+          <folding>
+            <element signature="e#600#601#0" expanded="true" />
+            <element signature="e#665#666#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/test/java/timejts/PKI/services/EmailServiceTests.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/test/java/timejts/PKI/services/CertificateServiceTests.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2">
+          <caret line="53" column="8" selection-start-line="53" selection-start-column="8" selection-end-line="53" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="113" column="70" selection-start-line="113" selection-start-column="70" selection-end-line="113" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/model/RevokedCertificate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="16" column="37" lean-forward="true" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/exceptions/NotExistingCertificateException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="6" column="1" lean-forward="true" selection-start-line="2" selection-start-column="45" selection-end-line="6" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/exceptions/DigitalSignatureInvalidException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/exceptions/InvalidRevocationException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="7" column="1" lean-forward="true" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/services/CertificateService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="429" column="8" selection-start-line="429" selection-start-column="8" selection-end-line="429" selection-end-column="8" />
         </state>
       </provider>
     </entry>

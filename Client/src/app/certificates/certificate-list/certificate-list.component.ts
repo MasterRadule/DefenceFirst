@@ -44,8 +44,10 @@ export class CertificateListComponent implements OnInit {
         this.content = params.get('tab-content');
         if (this.content === 'csrs') {
           this.displayedColumns = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email', 'action'];
-        } else {
+        } else if (this.content === 'active') {
           this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'action'];
+        } else {
+          this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate'];
         }
         this.getData();
       }

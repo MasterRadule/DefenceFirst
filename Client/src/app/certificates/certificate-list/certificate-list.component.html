@@ -85,6 +85,6 @@
   <mat-paginator [pageSizeOptions]="[6]" [hidePageSize]="true"></mat-paginator>
 </div>
 <button id="add" matTooltip="Create CA" *ngIf="this.content === 'active'" mat-fab color="primary"
-        (click)="openDialog()">
+        (click)="openDialog($event)">
   <mat-icon>add</mat-icon>
 </button>
