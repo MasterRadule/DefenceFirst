@@ -46,4 +46,8 @@ export class PkiApiService {
   getCACertificates() {
     return this.http.get('certificates/ca');
   }
+
+  rejectCSR(serialNumber: string) {
+    return this.http.delete(`certificates/csr/${serialNumber}`, {responseType: 'text'});
+  }
 }

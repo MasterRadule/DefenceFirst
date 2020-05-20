@@ -25,7 +25,6 @@ import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import java.io.File;
 import java.io.IOException;
@@ -328,6 +327,15 @@ public class CertificateService {
         ks.deleteEntry(serialNumber);
         saveKeyStore(ks, keystorePath, keystorePassword);
         return "Certificate successfully revoked";
+    }
+
+    public String rejectCSR(String serialNumber) throws CSRDoesNotExistException {
+        CertificateSigningRequest csr = csrRepository.findById(new BigInteger(serialNumber))
+                .orElseThrow(() -> new CSRDoesNotExistException("Certificate signing request " +
+                        "with given serial number does not exist"));
+        csrRepository.delete(csr);
+
+        return "Certificate signing request successfully rejected";
     }
 
     private void saveRevokedCertificate(X509Certificate certificate) throws CertificateNotYetValidException, CertificateExpiredException, CertificateEncodingException {

@@ -43,7 +43,7 @@ export class CertificateListComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
         this.content = params.get('tab-content');
         if (this.content === 'csrs') {
-          this.displayedColumns = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email'];
+          this.displayedColumns = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email', 'action'];
         } else {
           this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'action'];
         }
@@ -77,9 +77,23 @@ export class CertificateListComponent implements OnInit {
     });
   }
 
+  private rejectCSR(row) {
+    this.pkiApiService.rejectCSR(row.serialNumber).subscribe({
+      next: (message: any) => {
+        this.snackbarService.displayMessage(message);
+        this.getData();
+      },
+      error: (message: any) => {
+        this.snackbarService.displayMessage(message);
+      }
+    });
+  }
 
-  private openDialog(subject: Subject = {} as Subject, ca: boolean = true) {
-    console.log(subject);
+  private openDialog($event, subject: Subject = {} as Subject, ca: boolean = true) {
+    if ($event.target.classList.contains('mat-button-wrapper')) {
+      return;
+    }
+
     const dialogRef = this.dialog.open(CertificateCreationFormComponent, {
       width: '70%',
       data: {subject, ca}
