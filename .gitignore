@@ -1,4 +1,15 @@
 
+
+DefenceFirstWorkspace/.idea/encodings.xml
+DefenceFirstWorkspace/.idea/jarRepositories.xml
 DefenceFirstWorkspace/.idea/workspace.xml
-DefenceFirstWorkspace/.idea/workspace.xml
-*.xml
+SIEMAgent/.mvn/wrapper/maven-wrapper.jar
+SIEMAgent/.mvn/wrapper/maven-wrapper.properties
+SIEMAgent/mvnw.cmd
+SIEMAgent/mvnw
+SIEMAgent/.mvn/wrapper/MavenWrapperDownloader.java
+SIEMCentre/.mvn/wrapper/maven-wrapper.jar
+SIEMCentre/.mvn/wrapper/maven-wrapper.properties
+SIEMCentre/.mvn/wrapper/MavenWrapperDownloader.java
+SIEMCentre/mvnw.cmd
+SIEMCentre/mvnw
