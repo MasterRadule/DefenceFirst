@@ -6,6 +6,6 @@
     <button routerLink="/dashboard/certificates" mat-button>Certificates</button>
   </span>
   <span fxLayoutAlign="right">
-    <button routerLink="/logout" mat-button>Logout</button>
+    <button (click)="authorizationService.logout()" mat-button>Logout</button>
   </span>
 </mat-toolbar>

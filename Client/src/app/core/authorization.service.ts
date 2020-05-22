@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {LoginData} from "../model/login-data";
 import {environment} from "../../environments/environment";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
 import qs from "querystring"
 import * as moment from "moment"
@@ -19,6 +19,10 @@ export class AuthorizationService {
 
   public get accessToken() {
     return localStorage.getItem('accessToken');
+  }
+
+  public get refreshToken() {
+    return localStorage.getItem('refreshToken');
   }
 
   public login(data: LoginData) {
@@ -51,12 +55,28 @@ export class AuthorizationService {
     localStorage.setItem('refreshExpiresIn', now.add(authData.refresh_expires_in, 'seconds').toISOString());
   }
 
-  private static refreshToken() {
+  public logout() {
+    let refreshToken = this.refreshToken;
 
-  }
-
-  private logout() {
-    localStorage.clear();
+    let data = {
+      'refresh_token': refreshToken,
+      'client_id': environment.client_id,
+      'client_secret': environment.client_secret
+    }
+    this.httpClient.post(`http://localhost:${environment.keycloak_port}/auth/realms/${environment.realm}/protocol/openid-connect/logout`,
+      qs.stringify(data),
+      {
+        headers: this.headers
+      }
+    ).subscribe({
+      next: () => {
+        localStorage.clear();
+        this.router.navigateByUrl('/login').then();
+      },
+      error: () => {
+        this.snackbarService.displayMessage('Failed to logout');
+      }
+    });
   }
 
   private static isLoggedIn() {
