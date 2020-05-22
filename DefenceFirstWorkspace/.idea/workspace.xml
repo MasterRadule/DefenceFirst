@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8aad2c6d-856f-4e87-84b2-15470f7ec44c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/GatewayController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/configurations/SSLConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/SSLConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/SSLConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/configurations/WebSecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/core/pki-api.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/core/pki-api.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/RestClientCertConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/RestClientCertConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PKI/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../PKI/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/test/java/timejts/SIEMAgent/HTTPSTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/test/java/timejts/SIEMAgent/HTTPSTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/../Config-Server/target/" />
     <ignored path="$PROJECT_DIR$/../Service-Registry/target/" />
@@ -28,59 +23,7 @@
     <favorites_list name="DefenceFirstWorkspace" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/RestClientCertConfiguration.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="31" column="62" selection-start-line="31" selection-start-column="62" selection-end-line="31" selection-end-column="62" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/GatewayController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="32" lean-forward="true" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="77" column="68" selection-start-line="77" selection-start-column="68" selection-end-line="77" selection-end-column="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../Gateway/src/main/resources/application.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../PKI/src/main/resources/application.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="10" selection-start-column="10" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -112,6 +55,10 @@
       <find>Invalidated</find>
       <find>proba</find>
       <find>gateway</find>
+      <find>webmast</find>
+      <find>security</find>
+      <find>security password</find>
+      <find>security passwor</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -121,7 +68,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/Proba.java" />
-        <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java" />
         <option value="$PROJECT_DIR$/../PKI/src/test/java/timejts/PKI/services/CertificateServiceTests.java" />
         <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/SubjectDTO.java" />
         <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/dto/NonCACertificateCreationDTO.java" />
@@ -131,9 +77,12 @@
         <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/services/CertificateService.java" />
         <option value="$PROJECT_DIR$/../PKI/src/main/resources/application.properties" />
         <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/configurations/SSLConfiguration.java" />
-        <option value="$PROJECT_DIR$/../Gateway/src/main/resources/application.properties" />
         <option value="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/RestClientCertConfiguration.java" />
         <option value="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/GatewayController.java" />
+        <option value="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java" />
+        <option value="$PROJECT_DIR$/../Gateway/src/main/resources/application.properties" />
+        <option value="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/configurations/WebSecurityConfiguration.java" />
+        <option value="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/GatewayApplication.java" />
       </list>
     </option>
   </component>
@@ -156,141 +105,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Gateway" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Gateway" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Gateway" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Gateway" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Gateway" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="Gateway" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Gateway" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Gateway" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="keystore" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="configurations" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="services" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="PKI" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="keystore" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="Scope" />
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -382,7 +199,6 @@
     <configuration name="GatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="Gateway" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="timejts.Gateway.GatewayApplication" />
-      <option name="VM_PARAMETERS" value="-Djavax.net.debug=ssl:all:verbose" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -397,7 +213,6 @@
         </pattern>
       </extension>
       <option name="SPRING_BOOT_MAIN_CLASS" value="timejts.PKI.PkiApplication" />
-      <option name="VM_PARAMETERS" value="-Djavax.net.debug=ssl:all:verbose" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -449,6 +264,8 @@
       <workItem from="1589620715153" duration="104000" />
       <workItem from="1589966502502" duration="12378000" />
       <workItem from="1590145641493" duration="9744000" />
+      <workItem from="1590184741319" duration="4182000" />
+      <workItem from="1590189463045" duration="404000" />
     </task>
     <servers />
   </component>
@@ -458,7 +275,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57326000" />
+    <option name="totallyTimeSpent" value="61912000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -471,7 +288,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Image Layers" order="0" />
       <window_info id="Capture Tool" order="1" />
@@ -479,7 +295,7 @@
       <window_info id="Favorites" order="3" sideWeight="0.5008347" side_tool="true" weight="0.25" />
       <window_info id="Web" order="4" sideWeight="0.5008347" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="5" />
-      <window_info active="true" content_ui="combo" id="Project" order="6" sideWeight="0.49916527" visible="true" weight="0.24432677" />
+      <window_info content_ui="combo" id="Project" order="6" sideWeight="0.49916527" visible="true" weight="0.25189108" />
       <window_info id="Structure" order="7" sideWeight="0.5008347" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Spring" order="0" weight="0.32922733" />
       <window_info anchor="bottom" id="Terminal" order="1" weight="0.32922733" />
@@ -496,7 +312,7 @@
       <window_info anchor="bottom" id="Cvs" order="12" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="13" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="14" weight="0.32922733" />
-      <window_info anchor="bottom" id="Run Dashboard" order="15" sideWeight="0.49848714" visible="true" weight="0.39116204" />
+      <window_info active="true" anchor="bottom" id="Run Dashboard" order="15" sideWeight="0.49848714" visible="true" weight="0.5139116" />
       <window_info anchor="right" id="Palette" order="0" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Database" order="2" />
@@ -561,9 +377,6 @@
     <entry file="file://$PROJECT_DIR$/../Config-Server/pom.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Gateway/pom.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/../PKI/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -604,28 +417,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/GatewayApplication.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
-          <folding>
-            <element signature="e#642#643#0" expanded="true" />
-            <element signature="e#711#712#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/utils/Utilities.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="42" column="13" selection-start-line="42" selection-start-column="13" selection-end-line="42" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/configurations/WebSecurityConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
         </state>
       </provider>
     </entry>
@@ -731,18 +526,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/CustomTrustManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="47">
-          <caret line="4" column="42" selection-start-line="4" selection-start-column="42" selection-end-line="4" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#592#593#0" expanded="true" />
-            <element signature="e#637#638#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/CustomTrustManager.java" />
     <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/services/EmailService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -757,16 +541,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/configurations/SSLConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="16" column="6" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/configurations/SSLConfiguration.java" />
     <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/services/CertificateService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="177">
@@ -774,44 +549,71 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="77" column="68" selection-start-line="77" selection-start-column="68" selection-end-line="77" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/GatewayController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="32" lean-forward="true" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/resources/application.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/RestClientCertConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="31" column="62" selection-start-line="31" selection-start-column="62" selection-end-line="31" selection-end-column="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/GatewayController.java" />
+    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/RestClientCertConfiguration.java" />
     <entry file="file://$PROJECT_DIR$/../PKI/src/main/resources/application.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="10" selection-start-column="10" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Gateway/pom.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/resources/application.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/configurations/WebSecurityConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/configurations/WebSecurityConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/configurations/RestTemplateConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/GatewayApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="20" column="4" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="4" />
+          <folding>
+            <element signature="e#642#643#0" expanded="true" />
+            <element signature="e#711#712#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/controllers/PKIController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="73">
+          <caret line="14" column="32" lean-forward="true" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
         </state>
       </provider>
     </entry>
