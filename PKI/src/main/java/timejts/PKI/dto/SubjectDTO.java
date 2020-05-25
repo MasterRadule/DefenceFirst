@@ -4,29 +4,28 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 
 public class SubjectDTO {
 
     private String serialNumber;
 
-    @NotBlank(message = "Common name must be provided")
+    @Pattern(regexp = "^(?!.*\\s).*$", message = "Common name can not contain whitespaces")
     private String commonName;
 
-    @NotBlank(message = "Organization must be provided")
+    @Pattern(regexp = "^[A-Z].*$", message = "Organization name must start with capital letter")
     private String organization;
 
-    @NotBlank(message = "Organizational unit must be provided")
+    @Pattern(regexp = "^[A-Z].*$", message = "Organizational unit must start with capital letter")
     private String organizationalUnit;
 
-    @NotBlank(message = "City must be provided")
+    @Pattern(regexp = "^[A-Z](?!.*\\d).*$", message = "City must start with capital letter and can not contain numbers")
     private String city;
 
-    @NotBlank(message = "State must be provided")
+    @Pattern(regexp = "^[A-Z](?!.*\\d).*$", message = "State must start with capital letter and can not contain numbers")
     private String state;
 
-    @Size(min = 2, max = 2, message = "Country code must be two-letter word")
+    @Pattern(regexp = "^[A-Z]{2}$", message = "Country code must be two-letter word")
     private String country;
 
     @Email

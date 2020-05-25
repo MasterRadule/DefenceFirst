@@ -27,6 +27,15 @@ public class CertificateController {
         }
     }
 
+    @DeleteMapping("/csr/{serialNumber}")
+    public ResponseEntity<Object> rejectCSR(@PathVariable(value = "serialNumber") String serialNumber) {
+        try {
+            return new ResponseEntity<>(certificateService.rejectCSR(serialNumber), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/csr/{serialNumber}")
     public ResponseEntity<Object> getCSR(@PathVariable(value = "serialNumber") String serialNumber) {
         try {
