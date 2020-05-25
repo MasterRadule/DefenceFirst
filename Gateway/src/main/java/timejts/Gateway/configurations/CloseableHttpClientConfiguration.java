@@ -6,6 +6,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ResourceUtils;
@@ -21,14 +22,26 @@ import java.security.cert.CertificateException;
 @Configuration
 public class CloseableHttpClientConfiguration {
 
+    @Value("${server.ssl.key-store}")
+    private String keystorePath;
+
+    @Value("${server.ssl.key-store-password}")
+    private String keystorePassword;
+
+    @Value("${server.ssl.trust-store}")
+    private String truststorePath;
+
+    @Value("${server.ssl.trust-store-password}")
+    private String truststorePassword;
+
     @Bean
     public CloseableHttpClient closeableHttpClient() throws IOException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         SSLContextBuilder sslBuilder = SSLContexts.custom();
         sslBuilder.loadKeyMaterial(ResourceUtils
-                .getFile("../Gateway/src/main/resources/static/keystore/zull-keystore.jks"), "zuulpass"
-                .toCharArray(), "zuulpass".toCharArray());
+                .getFile(keystorePath), keystorePassword
+                .toCharArray(), keystorePassword.toCharArray());
         sslBuilder.loadTrustMaterial(ResourceUtils
-                .getFile("../Gateway/src/main/resources/static/keystore/truststore.jks"), "gatewaytruststorepass"
+                .getFile(truststorePath), truststorePassword
                 .toCharArray());
 
         SSLContext sslContext = sslBuilder.build();
