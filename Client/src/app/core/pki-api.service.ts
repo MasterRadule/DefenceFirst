@@ -28,7 +28,7 @@ export class PkiApiService {
   }
 
   getCertificates() {
-    return this.http.get('certificates', { withCredentials: true });
+    return this.http.get('certificates');
   }
 
   getCertificate(serialNumber: string) {
