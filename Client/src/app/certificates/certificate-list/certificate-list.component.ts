@@ -43,7 +43,9 @@ export class CertificateListComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
         this.content = params.get('tab-content');
         if (this.content === 'csrs') {
-          this.displayedColumns = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email'];
+          this.displayedColumns = ['commonName', 'organization', 'organizationalUnit', 'city', 'state', 'country', 'email', 'action'];
+        } else if (this.content === 'active') {
+          this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate', 'action'];
         } else {
           this.displayedColumns = ['serialNumber', 'commonName', 'issuer', 'startDate', 'endDate'];
         }
@@ -67,16 +69,33 @@ export class CertificateListComponent implements OnInit {
 
   private revoke(row) {
     this.pkiApiService.revokeCertificate(row.serialNumber).subscribe({
-      next: (message: string) => {
+      next: (message: any) => {
         this.snackbarService.displayMessage(message);
+        this.getData();
       },
-      error: (message: string) => this.snackbarService.displayMessage(message)
+      error: (message: any) => {
+        this.snackbarService.displayMessage(message);
+      }
     });
   }
 
+  private rejectCSR(row) {
+    this.pkiApiService.rejectCSR(row.serialNumber).subscribe({
+      next: (message: any) => {
+        this.snackbarService.displayMessage(message);
+        this.getData();
+      },
+      error: (message: any) => {
+        this.snackbarService.displayMessage(message);
+      }
+    });
+  }
 
-  private openDialog(subject: Subject = {} as Subject, ca: boolean = true) {
-    console.log(subject);
+  private openDialog($event, subject: Subject = {} as Subject, ca: boolean = true) {
+    if ($event.target.classList.contains('mat-button-wrapper')) {
+      return;
+    }
+
     const dialogRef = this.dialog.open(CertificateCreationFormComponent, {
       width: '70%',
       data: {subject, ca}
@@ -84,6 +103,12 @@ export class CertificateListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       this.getData();
     });
+  }
+
+  redirectToCertView($event, serialNumber) {
+    if (!$event.target.classList.contains('mat-button-wrapper')) {
+      this.router.navigate([`/dashboard/certificates/${this.content}/${serialNumber}`]);
+    }
   }
 
 }

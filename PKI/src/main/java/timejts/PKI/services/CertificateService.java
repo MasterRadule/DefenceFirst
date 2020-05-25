@@ -309,7 +309,7 @@ public class CertificateService {
                 .getNotAfter(), getIssuerCommonName(certificate), ks.getCertificateChain(serialNumber) != null);
     }
 
-    public String revokeCertificate(String serialNumber) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, NotExistingCertificateException, CertificateAlreadyRevokedException {
+    public String revokeCertificate(String serialNumber) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, NotExistingCertificateException, CertificateAlreadyRevokedException, InvalidRevocationException {
         Optional<RevokedCertificate> r = revokedCertificatesRepository.findById(serialNumber);
         if (r.isPresent()) {
             throw new CertificateAlreadyRevokedException("Certificate with serial number " + serialNumber + " is already revoked");
@@ -322,11 +322,23 @@ public class CertificateService {
         if (certificate == null) {
             throw new NotExistingCertificateException("Certificate with serial number" + serialNumber + " doesn't exist");
         }
+        if (ks.getCertificateChain(serialNumber) != null) {
+            throw new InvalidRevocationException("Root and CA certificates can not be revoked");
+        }
 
         saveRevokedCertificate(certificate);
         ks.deleteEntry(serialNumber);
         saveKeyStore(ks, keystorePath, keystorePassword);
         return "Certificate successfully revoked";
+    }
+
+    public String rejectCSR(String serialNumber) throws CSRDoesNotExistException {
+        CertificateSigningRequest csr = csrRepository.findById(new BigInteger(serialNumber))
+                .orElseThrow(() -> new CSRDoesNotExistException("Certificate signing request " +
+                        "with given serial number does not exist"));
+        csrRepository.delete(csr);
+
+        return "Certificate signing request successfully rejected";
     }
 
     private void saveRevokedCertificate(X509Certificate certificate) throws CertificateNotYetValidException, CertificateExpiredException, CertificateEncodingException {

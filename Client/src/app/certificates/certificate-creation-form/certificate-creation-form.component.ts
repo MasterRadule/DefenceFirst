@@ -56,12 +56,12 @@ export class CertificateCreationFormComponent implements OnInit {
   private initializeForm() {
     this.form = this.formBuilder.group({
       subject: this.formBuilder.group({
-        commonName: [this.data.subject.commonName, Validators.required],
-        organization: [this.data.subject.organization, Validators.required],
-        organizationalUnit: [this.data.subject.organizationalUnit, Validators.required],
-        city: [this.data.subject.city, Validators.required],
-        state: [this.data.subject.state, Validators.required],
-        country: [this.data.subject.country, [Validators.required, Validators.maxLength(2)]],
+        commonName: [this.data.subject.commonName, Validators.required, Validators.pattern('^(?!.*\\s).*$')],
+        organization: [this.data.subject.organization, Validators.required, Validators.pattern('^[A-Z].*$')],
+        organizationalUnit: [this.data.subject.organizationalUnit, Validators.required, Validators.pattern('^[A-Z].*$')],
+        city: [this.data.subject.city, Validators.required, Validators.pattern('^[A-Z](?!.*\\d).*$')],
+        state: [this.data.subject.state, Validators.required, Validators.pattern('^[A-Z](?!.*\\d).*$')],
+        country: [this.data.subject.country, [Validators.required, Validators.pattern('^[A-Z]{2}$')]],
         email: [this.data.subject.email, [Validators.email, Validators.required]]
       }),
       manual: this.formBuilder.group({
@@ -115,6 +115,9 @@ export class CertificateCreationFormComponent implements OnInit {
       };
 
       this.pkiApiService.createCACertificate(certificate).subscribe({
+        next: (message: any) => {
+          this.snackbarService.displayMessage(message);
+        },
         error: (message: string) => {
           this.snackbarService.displayMessage(message);
         }

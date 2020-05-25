@@ -20,7 +20,7 @@ export class PkiApiService {
   }
 
   createCACertificate(certAuth: CaCertificateCreation) {
-    return this.http.post('certificates/ca', certAuth);
+    return this.http.post('certificates/ca', certAuth, {responseType: 'text'});
   }
 
   getCertificateSigningRequests() {
@@ -36,7 +36,7 @@ export class PkiApiService {
   }
 
   revokeCertificate(serialNumber: string) {
-    return this.http.put('certificates/revoked', serialNumber);
+    return this.http.put('certificates/revoked', serialNumber, {responseType: 'text'});
   }
 
   getRevokedCertificates() {
@@ -45,5 +45,9 @@ export class PkiApiService {
 
   getCACertificates() {
     return this.http.get('certificates/ca');
+  }
+
+  rejectCSR(serialNumber: string) {
+    return this.http.delete(`certificates/csr/${serialNumber}`, {responseType: 'text'});
   }
 }

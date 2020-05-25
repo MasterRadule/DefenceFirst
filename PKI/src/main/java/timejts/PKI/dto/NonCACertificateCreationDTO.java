@@ -1,14 +1,14 @@
 package timejts.PKI.dto;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 public class NonCACertificateCreationDTO {
 
-    @NotBlank(message = "Serial number must be provided")
+    @Pattern(regexp = "^(?!.*\\s).*$", message = "Serial number can not contain whitespaces")
     private String serialNumber;
 
-    @NotBlank(message = "CA serial number must be provided")
+    @Pattern(regexp = "^(?!.*\\s).*$", message = "CA serial number can not contain whitespaces")
     private String caSerialNumber;
 
     @Valid
