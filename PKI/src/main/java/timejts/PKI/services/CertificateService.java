@@ -49,6 +49,12 @@ public class CertificateService {
     @Value("${server.ssl.key-store-password}")
     private String keystorePassword;
 
+    @Value("${server.ssl.trust-store}")
+    private String truststorePath;
+
+    @Value("${server.ssl.trust-store-password}")
+    private String truststorePassword;
+
     @Value("${server.ssl.key-alias}")
     private String root;
 
@@ -157,6 +163,11 @@ public class CertificateService {
         // Save keystore and serial number
         ks.setCertificateEntry(serialNumber, newCertificate);
         saveKeyStore(ks, keystorePath, keystorePassword);
+
+        // Save certificate in truststore
+        KeyStore truststore = loadKeyStore(truststorePath, truststorePassword);
+        truststore.setCertificateEntry(serialNumber, newCertificate);
+        saveKeyStore(truststore, truststorePath, truststorePassword);
 
         // Create certificate file
         File certificateFile = x509CertificateToPem(newCertificate, serialNumber);
@@ -330,6 +341,11 @@ public class CertificateService {
         saveRevokedCertificate(certificate);
         ks.deleteEntry(serialNumber);
         saveKeyStore(ks, keystorePath, keystorePassword);
+
+        KeyStore truststore = loadKeyStore(truststorePath, truststorePassword);
+        truststore.deleteEntry(serialNumber);
+        saveKeyStore(truststore, truststorePath, truststorePassword);
+
         return "Certificate successfully revoked";
     }
 

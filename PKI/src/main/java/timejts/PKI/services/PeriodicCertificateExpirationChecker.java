@@ -31,13 +31,19 @@ public class PeriodicCertificateExpirationChecker {
     @Value("${server.ssl.key-store-password}")
     private String keystorePassword;
 
+    @Value("${server.ssl.trust-store}")
+    private String truststorePath;
+
+    @Value("${server.ssl.trust-store-password}")
+    private String truststorePassword;
+
     @Autowired
     private EmailService emailService;
 
     @Autowired
     private CertificateService certificateService;
 
-    private void checkNonCaCertificate(KeyStore ks, String alias, X509Certificate certificate, Calendar now,
+    private void checkNonCaCertificate(KeyStore ks, KeyStore truststore, String alias, X509Certificate certificate, Calendar now,
                                        Calendar other) throws KeyStoreException, CertificateEncodingException {
         other.setTime(certificate.getNotAfter());
 
@@ -45,8 +51,9 @@ public class PeriodicCertificateExpirationChecker {
                 .getFirst().getValue().toString();
 
         if (other.before(now)) {
-            // delete certificate from keystore and send email
+            // delete certificate from keystore and truststore and send email
             ks.deleteEntry(alias);
+            truststore.deleteEntry(alias);
             try {
                 emailService.sendEmail(email, "Certificate expired", String.format("Your certificate with serial " +
                         "number %s has expired", certificate.getSerialNumber()));
@@ -79,8 +86,11 @@ public class PeriodicCertificateExpirationChecker {
     @Scheduled(cron = "${certificate.check.period}")
     private void checkCertificates() {
         try {
-            // Load non CA keystore
+            // Load keystore
             KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+
+            // Load truststore
+            KeyStore truststore = loadKeyStore(truststorePath, truststorePassword);
 
             Calendar now = new GregorianCalendar();
             now.setTime(new Date());
@@ -97,7 +107,7 @@ public class PeriodicCertificateExpirationChecker {
                 if (ks.getCertificateChain(alias) != null) {
                     checkCACertificate(certificate, now, other);
                 } else {
-                    checkNonCaCertificate(ks, alias, certificate, now, other);
+                    checkNonCaCertificate(ks, truststore, alias, certificate, now, other);
                 }
             }
 
