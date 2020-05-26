@@ -26,6 +26,7 @@ import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
 import javax.mail.MessagingException;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -361,7 +362,13 @@ public class CertificateService {
         return serialNumber;
     }
 
-    public boolean validateCertificate(X509Certificate certificate) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException, CorruptedCertificateException, InvalidKeyException, NoSuchProviderException, SignatureException {
+    public boolean validateCertificate(byte[] certificateEncoded) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException, CorruptedCertificateException, InvalidKeyException, NoSuchProviderException, SignatureException {
+
+        // Decode certificate
+        ByteArrayInputStream inputStream  =  new ByteArrayInputStream(certificateEncoded);
+
+        CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+        X509Certificate certificate = (X509Certificate)certFactory.generateCertificate(inputStream);
 
         //load keystore
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
@@ -370,7 +377,7 @@ public class CertificateService {
         X509Certificate certificateFromKS = (X509Certificate) ks
                 .getCertificate(certificate.getSerialNumber().toString());
         if (certificateFromKS == null) {
-            throw new NotExistingCertificateException("Certificate doesn't exist");
+            throw new CertificateException("Certificate doesn't exist");
         }
 
         //check if certificate from database is equal with given certificate
