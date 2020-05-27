@@ -6,7 +6,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,10 +16,12 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import org.springframework.web.client.RestTemplate;
 
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -51,8 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             User user = null;
             if (valid) {
-                user = new User(certificate.getSubjectX500Principal().getName(), null, AuthorityUtils
-                        .commaSeparatedStringToAuthorityList("ROLE_AGENT"));
+                GrantedAuthority authority1 = new SimpleGrantedAuthority("ROLE_AGENT");
+                List<GrantedAuthority> authorityList = new ArrayList<>();
+                authorityList.add(authority1);
+                user = new User(certificate.getSubjectX500Principal().getName(), "", authorityList);
             }
 
             return user;

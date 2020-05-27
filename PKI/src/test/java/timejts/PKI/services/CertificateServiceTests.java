@@ -137,9 +137,11 @@ public class CertificateServiceTests {
         PKCS10CertificationRequest csr2 = p10Builder2.build(signer2);
         certificateService.submitCSR(csr2.getEncoded());*/
 
-        ArrayList<SubjectDTO> caDTO = certificateService.getCertificateSigningRequests();
+        /*ArrayList<SubjectDTO> caDTO = certificateService.getCertificateSigningRequests();
         NonCACertificateCreationDTO nonCADTO = new NonCACertificateCreationDTO(caDTO.get(0).getSerialNumber(), "15797428220941440972", null);
-        certificateService.createNonCACertificate(nonCADTO);
+        certificateService.createNonCACertificate(nonCADTO);*/
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+        x509CertificateToPem((X509Certificate) ks.getCertificate("15797428220941440972"), "asiaChamber");
     }
 
     @Test

@@ -12,6 +12,8 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
+import java.io.FileInputStream;
+import java.security.KeyStore;
 
 @Configuration
 public class RestTemplateConfiguration {
@@ -28,14 +30,17 @@ public class RestTemplateConfiguration {
     @Value("${server.ssl.trust-store-password}")
     private String truststorePassword;
 
+    @Value("${server.ssl.key-alias}")
+    private String keyAlias;
+
     @Bean
     public RestTemplate restTemplate() throws Exception {
         System.out.println("Rest templejt");
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
         SSLContext sslContext = SSLContextBuilder
                 .create()
-                .loadKeyMaterial(ResourceUtils
-                        .getFile(keystorePath), keystorePassword
-                        .toCharArray(), keystorePassword.toCharArray())
+                .loadKeyMaterial(ks, keystorePassword.toCharArray(), (map, socket) -> keyAlias)
                 .loadTrustMaterial(ResourceUtils
                         .getFile(truststorePath), truststorePassword
                         .toCharArray())
