@@ -35,15 +35,13 @@ public class RestTemplateWithStrategyConfiguration {
 
     @Bean("restTemplateWithStrategy")
     public RestTemplate restTemplateWithStrategy() throws Exception {
-        System.out.println("Rest templejt");
+        System.out.println("Rest templejt sa strategiju");
         SSLContext sslContext = SSLContextBuilder
                 .create()
                 .loadKeyMaterial(ResourceUtils
-                        .getFile(keystorePath), keystorePassword
-                        .toCharArray(), keystorePassword.toCharArray())
-                .loadTrustMaterial(ResourceUtils
-                        .getFile(truststorePath), truststorePassword
-                        .toCharArray(), trustStrategy)
+                        .getFile("src/main/resources/static/keystore/agent.jks"), "agentpass"
+                        .toCharArray(), "agentpass".toCharArray())
+                .loadTrustMaterial(null, trustStrategy)
                 .build();
 
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);

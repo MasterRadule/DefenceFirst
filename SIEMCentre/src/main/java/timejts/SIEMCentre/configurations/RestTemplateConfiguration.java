@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.net.ssl.SSLContext;
 
 @Configuration
-public class RestTemplateWithoutStrategyConfiguration {
+public class RestTemplateConfiguration {
 
     @Value("${server.ssl.key-store}")
     private String keystorePath;
@@ -28,8 +28,8 @@ public class RestTemplateWithoutStrategyConfiguration {
     @Value("${server.ssl.trust-store-password}")
     private String truststorePassword;
 
-    @Bean("restTemplateWithoutStrategy")
-    public RestTemplate restTemplateWithoutStrategy() throws Exception {
+    @Bean
+    public RestTemplate restTemplate() throws Exception {
         System.out.println("Rest templejt");
         SSLContext sslContext = SSLContextBuilder
                 .create()

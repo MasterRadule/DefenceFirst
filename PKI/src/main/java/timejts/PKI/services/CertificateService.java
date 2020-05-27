@@ -207,7 +207,7 @@ public class CertificateService {
 
         // Generate CA public and private key
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-        kpg.initialize(1024);
+        kpg.initialize(2048);
         KeyPair kp = kpg.generateKeyPair();
 
         // Generate serial number and set start/end date

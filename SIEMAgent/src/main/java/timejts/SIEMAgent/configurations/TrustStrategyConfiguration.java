@@ -1,6 +1,5 @@
 package timejts.SIEMAgent.configurations;
 
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,8 +20,8 @@ public class TrustStrategyConfiguration {
             System.out.println("Trust strategija");
 
             return (Boolean) restTemplate
-                    .postForEntity("https://localhost:8443/api/certificates/validate", x509Certificates[0].getEncoded(), Object.class)
-                    .getBody();
+                    .postForEntity("https://localhost:8443/api/certificates/validate", x509Certificates[0]
+                    .getEncoded(), Object.class).getBody();
         };
     }
 }
