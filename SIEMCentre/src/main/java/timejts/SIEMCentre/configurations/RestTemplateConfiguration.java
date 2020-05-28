@@ -35,7 +35,6 @@ public class RestTemplateConfiguration {
 
     @Bean
     public RestTemplate restTemplate() throws Exception {
-        System.out.println("Rest templejt");
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
         ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
         SSLContext sslContext = SSLContextBuilder

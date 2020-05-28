@@ -1,49 +1,25 @@
 package timejts.PKI.services;
 
-import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
-import org.bouncycastle.openssl.PKCS8Generator;
-import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
-import org.bouncycastle.openssl.jcajce.JcaPKCS8Generator;
-import org.bouncycastle.openssl.jcajce.JceOpenSSLPKCS8EncryptorBuilder;
-import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
-import org.bouncycastle.operator.OutputEncryptor;
-import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.bouncycastle.pkcs.PKCS10CertificationRequest;
-import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.PKCSException;
-import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
-import org.bouncycastle.util.io.pem.PemObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import timejts.PKI.dto.CACertificateCreationDTO;
-import timejts.PKI.dto.CreationDataDTO;
 import timejts.PKI.dto.NonCACertificateCreationDTO;
 import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.exceptions.*;
 import timejts.PKI.utils.Utilities;
 
-import javax.security.auth.x500.X500Principal;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
-
-import static timejts.PKI.utils.Utilities.loadKeyStore;
-import static timejts.PKI.utils.Utilities.x509CertificateToPem;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -137,11 +113,10 @@ public class CertificateServiceTests {
         PKCS10CertificationRequest csr2 = p10Builder2.build(signer2);
         certificateService.submitCSR(csr2.getEncoded());*/
 
-        /*ArrayList<SubjectDTO> caDTO = certificateService.getCertificateSigningRequests();
-        NonCACertificateCreationDTO nonCADTO = new NonCACertificateCreationDTO(caDTO.get(0).getSerialNumber(), "15797428220941440972", null);
-        certificateService.createNonCACertificate(nonCADTO);*/
-        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
-        x509CertificateToPem((X509Certificate) ks.getCertificate("15797428220941440972"), "asiaChamber");
+        ArrayList<SubjectDTO> caDTO = certificateService.getCertificateSigningRequests();
+        NonCACertificateCreationDTO nonCADTO = new NonCACertificateCreationDTO(caDTO.get(0)
+                .getSerialNumber(), "15797428220941440972", null);
+        certificateService.createNonCACertificate(nonCADTO);
     }
 
     @Test

@@ -381,10 +381,10 @@ public class CertificateService {
     public boolean validateCertificate(byte[] certificateEncoded) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException, CorruptedCertificateException, InvalidKeyException, NoSuchProviderException, SignatureException {
 
         // Decode certificate
-        ByteArrayInputStream inputStream  =  new ByteArrayInputStream(certificateEncoded);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(certificateEncoded);
 
         CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-        X509Certificate certificate = (X509Certificate)certFactory.generateCertificate(inputStream);
+        X509Certificate certificate = (X509Certificate) certFactory.generateCertificate(inputStream);
 
         //load keystore
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);

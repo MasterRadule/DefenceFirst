@@ -14,6 +14,6 @@ public class TestController {
     @Secured("ROLE_AGENT")
     public ResponseEntity<String> TestSSL(@RequestBody String message) {
         System.out.println("Message from agent: " + message);
-        return new ResponseEntity<String>(new String("Response from CENTER"), HttpStatus.OK);
+        return new ResponseEntity<>("Response from CENTER", HttpStatus.OK);
     }
 }

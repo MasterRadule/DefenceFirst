@@ -38,8 +38,14 @@
   <component name="ChangeListManager">
     <list default="true" id="8aad2c6d-856f-4e87-84b2-15470f7ec44c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/configurations/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/configurations/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/configurations/Proba.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/configurations/TestClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/configurations/RestTemplateWithStrategyConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/configurations/RestTemplateWithStrategyConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/configurations/RestTemplateWithoutStrategyConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/configurations/RestTemplateWithoutStrategyConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/configurations/TrustStrategyConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/configurations/TrustStrategyConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/configurations/RestTemplateConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/configurations/RestTemplateConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/configurations/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/configurations/SecurityConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/controllers/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/controllers/TestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMCentre/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMCentre/src/main/resources/application.properties" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/../Config-Server/target/" />
@@ -69,8 +75,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/services/CertificateService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="389" selection-start-line="389" selection-end-line="389" />
+            <state relative-caret-position="150">
+              <caret line="390" lean-forward="true" selection-start-line="390" selection-end-line="390" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -120,7 +126,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="20" />
     <option name="y" value="-8" />
     <option name="width" value="1346" />
@@ -309,7 +315,7 @@
       <workItem from="1590403841252" duration="220000" />
       <workItem from="1590480874901" duration="9701000" />
       <workItem from="1590563717335" duration="24687000" />
-      <workItem from="1590657602468" duration="2052000" />
+      <workItem from="1590657602468" duration="2450000" />
     </task>
     <servers />
   </component>
@@ -346,7 +352,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36689000" />
+    <option name="totallyTimeSpent" value="37087000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -358,7 +364,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25416037" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -574,8 +580,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/services/CertificateService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="389" selection-start-line="389" selection-end-line="389" />
+        <state relative-caret-position="150">
+          <caret line="390" lean-forward="true" selection-start-line="390" selection-end-line="390" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
@@ -41,7 +40,6 @@ public class RestTemplateWithStrategyConfiguration {
 
     @Bean("restTemplateWithStrategy")
     public RestTemplate restTemplateWithStrategy() throws Exception {
-        System.out.println("Rest templejt sa strategiju");
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
         ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
         SSLContext sslContext = SSLContextBuilder

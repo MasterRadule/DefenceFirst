@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.PostConstruct;
 
 @Component
-public class Proba {
+public class TestClass {
 
     @Autowired
     @Qualifier("restTemplateWithStrategy")

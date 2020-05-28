@@ -9,7 +9,6 @@ import timejts.PKI.dto.NonCACertificateCreationDTO;
 import timejts.PKI.services.CertificateService;
 
 import javax.validation.Valid;
-import java.security.cert.X509Certificate;
 
 @RestController
 @RequestMapping("/certificates")
