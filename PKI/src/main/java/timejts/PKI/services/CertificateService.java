@@ -401,7 +401,7 @@ public class CertificateService {
         X509Certificate certificateFromKS = (X509Certificate) ks
                 .getCertificate(certificate.getSerialNumber().toString());
         if (certificateFromKS == null) {
-            throw new CertificateException("Certificate doesn't exist");
+            throw new NotExistingCertificateException("Certificate doesn't exist");
         }
 
         //check if certificate from database is equal with given certificate

@@ -123,7 +123,7 @@ public class CertificateServiceTests {
     void validateCertificateCorrectCertificate() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, CertificateRevokedException, CorruptedCertificateException, NotExistingCertificateException, SignatureException, NoSuchProviderException, InvalidKeyException {
         KeyStore ks = Utilities.loadKeyStore(keystorePath, keystorePassword);
         X509Certificate cert = (X509Certificate) ks.getCertificate("29265996049563850812855439007");
-        //boolean result = certificateService.validateCertificate(cert);
+        boolean result = certificateService.validateCertificate(cert.getEncoded());
     }
 
     @Test
@@ -137,7 +137,7 @@ public class CertificateServiceTests {
             inStream = new FileInputStream(serverCertFile);
             X509Certificate cer = (X509Certificate) certFactory.generateCertificate(inStream);
             System.out.println(cer.getIssuerX500Principal().getName());
-            //boolean result = certificateService.validateCertificate(cer);
+            boolean result = certificateService.validateCertificate(cer.getEncoded());
             inStream.close();
         } catch (Exception e) {
             e.printStackTrace();
