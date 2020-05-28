@@ -20,6 +20,6 @@ public class EmailServiceTests {
     void sendEmail_emailSent() {
         String to = "mikovic.nm@gmail.com";
         File certificate = new File("C:\\Users\\korisnik\\Desktop\\mikan.pem");
-        assertDoesNotThrow(() -> emailService.sendEmailWithCertificate(to, certificate));
+        assertDoesNotThrow(() -> emailService.sendEmailWithCertificateAndCAs(to, certificate));
     }
 }

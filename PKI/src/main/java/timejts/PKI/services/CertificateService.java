@@ -170,15 +170,20 @@ public class CertificateService {
         saveKeyStore(truststore, truststorePath, truststorePassword);
 
         // Create certificate file
-        File certificateFile = x509CertificateToPem(newCertificate, serialNumber);
+        File certificateFile = x509CertificateToPem(newCertificate, "", serialNumber);
+
+        // Get CA certificates files
+        File caZipped = getCACertificatesFiles();
 
         // Send certificate on email address
         try {
-            emailService.sendEmailWithCertificate(email, certificateFile);
+            emailService.sendEmailWithCertificateAndCAs(email, certificateFile, caZipped);
         } catch (MessagingException ignored) {
         }
 
         csrRepository.delete(csr);
+        certificateFile.delete();
+        caZipped.delete();
 
         return "Certificate for " + getCommonName(newCertificate) + " successfully created";
     }
@@ -244,6 +249,9 @@ public class CertificateService {
         String pass = keystorePassword + serialNumber;
         ks.setEntry(serialNumber.toString(), privKeyEntry, new KeyStore.PasswordProtection(pass.toCharArray()));
         saveKeyStore(ks, keystorePath, keystorePassword);
+
+        // Create certificate file
+        x509CertificateToPem(newCertificate, "../PKI/src/main/resources/static/certAuths/", getCommonName(newCertificate));
 
         return "CA Certificate for " + certAuth.getCommonName() + " successfully created";
     }

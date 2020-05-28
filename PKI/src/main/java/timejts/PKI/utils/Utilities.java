@@ -36,6 +36,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static org.bouncycastle.asn1.x509.X509Extensions.IssuerAlternativeName;
 import static org.bouncycastle.asn1.x509.X509Extensions.SubjectAlternativeName;
@@ -91,13 +93,40 @@ public class Utilities {
 
     }
 
-    public static File x509CertificateToPem(X509Certificate cert, String commonName) throws IOException {
-        File f = new File(commonName + ".pem");
+    public static File x509CertificateToPem(X509Certificate cert, String path, String name) throws IOException {
+        File f = new File(path + name + ".pem");
         FileWriter fileWriter = new FileWriter(f);
         JcaPEMWriter pemWriter = new JcaPEMWriter(fileWriter);
         pemWriter.writeObject(cert);
         pemWriter.flush();
         pemWriter.close();
+        return f;
+    }
+
+    public static File getCACertificatesFiles() throws IOException {
+        File f = new File("CertificateAuthorities.zip");
+        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f));
+
+        File folder = new File("../PKI/src/main/resources/static/certAuths");
+        File[] listOfFiles = folder.listFiles();
+        byte[] buf = new byte[1024];
+
+        if (listOfFiles != null) {
+            for (File listOfFile : listOfFiles) {
+                InputStream in = new FileInputStream(listOfFile);
+                ZipEntry e = new ZipEntry(listOfFile.getName());
+                out.putNextEntry(e);
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                out.closeEntry();
+                in.close();
+            }
+        }
+
+        out.close();
+
         return f;
     }
 
