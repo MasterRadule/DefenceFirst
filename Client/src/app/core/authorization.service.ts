@@ -1,85 +1,104 @@
 import {Injectable} from '@angular/core';
-import {LoginData} from "../model/login-data";
 import {environment} from "../../environments/environment";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
-import qs from "querystring"
 import * as moment from "moment"
-import {SnackbarService} from "./snackbar.service";
+import * as auth0 from 'auth0-js';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthorizationService {
-  private headers: HttpHeaders = new HttpHeaders().set('skip', 'true')
-    .set('Content-Type', 'application/x-www-form-urlencoded');
+  private auth0 = new auth0.WebAuth({
+    clientID: environment.auth.clientID,
+    domain: environment.auth.domain,
+    responseType: 'token id_token',
+    redirectUri: environment.auth.redirect,
+    audience: environment.auth.audience,
+    scope: environment.auth.scope
+  });
 
-  constructor(private httpClient: HttpClient, private router: Router, private snackbarService: SnackbarService) {
+  constructor(private router: Router) {
+    this.getAccessToken();
   }
 
-  public get accessToken() {
-    return localStorage.getItem('accessToken');
+  public login() {
+    this.auth0.authorize();
   }
 
-  public get refreshToken() {
-    return localStorage.getItem('refreshToken');
-  }
-
-  public login(data: LoginData) {
-    data.client_id = environment.client_id;
-    data.client_secret = environment.client_secret;
-    data.grant_type = environment.grant_type;
-
-    this.httpClient.post(`http://localhost:${environment.keycloak_port}/auth/realms/${environment.realm}/protocol/openid-connect/token`,
-      qs.stringify(data),
-      {
-        headers: this.headers
-      }
-    ).subscribe({
-      next: (response) => {
-        AuthorizationService.setSession(response);
-        this.router.navigateByUrl('/dashboard').then();
-      },
-      error: () => {
-        this.snackbarService.displayMessage('Invalid credentials');
+  public handleLoginCallback() {
+    this.auth0.parseHash((err, authResult) => {
+      if (authResult && authResult.accessToken) {
+        window.location.hash = '';
+        this.setSession(authResult, {});
+        this.getUserInfo(authResult);
+        this.router.navigate(['/dashboard']);
+      } else if (err) {
+        console.error(`Error: ${err.error}`);
       }
     });
   }
 
-  private static setSession(authData) {
-    const now = moment();
+  private getAccessToken() {
+    this.auth0.checkSession({}, (_err, authResult) => {
+      if (authResult && authResult.accessToken) {
+        this.getUserInfo(authResult);
+      }
+    });
+  }
 
-    localStorage.setItem('accessToken', authData.access_token);
-    localStorage.setItem('expiresIn', now.add(authData.expires_in, 'seconds').toISOString());
-    localStorage.setItem('refreshToken', authData.refresh_token);
-    localStorage.setItem('refreshExpiresIn', now.add(authData.refresh_expires_in, 'seconds').toISOString());
+  public getUserInfo(authResult) {
+    this.auth0.client.userInfo(authResult.accessToken, (_err, profile) => {
+      if (profile) {
+        this.setSession(authResult, profile);
+      }
+    });
+  }
+
+  private setSession(authResult, profile) {
+    localStorage.setItem('expiresAt', JSON.stringify(moment().add(authResult.expiresIn, 'millisecond')));
+    localStorage.setItem('accessToken', authResult.accessToken);
+    localStorage.setItem('userProfile', JSON.stringify(profile));
+    localStorage.setItem('scopes', JSON.stringify(authResult.scope.split(' ')));
   }
 
   public logout() {
-    let refreshToken = this.refreshToken;
+    localStorage.clear();
 
-    let data = {
-      'refresh_token': refreshToken,
-      'client_id': environment.client_id,
-      'client_secret': environment.client_secret
-    }
-    this.httpClient.post(`http://localhost:${environment.keycloak_port}/auth/realms/${environment.realm}/protocol/openid-connect/logout`,
-      qs.stringify(data),
-      {
-        headers: this.headers
-      }
-    ).subscribe({
-      next: () => {
-        localStorage.clear();
-        this.router.navigateByUrl('/login').then();
-      },
-      error: () => {
-        this.snackbarService.displayMessage('Failed to logout');
-      }
+    this.auth0.logout({
+      returnTo: 'https://localhost:4200',
+      clientID: environment.auth.clientID
     });
   }
 
-  private static isLoggedIn() {
-    return moment() < moment(localStorage.getItem('expiresIn'));
+  public isLoggedIn() {
+    return moment().isBefore(moment(localStorage.getItem('expiresAt')));
+  }
+
+  public getUsername() {
+    const user = JSON.parse(localStorage.getItem('userProfile'));
+
+    if (user['given_name'] != undefined)
+      return user['given_name'];
+    else
+      return user['name'];
+  }
+
+  returnAccessToken() {
+    return localStorage.getItem('accessToken');
+  }
+
+  public checkScopes(neededScopes: string[]): boolean {
+    let userScopes = this.returnScopes();
+
+    for (let scope of neededScopes) {
+      if (!userScopes.includes(scope))
+        return false;
+    }
+    return true;
+  }
+
+  private returnScopes() {
+    return JSON.parse(localStorage.getItem('scopes'));
   }
 }
+

@@ -11,7 +11,6 @@ import {CertificatesModule} from './certificates/certificates.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {UrlInterceptor} from './interceptors/url-interceptor';
 import {LogsModule} from './logs/logs.module';
-import {LoginModule} from "./login/login.module";
 import {TokenInterceptor} from "./interceptors/token-interceptor";
 
 
@@ -29,8 +28,7 @@ import {TokenInterceptor} from "./interceptors/token-interceptor";
     DashboardModule,
     CertificatesModule,
     HttpClientModule,
-    LogsModule,
-    LoginModule
+    LogsModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true},

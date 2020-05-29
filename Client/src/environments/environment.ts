@@ -5,11 +5,13 @@
 export const environment = {
   production: false,
   baseURL: 'https://localhost:9092/api',
-  client_id: 'Defence First Client',
-  client_secret: 'f838e554-6ed4-4935-af58-bf68ccd514a7',
-  grant_type: 'password',
-  realm: 'Defence First Realm',
-  keycloak_port: 8180
+  auth: {
+    clientID: 'd0gkxBZS7W7P3nzSIG5x7v0ri26KHPSa',
+    domain: 'dev-6w-2hyw1.eu.auth0.com',
+    audience: 'https://localhost:9092',
+    redirect: 'https://localhost:4200/dashboard',
+    scope: 'openid profile email read:certificates write:certificates'
+  }
 };
 
 /*
