@@ -56,11 +56,11 @@ export class CertificateCreationFormComponent implements OnInit {
   private initializeForm() {
     this.form = this.formBuilder.group({
       subject: this.formBuilder.group({
-        commonName: [this.data.subject.commonName, Validators.required, Validators.pattern('^(?!.*\\s).*$')],
-        organization: [this.data.subject.organization, Validators.required, Validators.pattern('^[A-Z].*$')],
-        organizationalUnit: [this.data.subject.organizationalUnit, Validators.required, Validators.pattern('^[A-Z].*$')],
-        city: [this.data.subject.city, Validators.required, Validators.pattern('^[A-Z](?!.*\\d).*$')],
-        state: [this.data.subject.state, Validators.required, Validators.pattern('^[A-Z](?!.*\\d).*$')],
+        commonName: [this.data.subject.commonName, [Validators.required, Validators.pattern('^(?!.*\\s).*$')]],
+        organization: [this.data.subject.organization, [Validators.required, Validators.pattern('^[A-Z].*$')]],
+        organizationalUnit: [this.data.subject.organizationalUnit, [Validators.required, Validators.pattern('^[A-Z].*$')]],
+        city: [this.data.subject.city, [Validators.required, Validators.pattern('^[A-Z](?!.*\\d).*$')]],
+        state: [this.data.subject.state, [Validators.required, Validators.pattern('^[A-Z](?!.*\\d).*$')]],
         country: [this.data.subject.country, [Validators.required, Validators.pattern('^[A-Z]{2}$')]],
         email: [this.data.subject.email, [Validators.email, Validators.required]]
       }),
