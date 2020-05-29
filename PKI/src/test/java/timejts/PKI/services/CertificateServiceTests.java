@@ -73,7 +73,7 @@ public class CertificateServiceTests {
         fos.close();
 
         PKCS10CertificationRequestBuilder p10Builder = new JcaPKCS10CertificationRequestBuilder(
-                new X500Principal("CN=SIEM Agent 1, OU=Beijing corp., O=Asia DefenceFirst, C=CN, L=Beijing," +
+                new X500Principal("CN=SIEMAgent1, OU=Beijing corp., O=Asia DefenceFirst, C=CN, L=Beijing," +
                         " ST=Beijing, EmailAddress=master.daca09@gmail.com"), publicKey1);
         JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
         ContentSigner signer = csBuilder.build(privateKey1);
@@ -106,7 +106,7 @@ public class CertificateServiceTests {
         fos2.close();
 
         PKCS10CertificationRequestBuilder p10Builder2 = new JcaPKCS10CertificationRequestBuilder(
-                new X500Principal("CN=SIEM Centre 1, OU=Beijing corp., O=Asia DefenceFirst, C=CN, L=Beijing," +
+                new X500Principal("CN=SIEMCentre1, OU=Beijing corp., O=Asia DefenceFirst, C=CN, L=Beijing," +
                         " ST=Beijing, EmailAddress=master.daca09@gmail.com"), publicKey2);
         JcaContentSignerBuilder csBuilder2 = new JcaContentSignerBuilder("SHA256withRSA");
         ContentSigner signer2 = csBuilder2.build(privateKey2);
