@@ -48,7 +48,7 @@ public class RevocationTest {
             inStream = new FileInputStream(serverCertFile);
             X509Certificate cer = (X509Certificate) certFactory.generateCertificate(inStream);
             System.out.println(cer.getIssuerX500Principal().getName());
-            boolean result = certificateService.validateCertificate(cer);
+            boolean result = certificateService.validateCertificate(cer.getEncoded());
             inStream.close();
         } catch (Exception e) {
             e.printStackTrace();
