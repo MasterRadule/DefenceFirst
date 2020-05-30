@@ -35,8 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/api/certificates").hasRole("Administrator")
+        http.cors().and().csrf().disable().authorizeRequests()
+                .antMatchers("/api/certificates/**").hasRole("Administrator")
                 .antMatchers("/api/**").authenticated()
                 .and()
                 .oauth2ResourceServer().jwt();
