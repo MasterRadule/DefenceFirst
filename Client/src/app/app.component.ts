@@ -10,8 +10,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.login();
-    this.authService.handleLoginCallback();
+    this.authService.renewAuth();
   }
 
 

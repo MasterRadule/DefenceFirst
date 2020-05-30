@@ -1,104 +1,101 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {Router} from "@angular/router";
-import * as moment from "moment"
 import * as auth0 from 'auth0-js';
+import {BehaviorSubject, bindNodeCallback} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthorizationService {
-  private auth0 = new auth0.WebAuth({
+  private Auth0 = new auth0.WebAuth({
     clientID: environment.auth.clientID,
     domain: environment.auth.domain,
-    responseType: 'token id_token',
+    responseType: 'id_token token',
     redirectUri: environment.auth.redirect,
     audience: environment.auth.audience,
-    scope: environment.auth.scope
+    scope: 'openid profile email'
   });
 
+  private authFlag = 'isLoggedIn';
+
+  token$ = new BehaviorSubject<string>(null);
+  userProfile$ = new BehaviorSubject<any>(null);
+  onAuthSuccessUrl = '/dashboard';
+  onAuthFailureUrl = '/login';
+  logoutUrl = environment.auth.logout;
+
+  parseHash$ = bindNodeCallback(this.Auth0.parseHash.bind(this.Auth0));
+  checkSession$ = bindNodeCallback(this.Auth0.checkSession.bind(this.Auth0));
+
   constructor(private router: Router) {
-    this.getAccessToken();
   }
 
-  public login() {
-    this.auth0.authorize();
+  login() {
+    this.Auth0.authorize();
   }
 
-  public handleLoginCallback() {
-    this.auth0.parseHash((err, authResult) => {
-      if (authResult && authResult.accessToken) {
-        window.location.hash = '';
-        this.setSession(authResult, {});
-        this.getUserInfo(authResult);
-        this.router.navigate(['/dashboard']);
-      } else if (err) {
-        console.error(`Error: ${err.error}`);
-      }
-    });
+  handleLoginCallback() {
+    if (window.location.hash && !this.isAuthenticated) {
+      this.parseHash$().subscribe(
+        authResult => {
+          this.localLogin(authResult);
+          this.router.navigate([this.onAuthSuccessUrl]).then();
+        },
+        err => AuthorizationService.handleError(err)
+      )
+    }
   }
 
-  private getAccessToken() {
-    this.auth0.checkSession({}, (_err, authResult) => {
-      if (authResult && authResult.accessToken) {
-        this.getUserInfo(authResult);
-      }
-    });
+  private localLogin(authResult) {
+    // Observable of token
+    this.token$.next(authResult.accessToken);
+    // Emit value for user data subject
+    this.userProfile$.next(authResult.idTokenPayload);
+    // Set flag in local storage stating this app is logged in
+    localStorage.setItem(this.authFlag, JSON.stringify(true));
   }
 
-  public getUserInfo(authResult) {
-    this.auth0.client.userInfo(authResult.accessToken, (_err, profile) => {
-      if (profile) {
-        this.setSession(authResult, profile);
-      }
-    });
+  get isAuthenticated(): boolean {
+    return JSON.parse(localStorage.getItem(this.authFlag));
   }
 
-  private setSession(authResult, profile) {
-    localStorage.setItem('expiresAt', JSON.stringify(moment().add(authResult.expiresIn, 'millisecond')));
-    localStorage.setItem('accessToken', authResult.accessToken);
-    localStorage.setItem('userProfile', JSON.stringify(profile));
-    localStorage.setItem('scopes', JSON.stringify(authResult.scope.split(' ')));
+  renewAuth() {
+    if (this.isAuthenticated) {
+      this.checkSession$({}).subscribe(
+        authResult => this.localLogin(authResult),
+        err => {
+          localStorage.removeItem(this.authFlag);
+          this.router.navigate([this.onAuthFailureUrl]).then();
+        }
+      );
+    }
   }
 
-  public logout() {
-    localStorage.clear();
+  private localLogout() {
+    localStorage.setItem(this.authFlag, JSON.stringify(false));
+    this.token$.next(null);
+    this.userProfile$.next(null);
+  }
 
-    this.auth0.logout({
-      returnTo: 'https://localhost:4200',
+  logout() {
+    this.localLogout();
+    // This does a refresh and redirects back to homepage
+    // Make sure you have the logout URL in your Auth0
+    // Dashboard Application settings in Allowed Logout URLs
+    this.Auth0.logout({
+      returnTo: this.logoutUrl,
       clientID: environment.auth.clientID
     });
   }
 
-  public isLoggedIn() {
-    return moment().isBefore(moment(localStorage.getItem('expiresAt')));
-  }
-
-  public getUsername() {
-    const user = JSON.parse(localStorage.getItem('userProfile'));
-
-    if (user['given_name'] != undefined)
-      return user['given_name'];
-    else
-      return user['name'];
-  }
-
-  returnAccessToken() {
-    return localStorage.getItem('accessToken');
-  }
-
-  public checkScopes(neededScopes: string[]): boolean {
-    let userScopes = this.returnScopes();
-
-    for (let scope of neededScopes) {
-      if (!userScopes.includes(scope))
-        return false;
+  private static handleError(err) {
+    if (err.error_description) {
+      console.error(`Error: ${err.error_description}`);
+    } else {
+      console.error(`Error: ${JSON.stringify(err)}`);
     }
-    return true;
   }
 
-  private returnScopes() {
-    return JSON.parse(localStorage.getItem('scopes'));
-  }
 }
 

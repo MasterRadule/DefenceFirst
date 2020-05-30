@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/api/certificates").hasRole("Administrator")
+                .antMatchers("/api/**").authenticated()
                 .and()
                 .oauth2ResourceServer().jwt();
     }

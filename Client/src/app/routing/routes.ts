@@ -3,12 +3,13 @@ import {DashboardComponent} from '../dashboard/dashboard.component';
 import {AlarmsComponent} from '../alarms/alarms.component';
 import {LogsComponent} from '../logs/logs.component';
 import {AuthGuard} from "../guards/auth.guard";
+import {CallbackComponent} from "../callback/callback.component";
 
 export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [AuthGuard],
+    //canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -28,6 +29,10 @@ export const routes: Routes = [
         loadChildren: () => import('../certificates/certificates.module').then(c => c.CertificatesModule)
       }
     ]
+  },
+  {
+    path: 'callback',
+    component: CallbackComponent
   },
   {
     path: '',

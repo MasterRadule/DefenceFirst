@@ -12,11 +12,14 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {UrlInterceptor} from './interceptors/url-interceptor';
 import {LogsModule} from './logs/logs.module';
 import {TokenInterceptor} from "./interceptors/token-interceptor";
+import { CallbackComponent } from './callback/callback.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CallbackComponent
 
   ],
   imports: [
@@ -28,7 +31,8 @@ import {TokenInterceptor} from "./interceptors/token-interceptor";
     DashboardModule,
     CertificatesModule,
     HttpClientModule,
-    LogsModule
+    LogsModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true},
