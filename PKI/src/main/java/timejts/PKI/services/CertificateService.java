@@ -26,6 +26,7 @@ import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
 
 import javax.mail.MessagingException;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -47,6 +48,12 @@ public class CertificateService {
 
     @Value("${server.ssl.key-store-password}")
     private String keystorePassword;
+
+    @Value("${server.ssl.trust-store}")
+    private String truststorePath;
+
+    @Value("${server.ssl.trust-store-password}")
+    private String truststorePassword;
 
     @Value("${server.ssl.key-alias}")
     private String root;
@@ -157,16 +164,26 @@ public class CertificateService {
         ks.setCertificateEntry(serialNumber, newCertificate);
         saveKeyStore(ks, keystorePath, keystorePassword);
 
+        // Save certificate in truststore
+        KeyStore truststore = loadKeyStore(truststorePath, truststorePassword);
+        truststore.setCertificateEntry(serialNumber, newCertificate);
+        saveKeyStore(truststore, truststorePath, truststorePassword);
+
         // Create certificate file
-        File certificateFile = x509CertificateToPem(newCertificate, serialNumber);
+        File certificateFile = x509CertificateToPem(newCertificate, "", serialNumber);
+
+        // Get CA certificates files
+        File caZipped = getCACertificatesFiles();
 
         // Send certificate on email address
         try {
-            emailService.sendEmailWithCertificate(email, certificateFile);
+            emailService.sendEmailWithCertificateAndCAs(email, certificateFile, caZipped);
         } catch (MessagingException ignored) {
         }
 
         csrRepository.delete(csr);
+        certificateFile.delete();
+        caZipped.delete();
 
         return "Certificate for " + getCommonName(newCertificate) + " successfully created";
     }
@@ -195,7 +212,7 @@ public class CertificateService {
 
         // Generate CA public and private key
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-        kpg.initialize(1024);
+        kpg.initialize(2048);
         KeyPair kp = kpg.generateKeyPair();
 
         // Generate serial number and set start/end date
@@ -232,6 +249,9 @@ public class CertificateService {
         String pass = keystorePassword + serialNumber;
         ks.setEntry(serialNumber.toString(), privKeyEntry, new KeyStore.PasswordProtection(pass.toCharArray()));
         saveKeyStore(ks, keystorePath, keystorePassword);
+
+        // Create certificate file
+        x509CertificateToPem(newCertificate, "../PKI/src/main/resources/static/certAuths/", getCommonName(newCertificate));
 
         return "CA Certificate for " + certAuth.getCommonName() + " successfully created";
     }
@@ -329,6 +349,11 @@ public class CertificateService {
         saveRevokedCertificate(certificate);
         ks.deleteEntry(serialNumber);
         saveKeyStore(ks, keystorePath, keystorePassword);
+
+        KeyStore truststore = loadKeyStore(truststorePath, truststorePassword);
+        truststore.deleteEntry(serialNumber);
+        saveKeyStore(truststore, truststorePath, truststorePassword);
+
         return "Certificate successfully revoked";
     }
 
@@ -363,7 +388,13 @@ public class CertificateService {
         return serialNumber;
     }
 
-    public boolean validateCertificate(X509Certificate certificate) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException, CorruptedCertificateException, InvalidKeyException, NoSuchProviderException, SignatureException {
+    public boolean validateCertificate(byte[] certificateEncoded) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException, CorruptedCertificateException, InvalidKeyException, NoSuchProviderException, SignatureException {
+
+        // Decode certificate
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(certificateEncoded);
+
+        CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+        X509Certificate certificate = (X509Certificate) certFactory.generateCertificate(inputStream);
 
         //load keystore
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);

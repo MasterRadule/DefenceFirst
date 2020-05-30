@@ -9,7 +9,6 @@ import timejts.PKI.dto.NonCACertificateCreationDTO;
 import timejts.PKI.services.CertificateService;
 
 import javax.validation.Valid;
-import java.security.cert.X509Certificate;
 
 @RestController
 @RequestMapping("/certificates")
@@ -109,7 +108,7 @@ public class CertificateController {
     }
 
     @PostMapping("/validate")
-    public ResponseEntity<Object> validateCertificate(@RequestBody X509Certificate certificate) {
+    public ResponseEntity<Object> validateCertificate(@RequestBody byte[] certificate) {
         try {
             return new ResponseEntity<>(certificateService.validateCertificate(certificate), HttpStatus.OK);
         } catch (Exception e) {

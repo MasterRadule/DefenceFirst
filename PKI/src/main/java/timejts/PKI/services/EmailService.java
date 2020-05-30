@@ -23,7 +23,7 @@ public class EmailService {
 
 
     @Async
-    public void sendEmailWithCertificate(String to, File certificate) throws MessagingException {
+    public void sendEmailWithCertificateAndCAs(String to, File certificate, File caZipped) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(to);
@@ -33,6 +33,9 @@ public class EmailService {
 
         FileSystemResource certificateFile = new FileSystemResource(certificate);
         helper.addAttachment(Objects.requireNonNull(certificateFile.getFilename()), certificateFile);
+
+        FileSystemResource caZippedFile = new FileSystemResource(caZipped);
+        helper.addAttachment(Objects.requireNonNull(caZippedFile.getFilename()), caZippedFile);
 
         mailSender.send(message);
     }
