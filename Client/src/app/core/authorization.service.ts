@@ -3,6 +3,7 @@ import {environment} from "../../environments/environment";
 import {Router} from "@angular/router";
 import * as auth0 from 'auth0-js';
 import {BehaviorSubject, bindNodeCallback} from "rxjs";
+import {SnackbarService} from "./snackbar.service";
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +23,13 @@ export class AuthorizationService {
   token$ = new BehaviorSubject<string>(null);
   userProfile$ = new BehaviorSubject<any>(null);
   onAuthSuccessUrl = '/dashboard';
-  onAuthFailureUrl = '/login';
+  onAuthFailureUrl = '/dashboard';
   logoutUrl = environment.auth.logout;
 
   parseHash$ = bindNodeCallback(this.Auth0.parseHash.bind(this.Auth0));
   checkSession$ = bindNodeCallback(this.Auth0.checkSession.bind(this.Auth0));
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private snackbarService: SnackbarService) {
   }
 
   login() {
@@ -42,7 +43,7 @@ export class AuthorizationService {
           this.localLogin(authResult);
           this.router.navigate([this.onAuthSuccessUrl]).then();
         },
-        err => AuthorizationService.handleError(err)
+        err => this.handleError(err)
       )
     }
   }
@@ -63,7 +64,9 @@ export class AuthorizationService {
   renewAuth() {
     if (this.isAuthenticated) {
       this.checkSession$({}).subscribe(
-        authResult => this.localLogin(authResult),
+        authResult => {
+          this.localLogin(authResult)
+        },
         err => {
           localStorage.removeItem(this.authFlag);
           this.router.navigate([this.onAuthFailureUrl]).then();
@@ -89,11 +92,11 @@ export class AuthorizationService {
     });
   }
 
-  private static handleError(err) {
+  private handleError(err) {
     if (err.error_description) {
-      console.error(`Error: ${err.error_description}`);
+      this.snackbarService.displayMessage(err.error_description);
     } else {
-      console.error(`Error: ${JSON.stringify(err)}`);
+      this.snackbarService.displayMessage(JSON.stringify(err));
     }
   }
 

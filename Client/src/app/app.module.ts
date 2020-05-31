@@ -14,6 +14,7 @@ import {LogsModule} from './logs/logs.module';
 import {TokenInterceptor} from "./interceptors/token-interceptor";
 import { CallbackComponent } from './callback/callback.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatButtonModule} from "@angular/material/button";
 
 
 @NgModule({
@@ -22,18 +23,19 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     CallbackComponent
 
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    ToolbarModule,
-    DashboardModule,
-    CertificatesModule,
-    HttpClientModule,
-    LogsModule,
-    MatProgressSpinnerModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        ToolbarModule,
+        DashboardModule,
+        CertificatesModule,
+        HttpClientModule,
+        LogsModule,
+        MatProgressSpinnerModule,
+        MatButtonModule
+    ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}

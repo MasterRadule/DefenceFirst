@@ -1,1 +1,5 @@
-<mat-spinner></mat-spinner>
+<div class="background-image">
+  <button *ngIf="!authService.isAuthenticated" mat-raised-button color="primary" (click)="authService.login()">Login
+  </button>
+</div>
+

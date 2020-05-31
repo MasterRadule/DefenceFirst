@@ -9,30 +9,28 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    //canActivate: [AuthGuard],
     children: [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'logs'
+        component: CallbackComponent
       },
       {
         path: 'alarms',
+        canActivate: [AuthGuard],
         component: AlarmsComponent,
       },
       {
         path: 'logs',
+        canActivate: [AuthGuard],
         component: LogsComponent
       },
       {
         path: 'certificates',
+        canActivate: [AuthGuard],
         loadChildren: () => import('../certificates/certificates.module').then(c => c.CertificatesModule)
       }
     ]
-  },
-  {
-    path: 'callback',
-    component: CallbackComponent
   },
   {
     path: '',

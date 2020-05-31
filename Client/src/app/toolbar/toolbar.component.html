@@ -8,7 +8,5 @@
   <span fxLayoutAlign="right">
       <button *ngIf="authorizationService.isAuthenticated" (click)="authorizationService.logout()"
               mat-button>Logout</button>
-    <button (click)="authorizationService.login()" mat-button
-            *ngIf="!authorizationService.isAuthenticated">Login</button>
     </span>
 </mat-toolbar>

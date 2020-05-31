@@ -9,8 +9,8 @@ export const environment = {
     clientID: 'd0gkxBZS7W7P3nzSIG5x7v0ri26KHPSa',
     domain: 'dev-6w-2hyw1.eu.auth0.com',
     audience: 'https://localhost:9092',
-    redirect: 'https://localhost:4200/callback',
-    logout: 'https://localhost:4200',
+    redirect: 'https://localhost:4200/dashboard',
+    logout: 'https://localhost:4200/dashboard',
     scope: 'openid profile email read:certificates write:certificates'
   }
 };
