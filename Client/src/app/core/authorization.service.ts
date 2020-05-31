@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
-import {Router} from "@angular/router";
+import {environment} from '../../environments/environment';
+import {Router} from '@angular/router';
 import * as auth0 from 'auth0-js';
-import {BehaviorSubject, bindNodeCallback} from "rxjs";
-import {SnackbarService} from "./snackbar.service";
+import {BehaviorSubject, bindNodeCallback} from 'rxjs';
+import {SnackbarService} from './snackbar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +44,7 @@ export class AuthorizationService {
           this.router.navigate([this.onAuthSuccessUrl]).then();
         },
         err => this.handleError(err)
-      )
+      );
     }
   }
 
@@ -65,7 +65,7 @@ export class AuthorizationService {
     if (this.isAuthenticated) {
       this.checkSession$({}).subscribe(
         authResult => {
-          this.localLogin(authResult)
+          this.localLogin(authResult);
         },
         err => {
           localStorage.removeItem(this.authFlag);

@@ -2,8 +2,8 @@ import {Routes} from '@angular/router';
 import {DashboardComponent} from '../dashboard/dashboard.component';
 import {AlarmsComponent} from '../alarms/alarms.component';
 import {LogsComponent} from '../logs/logs.component';
-import {AuthGuard} from "../guards/auth.guard";
-import {CallbackComponent} from "../callback/callback.component";
+import {AuthGuard} from '../guards/auth.guard';
+import {CallbackComponent} from '../callback/callback.component';
 
 export const routes: Routes = [
   {
@@ -27,7 +27,6 @@ export const routes: Routes = [
       },
       {
         path: 'certificates',
-        canActivate: [AuthGuard],
         loadChildren: () => import('../certificates/certificates.module').then(c => c.CertificatesModule)
       }
     ]

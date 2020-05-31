@@ -1,10 +1,8 @@
 package timejts.Gateway.security;
 
-import net.minidev.json.JSONArray;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.oauth2.jwt.MappedJwtClaimSetConverter;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 

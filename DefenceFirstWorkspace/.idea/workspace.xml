@@ -37,20 +37,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8aad2c6d-856f-4e87-84b2-15470f7ec44c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Client/src/app/images/background.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/RoleClaimConverter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Client/src/app/interceptors/auth-interceptor.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Client/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/app.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Client/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/callback/callback.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/callback/callback.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/callback/callback.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/callback/callback.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Client/src/app/callback/callback.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/callback/callback.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/certificates/certificate-list/certificate-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/certificates/certificate-list/certificate-list.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Client/src/app/core/authorization.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/core/authorization.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/dashboard/dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/dashboard/dashboard.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/dashboard/dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/dashboard/dashboard.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/dashboard/dashboard.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/dashboard/dashboard.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/guards/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/guards/auth.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/interceptors/token-interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/interceptors/token-interceptor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/model/login-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/model/login-data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/routing/certificates-routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/routing/certificates-routes.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Client/src/app/routing/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/routing/routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/toolbar/toolbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/toolbar/toolbar.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/environments/environment.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/toolbar/toolbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/toolbar/toolbar.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/RoleClaimConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/RoleClaimConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,6 +232,7 @@
       <workItem from="1590674931494" duration="263000" />
       <workItem from="1590778792170" duration="1623000" />
       <workItem from="1590913744784" duration="14885000" />
+      <workItem from="1590954629872" duration="1453000" />
     </task>
     <servers />
   </component>
@@ -305,45 +311,45 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="488" y="70" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1590923577740" />
-    <state width="970" height="220" key="GridCell.Tab.0.bottom" timestamp="1590948077567">
+    <state width="970" height="220" key="GridCell.Tab.0.bottom" timestamp="1590957453220">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1590948077567" />
+    <state width="970" height="220" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
     <state width="1191" height="284" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1589543112978" />
-    <state width="970" height="220" key="GridCell.Tab.0.center" timestamp="1590948077567">
+    <state width="970" height="220" key="GridCell.Tab.0.center" timestamp="1590957453220">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1590948077567" />
+    <state width="970" height="220" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
     <state width="1191" height="284" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1589543112978" />
-    <state width="970" height="220" key="GridCell.Tab.0.left" timestamp="1590948077567">
+    <state width="970" height="220" key="GridCell.Tab.0.left" timestamp="1590957453219">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1590948077567" />
+    <state width="970" height="220" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1590957453219" />
     <state width="1191" height="284" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1589543112978" />
-    <state width="970" height="220" key="GridCell.Tab.0.right" timestamp="1590948077567">
+    <state width="970" height="220" key="GridCell.Tab.0.right" timestamp="1590957453220">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1590948077567" />
+    <state width="970" height="220" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
     <state width="1191" height="284" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1589543112978" />
-    <state width="970" height="220" key="GridCell.Tab.1.bottom" timestamp="1590948077568">
+    <state width="970" height="220" key="GridCell.Tab.1.bottom" timestamp="1590957453220">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1590948077568" />
+    <state width="970" height="220" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
     <state width="1191" height="284" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1589543112979" />
-    <state width="970" height="220" key="GridCell.Tab.1.center" timestamp="1590948077568">
+    <state width="970" height="220" key="GridCell.Tab.1.center" timestamp="1590957453220">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1590948077568" />
+    <state width="970" height="220" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
     <state width="1191" height="284" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1589543112979" />
-    <state width="970" height="220" key="GridCell.Tab.1.left" timestamp="1590948077568">
+    <state width="970" height="220" key="GridCell.Tab.1.left" timestamp="1590957453220">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1590948077568" />
+    <state width="970" height="220" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
     <state width="1191" height="284" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1589543112978" />
-    <state width="970" height="220" key="GridCell.Tab.1.right" timestamp="1590948077568">
+    <state width="970" height="220" key="GridCell.Tab.1.right" timestamp="1590957453220">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1590948077568" />
+    <state width="970" height="220" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
     <state width="1191" height="284" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1589543112979" />
     <state width="970" height="220" key="GridCell.Tab.2.bottom" timestamp="1590924141483">
       <screen x="0" y="0" width="1366" height="728" />

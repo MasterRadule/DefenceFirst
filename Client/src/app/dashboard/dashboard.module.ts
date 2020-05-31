@@ -6,7 +6,7 @@ import {RouterModule} from '@angular/router';
 import {AlarmsModule} from '../alarms/alarms.module';
 import {LogsModule} from '../logs/logs.module';
 import {CoreModule} from '../core/core.module';
-import {ToolbarModule} from "../toolbar/toolbar.module";
+import {ToolbarModule} from '../toolbar/toolbar.module';
 
 
 @NgModule({
