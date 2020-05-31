@@ -2,16 +2,17 @@ import {Component, OnInit} from '@angular/core';
 import {AuthorizationService} from '../core/authorization.service';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  selector: 'app-callback',
+  templateUrl: './callback.component.html',
+  styleUrls: ['./callback.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class CallbackComponent implements OnInit {
 
   constructor(private authService: AuthorizationService) {
   }
 
   ngOnInit() {
+    this.authService.handleLoginCallback();
   }
 
 }

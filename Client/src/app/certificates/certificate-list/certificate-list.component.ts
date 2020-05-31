@@ -8,6 +8,7 @@ import {ActivatedRoute, ParamMap, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {CertificateCreationFormComponent} from '../certificate-creation-form/certificate-creation-form.component';
 import {Subject} from '../../model/subject';
+import {AuthorizationService} from '../../core/authorization.service';
 
 @Component({
   selector: 'app-certificate-list',
@@ -36,7 +37,7 @@ export class CertificateListComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute, private pkiApiService: PkiApiService, private router: Router,
               private snackbarService: SnackbarService, private dialog: MatDialog,
-              private changeDetectorRef: ChangeDetectorRef) {
+              private changeDetectorRef: ChangeDetectorRef, private authService: AuthorizationService) {
   }
 
   ngOnInit() {

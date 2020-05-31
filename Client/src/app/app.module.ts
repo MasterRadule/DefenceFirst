@@ -11,11 +11,17 @@ import {CertificatesModule} from './certificates/certificates.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {UrlInterceptor} from './interceptors/url-interceptor';
 import {LogsModule} from './logs/logs.module';
+import {TokenInterceptor} from './interceptors/token-interceptor';
+import {CallbackComponent} from './callback/callback.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatButtonModule} from '@angular/material/button';
+import {AuthInterceptor} from './interceptors/auth-interceptor';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CallbackComponent
 
   ],
   imports: [
@@ -27,9 +33,15 @@ import {LogsModule} from './logs/logs.module';
     DashboardModule,
     CertificatesModule,
     HttpClientModule,
-    LogsModule
+    LogsModule,
+    MatProgressSpinnerModule,
+    MatButtonModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true}],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: UrlInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

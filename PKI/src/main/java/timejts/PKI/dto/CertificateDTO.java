@@ -1,5 +1,7 @@
 package timejts.PKI.dto;
 
+import timejts.PKI.model.RevokedCertificate;
+
 import java.util.Date;
 
 public class CertificateDTO {
@@ -18,6 +20,15 @@ public class CertificateDTO {
         this.endDate = endDate;
         this.issuer = issuer;
         this.ca = ca;
+    }
+
+    public CertificateDTO(RevokedCertificate r){
+        this.serialNumber = r.getId();
+        this.commonName = r.getCommonName();
+        this.startDate = r.getStartDate();
+        this.endDate = r.getEndDate();
+        this.issuer = r.getIssuer();
+        this.ca = false;
     }
 
     public String getSerialNumber() {
