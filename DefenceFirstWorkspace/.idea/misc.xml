@@ -7,6 +7,8 @@
         <option value="$PROJECT_DIR$/../Service-Registry/pom.xml" />
         <option value="$PROJECT_DIR$/../PKI/pom.xml" />
         <option value="$PROJECT_DIR$/../Gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/../SIEMAgent/pom.xml" />
+        <option value="$PROJECT_DIR$/../SIEMCentre/pom.xml" />
       </list>
     </option>
   </component>

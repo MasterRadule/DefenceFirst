@@ -37,25 +37,68 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8aad2c6d-856f-4e87-84b2-15470f7ec44c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Client/src/app/interceptors/auth-interceptor.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/angular.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/app.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/callback/callback.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/callback/callback.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/certificates/certificate-list/certificate-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/certificates/certificate-list/certificate-list.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/core/authorization.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/core/authorization.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/dashboard/dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/dashboard/dashboard.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/dashboard/dashboard.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/dashboard/dashboard.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/guards/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/guards/auth.guard.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/interceptors/token-interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/interceptors/token-interceptor.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/model/login-data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/model/login-data.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/routing/certificates-routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/routing/certificates-routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/routing/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/routing/routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/toolbar/toolbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/toolbar/toolbar.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_10_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_10_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_10_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_datatype_jackson_datatype_jdk8_2_10_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_datatype_jackson_datatype_jsr310_2_10_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_module_jackson_module_parameter_names_2_10_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_projectreactor_reactor_core_3_3_5_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__joda_time_joda_time_2_10_6.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_bytebuddy_byte_buddy_1_10_10.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_bytebuddy_byte_buddy_agent_1_10_10.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5_6.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_embed_tomcat_embed_core_9_0_34.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_embed_tomcat_embed_el_9_0_34.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_tomcat_embed_tomcat_embed_websocket_9_0_34.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hibernate_validator_hibernate_validator_6_0_19_Final.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_autoconfigure_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_aop_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_cache_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_data_rest_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_json_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_logging_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_test_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_tomcat_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_validation_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_web_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_test_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_test_autoconfigure_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_commons_2_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_rest_core_3_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_rest_webmvc_3_2_7_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_hateoas_spring_hateoas_1_0_5_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_security_spring_security_core_5_2_4_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_security_spring_security_crypto_5_2_4_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_aop_5_2_6_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_beans_5_2_6_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_context_5_2_6_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_context_support_5_2_6_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_core_5_2_6_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_expression_5_2_6_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_jcl_5_2_6_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_test_5_2_6_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_tx_5_2_6_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_web_5_2_6_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_webmvc_5_2_6_RELEASE.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/resources/bootstrap.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../SIEMCentre/src/main/resources/bootstrap.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/RoleClaimConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/RoleClaimConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Gateway/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PKI/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMAgent/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/SiemAgentApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/SiemAgentApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMCentre/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMCentre/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/SiemCentreApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/SiemCentreApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMCentre/src/main/resources/application.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,20 +114,6 @@
         <option value="Class" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>X509CERT</find>
-      <find>byte[]</find>
-      <find>revoke</find>
-      <find>revokeCertif</find>
-      <find>revokeCert</find>
-      <find>delete</find>
-      <find>validate</find>
-      <find>write</find>
-      <find>1024</find>
-      <find>loadKey</find>
-    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -108,10 +137,10 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1588942016082" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SIEMAgent" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SIEMCentre" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
@@ -125,7 +154,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.PkiApplication">
+  <component name="RunManager" selected="Spring Boot.SiemAgentApplication">
     <configuration default="true" type="CompoundRunConfigurationType">
       <toRun name="ServiceRegistryApplication" type="SpringBootApplicationConfigurationType" />
       <toRun name="ConfigServerApplication" type="SpringBootApplicationConfigurationType" />
@@ -199,12 +228,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SiemAgentApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="SIEMAgent" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="timejts.SIEMAgent.SiemAgentApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SiemCentreApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="SIEMCentre" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="timejts.SIEMCentre.SiemCentreApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="JUnit.CertificateServiceTests.generateCertificate" />
       <item itemvalue="Spring Boot.GatewayApplication" />
       <item itemvalue="Spring Boot.ConfigServerApplication" />
       <item itemvalue="Spring Boot.PkiApplication" />
       <item itemvalue="Spring Boot.ServiceRegistryApplication" />
+      <item itemvalue="Spring Boot.SiemAgentApplication" />
+      <item itemvalue="Spring Boot.SiemCentreApplication" />
     </list>
     <recent_temporary>
       <list>
@@ -233,6 +278,7 @@
       <workItem from="1590778792170" duration="1623000" />
       <workItem from="1590913744784" duration="14885000" />
       <workItem from="1590954629872" duration="1453000" />
+      <workItem from="1591119615889" duration="5584000" />
     </task>
     <servers />
   </component>
@@ -307,49 +353,57 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591120377347">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1591120377347" />
     <state x="488" y="70" key="#com.intellij.ide.util.MemberChooser" timestamp="1590923577740">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="488" y="70" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1590923577740" />
-    <state width="970" height="220" key="GridCell.Tab.0.bottom" timestamp="1590957453220">
+    <state x="463" y="57" key="FileChooserDialogImpl" timestamp="1591120099491">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
+    <state x="463" y="57" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1591120099491" />
+    <state width="970" height="219" key="GridCell.Tab.0.bottom" timestamp="1591125258728">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="970" height="219" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1591125258728" />
     <state width="1191" height="284" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1589543112978" />
-    <state width="970" height="220" key="GridCell.Tab.0.center" timestamp="1590957453220">
+    <state width="970" height="219" key="GridCell.Tab.0.center" timestamp="1591125258728">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
+    <state width="970" height="219" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1591125258728" />
     <state width="1191" height="284" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1589543112978" />
-    <state width="970" height="220" key="GridCell.Tab.0.left" timestamp="1590957453219">
+    <state width="970" height="219" key="GridCell.Tab.0.left" timestamp="1591125258727">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1590957453219" />
+    <state width="970" height="219" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1591125258727" />
     <state width="1191" height="284" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1589543112978" />
-    <state width="970" height="220" key="GridCell.Tab.0.right" timestamp="1590957453220">
+    <state width="970" height="219" key="GridCell.Tab.0.right" timestamp="1591125258728">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
+    <state width="970" height="219" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1591125258728" />
     <state width="1191" height="284" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1589543112978" />
-    <state width="970" height="220" key="GridCell.Tab.1.bottom" timestamp="1590957453220">
+    <state width="970" height="219" key="GridCell.Tab.1.bottom" timestamp="1591125258728">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
+    <state width="970" height="219" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1591125258728" />
     <state width="1191" height="284" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1589543112979" />
-    <state width="970" height="220" key="GridCell.Tab.1.center" timestamp="1590957453220">
+    <state width="970" height="219" key="GridCell.Tab.1.center" timestamp="1591125258728">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
+    <state width="970" height="219" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1591125258728" />
     <state width="1191" height="284" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1589543112979" />
-    <state width="970" height="220" key="GridCell.Tab.1.left" timestamp="1590957453220">
+    <state width="970" height="219" key="GridCell.Tab.1.left" timestamp="1591125258728">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
+    <state width="970" height="219" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1591125258728" />
     <state width="1191" height="284" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1589543112978" />
-    <state width="970" height="220" key="GridCell.Tab.1.right" timestamp="1590957453220">
+    <state width="970" height="219" key="GridCell.Tab.1.right" timestamp="1591125258728">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="970" height="220" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1590957453220" />
+    <state width="970" height="219" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1591125258728" />
     <state width="1191" height="284" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1589543112979" />
     <state width="970" height="220" key="GridCell.Tab.2.bottom" timestamp="1590924141483">
       <screen x="0" y="0" width="1366" height="728" />
@@ -367,93 +421,13 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="970" height="220" key="GridCell.Tab.2.right/0.0.1366.728@0.0.1366.728" timestamp="1590924141483" />
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <last-edited>Spring</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <last-edited>Config-Server</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-                <option value="0.6" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <last-edited>Maven: antlr:antlr:2.7.7</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
+    <state x="348" y="68" key="NewModule_or_Project.wizard" timestamp="1591120101368">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="348" y="68" key="NewModule_or_Project.wizard/0.0.1366.728@0.0.1366.728" timestamp="1591120101368" />
+    <state x="163" y="0" key="SettingsEditor" timestamp="1591120225759">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="163" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1591120225759" />
   </component>
 </project>
