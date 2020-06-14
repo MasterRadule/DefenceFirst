@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Config-Server" />
         <module name="Gateway" />
         <module name="PKI" />
-        <module name="SIEMAgent" />
-        <module name="Config-Server" />
         <module name="Service-Registry" />
+        <module name="SIEMAgent" />
         <module name="SIEMCentre" />
       </profile>
     </annotationProcessing>
@@ -20,7 +20,7 @@
       <module name="PKI" target="1.8" />
       <module name="Service-Registry" target="1.8" />
       <module name="SIEMAgent" target="1.8" />
-      <module name="SIEMCentre" target="1.8" />
+      <module name="SIEMCentre" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
