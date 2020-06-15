@@ -20,6 +20,8 @@ public class Log {
     @Indexed
     private String hostIP;
 
+    private String sourceIP;
+
     @Indexed
     private Severity severity;
 
@@ -27,28 +29,27 @@ public class Log {
     private Facility facility;
 
     @Indexed
-    private String os;
+    private String system;
 
+    @Indexed
     private String hostname;
 
     private String message;
 
-    private String log;
-
     public Log() {
     }
 
-    public Log(Date timestamp, String hostname, String hostIP, Severity severity, Facility facility, String message,
-               String log, String os) {
+    public Log(Date timestamp, String hostname, String hostIP, String sourceIP, Severity severity, Facility facility, String message,
+               String system) {
         super();
         this.timestamp = timestamp;
         this.hostname = hostname;
         this.hostIP = hostIP;
+        this.sourceIP = sourceIP;
         this.severity = severity;
         this.facility = facility;
         this.message = message;
-        this.log = log;
-        this.os = os;
+        this.system = system;
     }
 
     public BigInteger getId() {
@@ -83,6 +84,14 @@ public class Log {
         this.hostIP = hostIP;
     }
 
+    public String getSourceIP() {
+        return sourceIP;
+    }
+
+    public void setSourceIP(String sourceIP) {
+        this.sourceIP = sourceIP;
+    }
+
     public Severity getSeverity() {
         return severity;
     }
@@ -107,19 +116,11 @@ public class Log {
         this.message = message;
     }
 
-    public String getLog() {
-        return log;
+    public String getSystem() {
+        return system;
     }
 
-    public void setLog(String log) {
-        this.log = log;
-    }
-
-    public String getOs() {
-        return os;
-    }
-
-    public void setOs(String os) {
-        this.os = os;
+    public void setSystem(String system) {
+        this.system = system;
     }
 }
