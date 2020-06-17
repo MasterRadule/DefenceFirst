@@ -1,0 +1,34 @@
+template header
+templateNumber
+severityParam
+
+package rules;
+
+import timejts.SIEMCentre.model.Log;
+import timejts.SIEMCentre.model.Alarm;
+import timejts.SIEMCentre.model.RaisedAlarm;
+import timejts.SIEMCentre.model.Facility;
+import timejts.SIEMCentre.model.Severity;
+import java.util.Date;
+import timejts.SIEMCentre.model.AlarmType;
+
+template "Severity template"
+
+rule "Severity rule_@{templateNumber}"
+    when
+        Number(intValue >= 1) from accumulate(
+           $l: Log(
+               severity == @{severityParam},
+               $severity: severity
+           ) over window:time(10s),
+           count($l)
+        )
+    then
+        RaisedAlarm raisedAlarm = new RaisedAlarm();
+        raisedAlarm.setTime(new Date());
+        raisedAlarm.setAlarmType(AlarmType.SEVERITY_ALARM);
+        raisedAlarm.setSeverity($severity);
+        insert(raisedAlarm);
+end
+
+end template

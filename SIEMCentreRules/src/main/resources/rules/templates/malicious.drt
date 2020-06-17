@@ -1,0 +1,35 @@
+template header
+templateNumber
+timespan
+sourceIPRegex
+
+package rules;
+
+import timejts.SIEMCentre.model.Log;
+import timejts.SIEMCentre.model.Alarm;
+import timejts.SIEMCentre.model.RaisedAlarm;
+import timejts.SIEMCentre.model.Facility;
+import timejts.SIEMCentre.model.Severity;
+import java.util.Date;
+import timejts.SIEMCentre.model.AlarmType;
+
+template "Malicious template"
+
+rule "Malicious rule_@{templateNumber}"
+    when
+        Number(intValue >= 1) from accumulate(
+           $l: Log(
+               sourceIP matches @{sourceIPRegex},
+               $sourceIP: sourceIP
+           ) over window:time(10s),
+           count($l)
+        )
+    then
+        RaisedAlarm raisedAlarm = new RaisedAlarm();
+        raisedAlarm.setTime(new Date());
+        raisedAlarm.setAlarmType(AlarmType.MALICIOUS_IP_ADDRESS);
+        raisedAlarm.setSourceIP($sourceIP);
+        insert(raisedAlarm);
+end
+
+end template

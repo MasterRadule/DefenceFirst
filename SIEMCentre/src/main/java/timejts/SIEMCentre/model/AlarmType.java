@@ -1,0 +1,5 @@
+package timejts.SIEMCentre.model;
+
+public enum AlarmType {
+    EXCEEDED_NUMBER_OF_REQUESTS, SUSPICIOUS_BEHAVIOUR, SEVERITY_ALARM, MALICIOUS_IP_ADDRESS
+}

@@ -14,17 +14,60 @@ public class RaisedAlarm {
 
     private Date time;
 
-    private Log log;
+    private AlarmType alarmType;
 
-    private Alarm alarm;
+    private String sourceIP;
 
-    public RaisedAlarm() {}
+    private Severity severity;
 
-    public RaisedAlarm(String id, Date time, Log log, Alarm alarm) {
+    private Facility facility;
+
+    private String message1;
+
+    private String message2;
+
+    public RaisedAlarm() {
+    }
+
+    public RaisedAlarm(String id, Date time, AlarmType alarmType, String sourceIP, Severity severity, Facility facility) {
         this.id = id;
         this.time = time;
-        this.log = log;
-        this.alarm = alarm;
+        this.alarmType = alarmType;
+        this.sourceIP = sourceIP;
+        this.severity = severity;
+        this.facility = facility;
+    }
+
+    public AlarmType getAlarmType() {
+        return alarmType;
+    }
+
+    public void setAlarmType(AlarmType alarmType) {
+        this.alarmType = alarmType;
+    }
+
+    public String getSourceIP() {
+        return sourceIP;
+    }
+
+    public void setSourceIP(String sourceIP) {
+        this.sourceIP = sourceIP;
+    }
+
+    public Severity getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(Severity severity) {
+        this.severity = severity;
+    }
+
+    public Facility getFacility() {
+        return facility;
+    }
+
+    public void setFacility(Facility facility) {
+        this.facility = facility;
     }
 
     public String getId() {
@@ -43,19 +86,19 @@ public class RaisedAlarm {
         this.time = time;
     }
 
-    public Log getLog() {
-        return log;
+    public String getMessage1() {
+        return message1;
     }
 
-    public void setLog(Log log) {
-        this.log = log;
+    public void setMessage1(String message1) {
+        this.message1 = message1;
     }
 
-    public Alarm getAlarm() {
-        return alarm;
+    public String getMessage2() {
+        return message2;
     }
 
-    public void setAlarm(Alarm alarm) {
-        this.alarm = alarm;
+    public void setMessage2(String message2) {
+        this.message2 = message2;
     }
 }

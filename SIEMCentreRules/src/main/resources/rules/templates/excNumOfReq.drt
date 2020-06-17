@@ -1,0 +1,40 @@
+template header
+templateNumber
+count
+timespan
+severityParam
+facilityParam
+
+package rules;
+
+import timejts.SIEMCentre.model.Log;
+import timejts.SIEMCentre.model.Alarm;
+import timejts.SIEMCentre.model.RaisedAlarm;
+import timejts.SIEMCentre.model.Facility;
+import timejts.SIEMCentre.model.Severity;
+import java.util.Date;
+import timejts.SIEMCentre.model.AlarmType;
+
+template "Exceeded number of requests"
+
+rule "ENOR rule_@{templateNumber}"
+    when
+        Number(intValue >= @{count}) from accumulate(
+           $l: Log(
+               severity == @{severityParam},
+               facility == @{facilityParam},
+               $severity: severity,
+               $facility: facility
+           ) over window:time(@{timespan}s),
+           count($l)
+        )
+    then
+        RaisedAlarm raisedAlarm = new RaisedAlarm();
+        raisedAlarm.setTime(new Date());
+        raisedAlarm.setAlarmType(AlarmType.EXCEEDED_NUMBER_OF_REQUESTS);
+        raisedAlarm.setSeverity($severity);
+        raisedAlarm.setFacility($facility);
+        insert(raisedAlarm);
+end
+
+end template

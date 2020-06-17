@@ -1,0 +1,11 @@
+package rules;
+dialect  "mvel"
+
+import timejts.SIEMCentre.model.Log;
+
+rule "Dummy rule"
+    when
+        $l: Log()
+    then
+        System.out.println("Log exists");
+end
