@@ -22,20 +22,22 @@ public class Alarm {
 
     private Facility facility;
 
-    private String messageRegex;
+    private String messageRegex1;
+
+    private String messageRegex2;
 
     public Alarm() {
     }
 
-    public Alarm(BigInteger id, int count, Long timespan,
-                 String sourceIPRegex, Severity severity, Facility facility, String messageRegex) {
+    public Alarm(BigInteger id, int count, Long timespan, String sourceIPRegex, Severity severity, Facility facility, String messageRegex1, String messageRegex2) {
         this.id = id;
         this.count = count;
         this.timespan = timespan;
         this.sourceIPRegex = sourceIPRegex;
         this.severity = severity;
         this.facility = facility;
-        this.messageRegex = messageRegex;
+        this.messageRegex1 = messageRegex1;
+        this.messageRegex2 = messageRegex2;
     }
 
     public BigInteger getId() {
@@ -78,12 +80,20 @@ public class Alarm {
         this.facility = facility;
     }
 
-    public String getMessageRegex() {
-        return messageRegex;
+    public String getMessageRegex1() {
+        return messageRegex1;
     }
 
-    public void setMessageRegex(String messageRegex) {
-        this.messageRegex = messageRegex;
+    public void setMessageRegex1(String messageRegex1) {
+        this.messageRegex1 = messageRegex1;
+    }
+
+    public String getMessageRegex2() {
+        return messageRegex2;
+    }
+
+    public void setMessageRegex2(String messageRegex2) {
+        this.messageRegex2 = messageRegex2;
     }
 
     public int getCount() {

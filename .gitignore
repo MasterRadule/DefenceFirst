@@ -33,3 +33,16 @@ DefenceFirstWorkspace/.idea/libraries/Maven__org_kie_kie_api_7_0_0_Final.xml
 DefenceFirstWorkspace/.idea/libraries/Maven__org_jbpm_jbpm_flow_7_0_0_Final.xml
 DefenceFirstWorkspace/.idea/libraries/Maven__org_eclipse_jdt_core_compiler_ecj_4_4_2.xml
 DefenceFirstWorkspace/.idea/libraries/Maven__org_drools_drools_templates_7_0_0_Final.xml
+SIEMCentreRules/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+SIEMCentreRules/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+SIEMCentreRules/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+SIEMCentreRules/target/maven-archiver/pom.properties
+SIEMCentreRules/target/classes/timejts/SIEMCenterRules/App.class
+SIEMCentreRules/target/classes/rules/templates/suspBehaviour.drt
+SIEMCentreRules/target/classes/rules/templates/severity.drt
+SIEMCentreRules/target/classes/rules/templates/malicious.drt
+SIEMCentreRules/target/classes/rules/templates/excNumOfReq.drt
+SIEMCentreRules/target/classes/rules/rules.drl
+SIEMCentreRules/target/classes/META-INF/MANIFEST.MF
+SIEMCentreRules/target/classes/META-INF/kmodule.xml
+SIEMCentreRules/target/classes/META-INF/maven/pom.properties
