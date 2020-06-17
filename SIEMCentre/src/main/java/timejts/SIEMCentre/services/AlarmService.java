@@ -7,6 +7,7 @@ import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.QueryResults;
 import org.kie.api.runtime.rule.QueryResultsRow;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
@@ -34,26 +35,34 @@ import java.util.List;
 @Service
 public class AlarmService {
 
-    private static String exceededNumOfRequestsTemplate = "..\\SIEMCentreRules\\src\\main\\resources\\rules\\" +
-            "templates\\excNumOfReq.drt";
-    private static String suspiciousBehaviourTemplate = "..\\SIEMCentreRules\\src\\main\\resources\\rules\\" +
-            "templates\\suspBehaviour.drt";
-    private static String severityTemplate = "..\\SIEMCentreRules\\src\\main\\resources\\rules\\" +
-            "templates\\severity.drt";
-    private static String maliciousTemplate = "..\\SIEMCentreRules\\src\\main\\resources\\rules\\" +
-            "templates\\malicious.drt";
+    @Value("${rules.drt.exceededNumOfRequestsTemplate}")
+    private String exceededNumOfRequestsTemplate;
+
+    @Value("${rules.drt.suspiciousBehaviourTemplate}")
+    private String suspiciousBehaviourTemplate;
+
+    @Value("${rules.drt.severityTemplate}")
+    private String severityTemplate;
+
+    @Value("${rules.drt.maliciousTemplate}")
+    private String maliciousTemplate;
+
+    @Value("${rules.drt.exceededNumOfRequestsDRLPath}")
+    private String exceededNumOfRequestsDRLPath;
+
+    @Value("${rules.drt.suspiciousBehaviourDRLPath}")
+    private String suspiciousBehaviourDRLPath;
+
+    @Value("${rules.drt.severityDRLPath}")
+    private String severityDRLPath;
+
+    @Value("${rules.drt.maliciousDRLPath}")
+    private String maliciousDRLPath;
+
     private static int exceededNumOfRequestsCounter = 0;
     private static int suspiciousBehaviourCounter = 0;
     private static int severityCounter = 0;
     private static int maliciousCounter = 0;
-    private static String exceededNumOfRequestsDRLPath = "..\\SIEMCentreRules\\src\\main\\resources\\rules\\" +
-            "ExceededNumberOfRequests";
-    private static String suspiciousBehaviourDRLPath = "..\\SIEMCentreRules\\src\\main\\resources\\rules\\" +
-            "SuspiciousBehaviour";
-    private static String severityDRLPath = "..\\SIEMCentreRules\\src\\main\\resources\\rules\\" +
-            "Severity";
-    private static String maliciousDRLPath = "..\\SIEMCentreRules\\src\\main\\resources\\rules\\" +
-            "Malicious";
 
     @Autowired
     LogRepository logRepository;
