@@ -35,47 +35,34 @@ import java.util.List;
 @Service
 public class AlarmService {
 
-    @Value("${rules.drt.exceededNumOfRequestsTemplate}")
-    private String exceededNumOfRequestsTemplate;
-
-    @Value("${rules.drt.suspiciousBehaviourTemplate}")
-    private String suspiciousBehaviourTemplate;
-
-    @Value("${rules.drt.severityTemplate}")
-    private String severityTemplate;
-
-    @Value("${rules.drt.maliciousTemplate}")
-    private String maliciousTemplate;
-
-    @Value("${rules.drt.exceededNumOfRequestsDRLPath}")
-    private String exceededNumOfRequestsDRLPath;
-
-    @Value("${rules.drt.suspiciousBehaviourDRLPath}")
-    private String suspiciousBehaviourDRLPath;
-
-    @Value("${rules.drt.severityDRLPath}")
-    private String severityDRLPath;
-
-    @Value("${rules.drt.maliciousDRLPath}")
-    private String maliciousDRLPath;
-
     private static int exceededNumOfRequestsCounter = 0;
     private static int suspiciousBehaviourCounter = 0;
     private static int severityCounter = 0;
     private static int maliciousCounter = 0;
-
     @Autowired
     LogRepository logRepository;
-
     @Autowired
     AlarmRepository alarmRepository;
-
     @Autowired
     RaisedAlarmRepository raisedAlarmRepository;
-
     @Autowired
     KieContainer kieContainer;
-
+    @Value("${rules.drt.exceededNumOfRequestsTemplate}")
+    private String exceededNumOfRequestsTemplate;
+    @Value("${rules.drt.suspiciousBehaviourTemplate}")
+    private String suspiciousBehaviourTemplate;
+    @Value("${rules.drt.severityTemplate}")
+    private String severityTemplate;
+    @Value("${rules.drt.maliciousTemplate}")
+    private String maliciousTemplate;
+    @Value("${rules.drt.exceededNumOfRequestsDRLPath}")
+    private String exceededNumOfRequestsDRLPath;
+    @Value("${rules.drt.suspiciousBehaviourDRLPath}")
+    private String suspiciousBehaviourDRLPath;
+    @Value("${rules.drt.severityDRLPath}")
+    private String severityDRLPath;
+    @Value("${rules.drt.maliciousDRLPath}")
+    private String maliciousDRLPath;
     private KieSession kieSession;
 
     @EventListener(ApplicationReadyEvent.class)
@@ -95,11 +82,11 @@ public class AlarmService {
     }
 
     public Page<Alarm> getAlarms(Pageable pageable) {
-        return alarmRepository.findAll(pageable);
+        return alarmRepository.findAllByOrderByTimespanDesc(pageable);
     }
 
     public Page<RaisedAlarm> getRaisedAlarms(Pageable pageable) {
-        return raisedAlarmRepository.findAll(pageable);
+        return raisedAlarmRepository.findAllByOrderByTimeDesc(pageable);
     }
 
     private void generateAlarmRule(AlarmDTO alarmDTO) throws IOException, MavenInvocationException {

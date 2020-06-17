@@ -2,6 +2,7 @@ package timejts.SIEMCentre.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import timejts.SIEMCentre.model.Facility;
@@ -12,6 +13,8 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public interface LogRepository extends MongoRepository<Log, BigInteger> {
+
+    Page<Log> findAllByOrderByTimestampDesc(Pageable pageable);
 
     @Query("{$and:[" +
             "{$or:[{'message':{$regex:?0,$options:'i'}}, {$expr: ?0 == null}]}, " +

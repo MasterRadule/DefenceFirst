@@ -13,7 +13,7 @@ public class KieContainerConfiguration {
     public KieContainer kieContainer() {
         KieServices ks = KieServices.Factory.get();
         KieContainer kContainer = ks
-                .newKieContainer(ks.newReleaseId("rules", "SIEMCentreRules", "1.0-SNAPSHOT"));
+                .newKieContainer(ks.newReleaseId("timejts", "SIEMCentreRules", "1.0-SNAPSHOT"));
         KieScanner kScanner = ks.newKieScanner(kContainer);
         kScanner.start(3000);
         return kContainer;
