@@ -4,13 +4,14 @@ package timejts.SIEMCentre.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigInteger;
 import java.util.Date;
 
-@Document(collection = "raisedAlarm")
+@Document(collection = "raisedAlarms")
 public class RaisedAlarm {
 
     @Id
-    private String id;
+    private BigInteger id;
 
     private Date time;
 
@@ -26,16 +27,20 @@ public class RaisedAlarm {
 
     private String message2;
 
+    private boolean raised;
+
     public RaisedAlarm() {
+        raised = false;
     }
 
-    public RaisedAlarm(String id, Date time, AlarmType alarmType, String sourceIP, Severity severity, Facility facility) {
+    public RaisedAlarm(BigInteger id, Date time, AlarmType alarmType, String sourceIP, Severity severity, Facility facility) {
         this.id = id;
         this.time = time;
         this.alarmType = alarmType;
         this.sourceIP = sourceIP;
         this.severity = severity;
         this.facility = facility;
+        this.raised = false;
     }
 
     public AlarmType getAlarmType() {
@@ -70,11 +75,11 @@ public class RaisedAlarm {
         this.facility = facility;
     }
 
-    public String getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
@@ -100,5 +105,13 @@ public class RaisedAlarm {
 
     public void setMessage2(String message2) {
         this.message2 = message2;
+    }
+
+    public boolean isRaised() {
+        return raised;
+    }
+
+    public void setRaised(boolean raised) {
+        this.raised = raised;
     }
 }

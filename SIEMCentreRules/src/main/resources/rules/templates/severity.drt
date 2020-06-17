@@ -1,6 +1,12 @@
 template header
 templateNumber
+count
+timespan
+sourceIPRegex
 severityParam
+facilityParam
+messageRegex1
+messageRegex2
 
 package rules;
 

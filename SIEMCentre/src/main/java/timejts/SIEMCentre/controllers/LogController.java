@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/logs")
-public class LogsController {
+public class LogController {
 
     @Autowired
     LogService logService;
@@ -37,6 +37,4 @@ public class LogsController {
     public ResponseEntity<Page<Log>> searchLogs(SearchLogsDTO searchDTO, Pageable pageable) {
         return new ResponseEntity<>(logService.searchLogs(searchDTO, pageable), HttpStatus.OK);
     }
-
-
 }

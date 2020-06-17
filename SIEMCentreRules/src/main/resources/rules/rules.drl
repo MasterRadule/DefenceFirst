@@ -2,10 +2,18 @@ package rules;
 dialect  "mvel"
 
 import timejts.SIEMCentre.model.Log;
+import timejts.SIEMCentre.model.RaisedAlarm;
 
-rule "Dummy rule"
+query "Get new raised alarms"
+    $a: RaisedAlarm(raised == false)
+end
+
+rule "Raise alarm"
+    agenda-group "raise-alarm"
     when
-        $l: Log()
+        $a: RaisedAlarm(raised == false)
     then
-        System.out.println("Log exists");
+        modify($a){
+            setRaised(true)
+        }
 end
