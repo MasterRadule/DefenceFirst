@@ -5,7 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {
+        "timejts.SIEMCentre.repository", "timejts.SIEMCentre.configurations"})
 @EnableEurekaClient
 @EnableEncryptableProperties
 public class SiemCentreApplication {

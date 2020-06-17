@@ -1,5 +1,8 @@
 package timejts.SIEMCentre.model;
 
+import org.kie.api.definition.type.Expires;
+import org.kie.api.definition.type.Role;
+import org.kie.api.definition.type.Timestamp;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -9,6 +12,9 @@ import java.util.Date;
 
 
 @Document(collection = "logs")
+@Role(Role.Type.EVENT)
+@Timestamp("timestamp")
+@Expires("10m")
 public class Log {
 
     @Id
