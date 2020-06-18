@@ -8,11 +8,16 @@ query "Get new raised alarms"
     $a: RaisedAlarm(raised == false)
 end
 
+query "Get logs"
+    $l: Log()
+end
+
 rule "Raise alarm"
     agenda-group "raise-alarm"
     when
         $a: RaisedAlarm(raised == false)
     then
+        System.out.println(drools.getRule().getName());
         modify($a){
             setRaised(true)
         }

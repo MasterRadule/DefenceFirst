@@ -1,5 +1,5 @@
 template header
-templateNumber
+number
 count
 timespan
 sourceIPRegex
@@ -20,16 +20,16 @@ import timejts.SIEMCentre.model.AlarmType;
 
 template "Suspicious behaviour"
 
-rule "SB rule_@{templateNumber}"
+rule "SB rule_@{number}"
     when
-        $l1: Log(message matches @{messageRegex1}, $message1: message)
-        $l2: Log(this after[@{timespan}s] $l1, message matches @{messageRegex2}, $message2: message)
+        $l1: Log(message matches @{messageRegex1})
+        $l2: Log(this after[@{timespan}s] $l1, message matches @{messageRegex2})
     then
         RaisedAlarm raisedAlarm = new RaisedAlarm();
         raisedAlarm.setTime(new Date());
         raisedAlarm.setAlarmType(AlarmType.SUSPICIOUS_BEHAVIOUR);
-        raisedAlarm.setMessage1($message1);
-        raisedAlarm.setMessage2($message2);
+        raisedAlarm.setMessage1(@{messageRegex1});
+        raisedAlarm.setMessage2(@{messageRegex2});
         insert(raisedAlarm);
 end
 

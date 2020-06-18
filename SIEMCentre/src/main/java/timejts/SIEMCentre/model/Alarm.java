@@ -14,7 +14,7 @@ public class Alarm {
 
     private int count;
 
-    private Long timespan;
+    private int timespan;
 
     private String sourceIPRegex;
 
@@ -29,7 +29,7 @@ public class Alarm {
     public Alarm() {
     }
 
-    public Alarm(BigInteger id, int count, Long timespan, String sourceIPRegex, Severity severity, Facility facility, String messageRegex1, String messageRegex2) {
+    public Alarm(BigInteger id, int count, int timespan, String sourceIPRegex, Severity severity, Facility facility, String messageRegex1, String messageRegex2) {
         this.id = id;
         this.count = count;
         this.timespan = timespan;
@@ -48,11 +48,11 @@ public class Alarm {
         this.id = id;
     }
 
-    public Long getTimespan() {
+    public int getTimespan() {
         return timespan;
     }
 
-    public void setTimespan(Long timespan) {
+    public void setTimespan(int timespan) {
         this.timespan = timespan;
     }
 

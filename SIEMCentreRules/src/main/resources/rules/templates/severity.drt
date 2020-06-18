@@ -1,5 +1,5 @@
 template header
-templateNumber
+number
 count
 timespan
 sourceIPRegex
@@ -20,12 +20,11 @@ import timejts.SIEMCentre.model.AlarmType;
 
 template "Severity template"
 
-rule "Severity rule_@{templateNumber}"
+rule "Severity rule_@{number}"
     when
         Number(intValue >= 1) from accumulate(
            $l: Log(
-               severity == @{severityParam},
-               $severity: severity
+               severity == @{severityParam}
            ) over window:time(10s),
            count($l)
         )
@@ -33,7 +32,7 @@ rule "Severity rule_@{templateNumber}"
         RaisedAlarm raisedAlarm = new RaisedAlarm();
         raisedAlarm.setTime(new Date());
         raisedAlarm.setAlarmType(AlarmType.SEVERITY_ALARM);
-        raisedAlarm.setSeverity($severity);
+        raisedAlarm.setSeverity(Severity.@{severityParam});
         insert(raisedAlarm);
 end
 

@@ -16,13 +16,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import timejts.SIEMCentre.dto.AlarmDTO;
 import timejts.SIEMCentre.dto.AlarmDataDTO;
-import timejts.SIEMCentre.model.Alarm;
-import timejts.SIEMCentre.model.RaisedAlarm;
+import timejts.SIEMCentre.model.*;
 import timejts.SIEMCentre.repository.AlarmRepository;
 import timejts.SIEMCentre.repository.LogRepository;
 import timejts.SIEMCentre.repository.RaisedAlarmRepository;
 import timejts.SIEMCentre.utils.Utilities;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -63,7 +64,7 @@ public class AlarmService {
     private String severityDRLPath;
     @Value("${rules.drt.maliciousDRLPath}")
     private String maliciousDRLPath;
-    private KieSession kieSession;
+    public static KieSession kieSession;
 
     @EventListener(ApplicationReadyEvent.class)
     public void initializeSessions() {
@@ -74,7 +75,7 @@ public class AlarmService {
         return kieContainer.newKieSession("rules-session");
     }
 
-    public String createAlarm(AlarmDTO alarmDTO) throws IOException, MavenInvocationException {
+    public String createAlarm(AlarmDTO alarmDTO) throws IOException, MavenInvocationException, InterruptedException {
         alarmRepository.save(alarmDTO.getAlarm());
         generateAlarmRule(alarmDTO);
 
@@ -89,8 +90,8 @@ public class AlarmService {
         return raisedAlarmRepository.findAllByOrderByTimeDesc(pageable);
     }
 
-    private void generateAlarmRule(AlarmDTO alarmDTO) throws IOException, MavenInvocationException {
-        String templatePath;
+    private void generateAlarmRule(AlarmDTO alarmDTO) throws IOException, MavenInvocationException, InterruptedException {
+        String templatePath = null;
         String drlPath = null;
         InputStream template = null;
         AlarmDataDTO dataDTO = null;
@@ -100,6 +101,7 @@ public class AlarmService {
                 templatePath = exceededNumOfRequestsTemplate;
                 drlPath = exceededNumOfRequestsDRLPath + exceededNumOfRequestsCounter + ".drl";
                 template = new FileInputStream(templatePath);
+                alarmDTO.getAlarm().setCount(alarmDTO.getAlarm().getCount() - 1);
                 dataDTO = new AlarmDataDTO(exceededNumOfRequestsCounter, alarmDTO.getAlarm());
                 exceededNumOfRequestsCounter++;
                 break;
@@ -137,20 +139,32 @@ public class AlarmService {
 
     @Scheduled(fixedRate = 2000, initialDelay = 10000)
     private void checkForAlarms() {
+        System.out.println("checkForAlarms");
+        QueryResults results = kieSession.getQueryResults("Get logs");
+        System.out.println("Num of logs: " + results.size());
+        System.out.println("Fact count:" + kieSession.getFactCount());
         kieSession.getAgenda().getAgendaGroup("MAIN").setFocus();
         kieSession.fireAllRules();
     }
 
     @Scheduled(fixedRate = 3000, initialDelay = 10000)
     private void getRaisedAlarmsFromSession() {
+        System.out.println("getRaisedAlarmsFromSession");
+        QueryResults results3 = kieSession.getQueryResults("Get logs");
+        System.out.println("Num of logs: " + results3.size());
+        System.out.println("Fact count:" + kieSession.getFactCount());
+
         QueryResults results = kieSession.getQueryResults("Get new raised alarms");
         if (results.size() == 0) {
             return;
         }
 
+        System.out.println("Pozdrav");
         RaisedAlarm ra;
         for (QueryResultsRow queryResult : results) {
             ra = (RaisedAlarm) queryResult.get("$a");
+            System.out.println(ra.getAlarmType().toString());
+            System.out.println("RAISEDDD");
             raisedAlarmRepository.save(ra);
         }
 

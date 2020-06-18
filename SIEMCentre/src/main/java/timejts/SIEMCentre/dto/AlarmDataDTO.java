@@ -6,11 +6,11 @@ import timejts.SIEMCentre.model.Severity;
 
 public class AlarmDataDTO {
 
-    private int templateNumber;
+    private int number;
 
     private int count;
 
-    private Long timespan;
+    private int timespan;
 
     private String sourceIPRegex;
 
@@ -24,8 +24,8 @@ public class AlarmDataDTO {
 
     public AlarmDataDTO() {}
 
-    public AlarmDataDTO(int templateNumber, Alarm alarm) {
-        this.templateNumber = templateNumber;
+    public AlarmDataDTO(int number, Alarm alarm) {
+        this.number = number;
         this.count = alarm.getCount();
         this.timespan = alarm.getTimespan();
         this.sourceIPRegex = alarm.getSourceIPRegex();
@@ -35,12 +35,12 @@ public class AlarmDataDTO {
         this.messageRegex2 = alarm.getMessageRegex2();
     }
 
-    public int getTemplateNumber() {
-        return templateNumber;
+    public int getNumber() {
+        return number;
     }
 
-    public void setTemplateNumber(int templateNumber) {
-        this.templateNumber = templateNumber;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public int getCount() {
@@ -51,11 +51,11 @@ public class AlarmDataDTO {
         this.count = count;
     }
 
-    public Long getTimespan() {
+    public int getTimespan() {
         return timespan;
     }
 
-    public void setTimespan(Long timespan) {
+    public void setTimespan(int timespan) {
         this.timespan = timespan;
     }
 

@@ -1,5 +1,5 @@
 template header
-templateNumber
+number
 count
 timespan
 sourceIPRegex
@@ -20,12 +20,11 @@ import timejts.SIEMCentre.model.AlarmType;
 
 template "Malicious template"
 
-rule "Malicious rule_@{templateNumber}"
+rule "Malicious rule_@{number}"
     when
         Number(intValue >= 1) from accumulate(
            $l: Log(
-               sourceIP matches @{sourceIPRegex},
-               $sourceIP: sourceIP
+               sourceIP matches @{sourceIPRegex}
            ) over window:time(10s),
            count($l)
         )
@@ -33,7 +32,7 @@ rule "Malicious rule_@{templateNumber}"
         RaisedAlarm raisedAlarm = new RaisedAlarm();
         raisedAlarm.setTime(new Date());
         raisedAlarm.setAlarmType(AlarmType.MALICIOUS_IP_ADDRESS);
-        raisedAlarm.setSourceIP($sourceIP);
+        raisedAlarm.setSourceIP(@{sourceIPRegex});
         insert(raisedAlarm);
 end
 

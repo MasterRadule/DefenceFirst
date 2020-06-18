@@ -1,5 +1,5 @@
 template header
-templateNumber
+number
 count
 timespan
 sourceIPRegex
@@ -20,23 +20,25 @@ import timejts.SIEMCentre.model.AlarmType;
 
 template "Exceeded number of requests"
 
-rule "ENOR rule_@{templateNumber}"
+rule "ENOR rule_@{number}"
     when
+        $log: Log(severity == Severity.@{severityParam}, facility == Facility.@{facilityParam}, $severity: severity, $facility: facility)
         Number(intValue >= @{count}) from accumulate(
            $l: Log(
-               severity == @{severityParam},
-               facility == @{facilityParam},
-               $severity: severity,
-               $facility: facility
-           ) over window:time(@{timespan}s),
+               this != $log,
+               this after[@{timespan}s] $log,
+               severity == Severity.@{severityParam},
+               facility == Facility.@{facilityParam}
+           ),
            count($l)
         )
     then
+        System.out.print(drools.getRule().getName());
         RaisedAlarm raisedAlarm = new RaisedAlarm();
         raisedAlarm.setTime(new Date());
         raisedAlarm.setAlarmType(AlarmType.EXCEEDED_NUMBER_OF_REQUESTS);
-        raisedAlarm.setSeverity($severity);
-        raisedAlarm.setFacility($facility);
+        raisedAlarm.setSeverity(Severity.@{severityParam});
+        raisedAlarm.setFacility(Facility.@{facilityParam});
         insert(raisedAlarm);
 end
 

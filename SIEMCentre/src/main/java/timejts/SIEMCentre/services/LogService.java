@@ -19,7 +19,10 @@ public class LogService {
     LogRepository logRepository;
 
     public String saveLogs(ArrayList<Log> logs) {
-        logs.forEach(log -> logRepository.save(log));
+        logs.forEach(log -> {
+            logRepository.save(log);
+            AlarmService.kieSession.insert(log);
+        });
 
         return "Success";
     }
