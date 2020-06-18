@@ -24,8 +24,8 @@ rule "Severity rule_@{number}"
     when
         Number(intValue >= 1) from accumulate(
            $l: Log(
-               severity == @{severityParam}
-           ) over window:time(10s),
+               severity == Severity.@{severityParam}
+           ) over window:time(60s),
            count($l)
         )
     then

@@ -24,7 +24,7 @@ public class TestClass {
 
     @PostConstruct
     public void proba() throws InterruptedException {
-        Log l1 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,
+        /*Log l1 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,
                 Facility.AUTH, "message", "Application");
         System.out.println(l1.getTimestamp());
         Thread.sleep(2000);
@@ -42,6 +42,81 @@ public class TestClass {
 
         Alarm alarm = new Alarm(null, 2, 1, "", Severity.INFORMATIONAL, Facility.AUTH, "", "");
         AlarmDTO alarmDTO = new AlarmDTO(alarm, AlarmType.EXCEEDED_NUMBER_OF_REQUESTS);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<AlarmDTO> entity = new HttpEntity<>(alarmDTO, headers);
+
+        ResponseEntity<String> response2 =
+                restTemplate.postForEntity("https://localhost:8082/alarm", entity, String.class);
+        System.out.println(response2.getBody());*/
+
+        /*Log l1 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,
+                Facility.AUTH, "200", "Application");
+        System.out.println(l1.getTimestamp());
+        Thread.sleep(2000);
+        Log l2 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,
+                Facility.AUTH, "503", "Application");
+        System.out.println(l2.getTimestamp());
+        ArrayList<Log> logs = new ArrayList<>();
+        logs.add(l1);
+        logs.add(l2);
+
+        ResponseEntity<String> response =
+                restTemplate.postForEntity("https://localhost:8082/log", logs, String.class);
+        System.out.println(response.getBody());
+
+
+        Alarm alarm = new Alarm(null, 2, 2, "", Severity.INFORMATIONAL, Facility.AUTH, "\"200\"", "\"503\"");
+        AlarmDTO alarmDTO = new AlarmDTO(alarm, AlarmType.SUSPICIOUS_BEHAVIOUR);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<AlarmDTO> entity = new HttpEntity<>(alarmDTO, headers);
+
+        ResponseEntity<String> response2 =
+                restTemplate.postForEntity("https://localhost:8082/alarm", entity, String.class);
+        System.out.println(response2.getBody());*/
+
+        /*Log l1 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.ERROR,
+                Facility.AUTH, "200", "Application");
+        System.out.println(l1.getTimestamp());
+        ArrayList<Log> logs = new ArrayList<>();
+        logs.add(l1);
+
+        ResponseEntity<String> response =
+                restTemplate.postForEntity("https://localhost:8082/log", logs, String.class);
+        System.out.println(response.getBody());
+
+
+        Alarm alarm = new Alarm(null, 2, 2, "", Severity.ERROR, Facility.AUTH, "\"200\"", "\"503\"");
+        AlarmDTO alarmDTO = new AlarmDTO(alarm, AlarmType.SEVERITY_ALARM);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<AlarmDTO> entity = new HttpEntity<>(alarmDTO, headers);
+
+        ResponseEntity<String> response2 =
+                restTemplate.postForEntity("https://localhost:8082/alarm", entity, String.class);
+        System.out.println(response2.getBody());*/
+
+
+        Log l1 = new Log(new Date(), "hostname", "192.168.8.1", "192.168.8.1", Severity.ERROR,
+                Facility.AUTH, "200", "Application");
+        System.out.println(l1.getTimestamp());
+        ArrayList<Log> logs = new ArrayList<>();
+        logs.add(l1);
+
+        ResponseEntity<String> response =
+                restTemplate.postForEntity("https://localhost:8082/log", logs, String.class);
+        System.out.println(response.getBody());
+
+
+        Alarm alarm = new Alarm(null, 2, 2, "\"192.168.8.1\"", Severity.ERROR, Facility.AUTH, "\"200\"", "\"503\"");
+        AlarmDTO alarmDTO = new AlarmDTO(alarm, AlarmType.MALICIOUS_IP_ADDRESS);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

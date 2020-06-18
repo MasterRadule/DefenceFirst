@@ -25,7 +25,7 @@ rule "Malicious rule_@{number}"
         Number(intValue >= 1) from accumulate(
            $l: Log(
                sourceIP matches @{sourceIPRegex}
-           ) over window:time(10s),
+           ) over window:time(60s),
            count($l)
         )
     then
