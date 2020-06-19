@@ -2,6 +2,7 @@ package timejts.SIEMAgent.configurations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,7 +24,11 @@ public class TestClass {
     RestTemplate restTemplate;
 
     @PostConstruct
-    public void proba() throws InterruptedException {
+    public void alarms() throws InterruptedException {
+
+        System.out.println("Proba");
+
+        /*######## EXCEEDED NUMBER OF REQUESTS  ########*/
         /*Log l1 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,
                 Facility.AUTH, "message", "Application");
         System.out.println(l1.getTimestamp());
@@ -40,7 +45,7 @@ public class TestClass {
         System.out.println(response.getBody());
 
 
-        Alarm alarm = new Alarm(null, 2, 1, "", Severity.INFORMATIONAL, Facility.AUTH, "", "");
+        Alarm alarm = new Alarm(null, 2, 10, "", Severity.INFORMATIONAL, Facility.AUTH, "", "");
         AlarmDTO alarmDTO = new AlarmDTO(alarm, AlarmType.EXCEEDED_NUMBER_OF_REQUESTS);
 
         HttpHeaders headers = new HttpHeaders();
@@ -52,6 +57,8 @@ public class TestClass {
                 restTemplate.postForEntity("https://localhost:8082/alarm", entity, String.class);
         System.out.println(response2.getBody());*/
 
+
+        /*######## SUSPICIOUS BEHAVIOUR  ########*/
         /*Log l1 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,
                 Facility.AUTH, "200", "Application");
         System.out.println(l1.getTimestamp());
@@ -80,6 +87,8 @@ public class TestClass {
                 restTemplate.postForEntity("https://localhost:8082/alarm", entity, String.class);
         System.out.println(response2.getBody());*/
 
+
+        /*######## SEVERITY ALARM  ########*/
         /*Log l1 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.ERROR,
                 Facility.AUTH, "200", "Application");
         System.out.println(l1.getTimestamp());
@@ -104,7 +113,8 @@ public class TestClass {
         System.out.println(response2.getBody());*/
 
 
-        Log l1 = new Log(new Date(), "hostname", "192.168.8.1", "192.168.8.1", Severity.ERROR,
+        /*######## MALICIOUS IP ADDRESS  ########*/
+        /*Log l1 = new Log(new Date(), "hostname", "192.168.8.1", "192.168.8.1", Severity.ERROR,
                 Facility.AUTH, "200", "Application");
         System.out.println(l1.getTimestamp());
         ArrayList<Log> logs = new ArrayList<>();
@@ -125,6 +135,22 @@ public class TestClass {
 
         ResponseEntity<String> response2 =
                 restTemplate.postForEntity("https://localhost:8082/alarm", entity, String.class);
-        System.out.println(response2.getBody());
+        System.out.println(response2.getBody());*/
+    }
+
+    private String messageRegex;
+    private String hostname;
+    private String hostIPRegex;
+    private Date startDate;
+    private Date endDate;
+    private Severity severity;
+    private Facility facility;
+
+    @PostConstruct
+    public void logs() {
+        ResponseEntity<Object> response =
+                restTemplate.getForEntity("https://localhost:8082/log/search?messageRegex&hostname" +
+                        "&hostIPRegex&startDate=2020-06-18T13:58:03.732+00:00&endDate=2020-06-18T19:01:11.728+00:00&severity&facility&page=0&size=5", Object.class);
+        System.out.println(response.getBody());
     }
 }

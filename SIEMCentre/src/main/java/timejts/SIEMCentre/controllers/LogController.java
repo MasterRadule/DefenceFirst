@@ -31,7 +31,11 @@ public class LogController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<Log>> searchLogs(SearchLogsDTO searchDTO, Pageable pageable) {
-        return new ResponseEntity<>(logService.searchLogs(searchDTO, pageable), HttpStatus.OK);
+    public ResponseEntity<Object> searchLogs(SearchLogsDTO searchDTO, Pageable pageable) {
+        try {
+            return new ResponseEntity<>(logService.searchLogs(searchDTO, pageable), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

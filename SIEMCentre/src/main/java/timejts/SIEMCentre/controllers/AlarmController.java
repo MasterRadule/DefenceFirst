@@ -20,7 +20,7 @@ public class AlarmController {
     AlarmService alarmService;
 
     @PostMapping
-    public ResponseEntity<String> createAlarm(@RequestBody AlarmDTO alarmDTO) {
+    public ResponseEntity<Object> createAlarm(@RequestBody AlarmDTO alarmDTO) {
         try {
             return new ResponseEntity<>(alarmService.createAlarm(alarmDTO), HttpStatus.OK);
         } catch (Exception e) {
