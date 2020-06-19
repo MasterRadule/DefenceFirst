@@ -12,23 +12,26 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import timejts.SIEMCentre.dto.AlarmDTO;
 import timejts.SIEMCentre.dto.AlarmDataDTO;
-import timejts.SIEMCentre.model.*;
+import timejts.SIEMCentre.dto.ReportAlarmsDTO;
+import timejts.SIEMCentre.model.Alarm;
+import timejts.SIEMCentre.model.RaisedAlarm;
 import timejts.SIEMCentre.repository.AlarmRepository;
 import timejts.SIEMCentre.repository.LogRepository;
 import timejts.SIEMCentre.repository.RaisedAlarmRepository;
 import timejts.SIEMCentre.utils.Utilities;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +39,7 @@ import java.util.List;
 @Service
 public class AlarmService {
 
+    public static KieSession kieSession;
     private static int exceededNumOfRequestsCounter = 0;
     private static int suspiciousBehaviourCounter = 0;
     private static int severityCounter = 0;
@@ -64,7 +68,6 @@ public class AlarmService {
     private String severityDRLPath;
     @Value("${rules.drt.maliciousDRLPath}")
     private String maliciousDRLPath;
-    public static KieSession kieSession;
 
     @EventListener(ApplicationReadyEvent.class)
     public void initializeSessions() {
@@ -159,12 +162,10 @@ public class AlarmService {
             return;
         }
 
-        System.out.println("Pozdrav");
         RaisedAlarm ra;
         for (QueryResultsRow queryResult : results) {
             ra = (RaisedAlarm) queryResult.get("$a");
             System.out.println(ra.getAlarmType().toString());
-            System.out.println("RAISEDDD");
             raisedAlarmRepository.save(ra);
         }
 
@@ -177,5 +178,50 @@ public class AlarmService {
             ra = (RaisedAlarm) queryResult.get("$a");
             // TODO: 17.6.2020. Send notice through web socket
         }
+    }
+
+    public Long getReportBySeverity(ReportAlarmsDTO reportAlarmsDTO) throws ParseException {
+        Date startDate;
+        Date endDate;
+        Pair<Date, Date> dates = Utilities.parseDates(reportAlarmsDTO.getStartDate(), reportAlarmsDTO.getEndDate());
+        if (dates == null) {
+            startDate = null;
+            endDate = null;
+        } else {
+            startDate = dates.getFirst();
+            endDate = dates.getSecond();
+        }
+        return raisedAlarmRepository
+                .countBySeverityEqualsAndTimeBetween(reportAlarmsDTO.getSeverity(), startDate, endDate);
+    }
+
+    public Long getReportByFacility(ReportAlarmsDTO reportAlarmsDTO) throws ParseException {
+        Date startDate;
+        Date endDate;
+        Pair<Date, Date> dates = Utilities.parseDates(reportAlarmsDTO.getStartDate(), reportAlarmsDTO.getEndDate());
+        if (dates == null) {
+            startDate = null;
+            endDate = null;
+        } else {
+            startDate = dates.getFirst();
+            endDate = dates.getSecond();
+        }
+        return raisedAlarmRepository
+                .countByFacilityEqualsAndTimeBetween(reportAlarmsDTO.getFacility(), startDate, endDate);
+    }
+
+    public Long getReportByAlarmType(ReportAlarmsDTO reportAlarmsDTO) throws ParseException {
+        Date startDate;
+        Date endDate;
+        Pair<Date, Date> dates = Utilities.parseDates(reportAlarmsDTO.getStartDate(), reportAlarmsDTO.getEndDate());
+        if (dates == null) {
+            startDate = null;
+            endDate = null;
+        } else {
+            startDate = dates.getFirst();
+            endDate = dates.getSecond();
+        }
+        return raisedAlarmRepository
+                .countByAlarmTypeEqualsAndTimeBetween(reportAlarmsDTO.getAlarmType(), startDate, endDate);
     }
 }

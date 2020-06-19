@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import timejts.SIEMCentre.dto.ReportLogsDTO;
 import timejts.SIEMCentre.dto.SearchLogsDTO;
 import timejts.SIEMCentre.model.Log;
 import timejts.SIEMCentre.services.LogService;
@@ -34,6 +34,24 @@ public class LogController {
     public ResponseEntity<Object> searchLogs(SearchLogsDTO searchDTO, Pageable pageable) {
         try {
             return new ResponseEntity<>(logService.searchLogs(searchDTO, pageable), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/report/system")
+    public ResponseEntity<Object> getReportBySystem(ReportLogsDTO reportLogsDTO) {
+        try {
+            return new ResponseEntity<>(logService.getReportBySystem(reportLogsDTO), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/report/machine")
+    public ResponseEntity<Object> getReportByMachine(ReportLogsDTO reportLogsDTO) {
+        try {
+            return new ResponseEntity<>(logService.getReportByMachine(reportLogsDTO), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

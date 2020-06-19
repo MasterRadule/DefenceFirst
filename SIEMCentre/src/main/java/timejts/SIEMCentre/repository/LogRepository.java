@@ -15,6 +15,10 @@ public interface LogRepository extends MongoRepository<Log, BigInteger> {
 
     Page<Log> findAllByOrderByTimestampDesc(Pageable pageable);
 
+    Long countBySystemEqualsAndTimestampBetween(String system, Date startDate, Date endDate);
+
+    Long countByHostIPEqualsAndTimestampBetween(String machine, Date startDate, Date endDate);
+
     @Query("{$and:[" +
             "{$or:[{$expr: {$eq: [?0, '']}}, {'message':{$regex:?0,$options:'i'}}]}, " +
             "{$or:[{$expr: {$eq: [?1, '']}}, {'hostIP':{$regex:?1,$options:'i'}}]}, " +
