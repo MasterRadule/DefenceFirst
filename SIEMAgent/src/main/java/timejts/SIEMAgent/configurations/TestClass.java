@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import timejts.SIEMCentre.model.Facility;
 import timejts.SIEMCentre.model.Log;
+import timejts.SIEMCentre.model.Severity;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
@@ -86,7 +88,7 @@ public class TestClass {
     }
 
     private ArrayList<Log> readLogsPowerShell(String name, long skip) {
-        System.out.println("READ LOGS IN REAL TIME FROM: " + name);
+        System.out.println("READ LOGS FROM: " + name);
         //String command = "powershell.exe Get-EventLog -LogName " + name + " | Select-Object -Property *";
         String command = "powershell.exe Get-EventLog -LogName " + name + " | Sort-Object -Property Index | Select-Object -Property *";
 
@@ -211,6 +213,82 @@ public class TestClass {
             l.setTimestamp(sdf.parse(log.get("TimeGenerated").get(0)));
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        //Severity;
+        switch (log.get("EntryType").get(0)){
+            case "Error":
+                l.setSeverity(Severity.ERROR);
+                break;
+            case "FailureAudit":
+                l.setSeverity(Severity.ALERT);
+                break;
+            case "Information":
+                l.setSeverity(Severity.INFORMATIONAL);
+                break;
+            case "SuccessAudit":
+                l.setSeverity(Severity.NOTICE);
+                break;
+            case "Warning":
+                l.setSeverity(Severity.WARNING);
+                break;
+            default:
+                l.setSeverity(Severity.DEBUG);
+
+        }
+
+        //facility
+        switch(Integer.parseInt(log.get("CategoryNumber").get(0))){
+            case 0:
+                l.setFacility(Facility.KERN);
+                break;
+            case 1:
+                l.setFacility(Facility.USER);
+                break;
+            case 2:
+                l.setFacility(Facility.MAIL);
+                break;
+            case 3:
+                l.setFacility(Facility.DAEMON);
+                break;
+            case 4:
+                l.setFacility(Facility.AUTH);
+                break;
+            case 5:
+                l.setFacility(Facility.SYSLOG);
+                break;
+            case 6:
+                l.setFacility(Facility.LPR);
+                break;
+            case 7:
+                l.setFacility(Facility.NEWS);
+                break;
+            case 8:
+                l.setFacility(Facility.UUCP);
+                break;
+            case 9:
+                l.setFacility(Facility.CLOCK_DAEMON);
+                break;
+            case 10:
+                l.setFacility(Facility.AUTHPRIV);
+                break;
+            case 11:
+                l.setFacility(Facility.FTP);
+                break;
+            case 12:
+                l.setFacility(Facility.NTP);
+                break;
+            case 13:
+                l.setFacility(Facility.LOGAUDIT);
+                break;
+            case 14:
+                l.setFacility(Facility.LOGALERT);
+                break;
+            case 15:
+                l.setFacility(Facility.CRON);
+                break;
+            default:
+                l.setFacility(Facility.LOCAL0);
         }
 
         return l;
