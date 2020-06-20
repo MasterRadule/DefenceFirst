@@ -20,7 +20,7 @@
       <module name="PKI" target="1.8" />
       <module name="Service-Registry" target="1.8" />
       <module name="SIEMAgent" target="1.8" />
-      <module name="SIEMCentre" target="1.5" />
+      <module name="SIEMCentre" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
