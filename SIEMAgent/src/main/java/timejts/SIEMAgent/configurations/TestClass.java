@@ -3,13 +3,14 @@ package timejts.SIEMAgent.configurations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import timejts.SIEMCentre.model.Facility;
 import timejts.SIEMCentre.model.Log;
 import timejts.SIEMCentre.model.Severity;
 
-import javax.annotation.PostConstruct;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -21,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class TestClass {
+public class TestClass  implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
     @Qualifier("restTemplateWithStrategy")
@@ -48,7 +49,9 @@ public class TestClass {
         System.out.println(response.getBody());
     }*/
 
-    @PostConstruct
+    //@PostConstruct
+   // @Override
+
     private void process() {
         ArrayList<Log> logList = new ArrayList<>();
         if (this.realTimeMode) {
@@ -292,5 +295,10 @@ public class TestClass {
         }
 
         return l;
+    }
+
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        this.process();
     }
 }
