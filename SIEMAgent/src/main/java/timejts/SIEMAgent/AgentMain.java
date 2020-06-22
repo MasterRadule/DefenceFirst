@@ -15,6 +15,8 @@ import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,9 +32,10 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
     private ConfigProperties properties;
+
     private Boolean firstTime = true;
     private String lastIndex = "";
-
+    private long simulatorLineCounter = 0;
 
    /* @PostConstruct
     public void proba() {
@@ -43,18 +46,15 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     }*/
 
     //@PostConstruct
-   // @Override
+    // @Override
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        switch (properties.getAgentMode()){
+        switch (properties.getAgentMode()) {
             case "Windows":
-                this.windowsProcess();
+                this.simulatorProcess();
                 break;
             case "Linux":
-                break;
-            case "Simulator":
-                this.simulatorProcess();
                 break;
         }
 
@@ -72,10 +72,11 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
                 }
             }
         } else {
+            logList = readLogsPowerShell(properties.getLogName());
+            this.firstTime = false;
             while (true) {
                 try {
                     logList = readLogsPowerShell(properties.getLogName());
-                    this.firstTime = false;
                     Thread.sleep(properties.getBatchTime());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -88,8 +89,8 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         System.out.println("READ LOGS FROM: " + name);
         //String command = "powershell.exe Get-EventLog -LogName " + name + " | Select-Object -Property *";
         String command = "powershell.exe Get-EventLog -LogName " + name + " | Sort-Object -Property Index  | Select-Object -Property *";
-        if(!this.firstTime)
-            command = "powershell.exe Get-EventLog -LogName " + name +" | Where-object {$_.Index -gt '"+ this.lastIndex +"'} | Sort-Object -Propert Index | Select-Object -Property *";
+        if (!this.firstTime)
+            command = "powershell.exe Get-EventLog -LogName " + name + " | Where-object {$_.Index -gt '" + this.lastIndex + "'} | Sort-Object -Propert Index | Select-Object -Property *";
         ArrayList<Log> logs = new ArrayList<>();
 
         try {
@@ -203,7 +204,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         }
 
         //Severity;
-        switch (log.get("EntryType").get(0)){
+        switch (log.get("EntryType").get(0)) {
             case "Error":
                 l.setSeverity(Severity.ERROR);
                 break;
@@ -225,7 +226,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         }
 
         //facility
-        switch(Integer.parseInt(log.get("CategoryNumber").get(0))){
+        switch (Integer.parseInt(log.get("CategoryNumber").get(0))) {
             case 0:
                 l.setFacility(Facility.KERN);
                 break;
@@ -281,13 +282,164 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return l;
     }
 
-    private void simulatorProcess(){
-
+    private void simulatorProcess() {
+        ArrayList<Log> logList = new ArrayList<>();
         if (properties.getRealTimeMode()) {
+            logList = readSimulatorLog(properties.getSimulatorLogName());
+            while (true) {
+                logList = readSimulatorLog(properties.getSimulatorLogName());
+                // java watcher
+            }
+        } else {
 
         }
-        else {
+    }
 
+    private ArrayList<Log> readSimulatorLog(String logName) {
+        ArrayList<Log> logs = new ArrayList<>();
+
+        try {
+            BufferedReader br = Files.newBufferedReader(Paths.get("E:\\Fakultet\\DefenceFirst\\Simulator\\logs\\" + logName)); // ??? path
+            long counter = 0;
+            String line;
+            Log l;
+            while ((line = br.readLine()) != null) {
+                if (counter < this.simulatorLineCounter) {
+                    counter++;
+                    continue;
+                }
+
+                l = new Log();
+                this.simulatorLineCounter++;
+                //System.out.println(line);
+
+                //System.out.println(this.simulatorLineCounter);
+                String[] splitLine = line.split("\\s{5}");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                l.setTimestamp(sdf.parse(splitLine[0]));
+
+                String[] split2 = splitLine[1].split("-");
+                l.setHostname(split2[0] + split2[1]);
+                l.setSystem(split2[2]);
+                l.setHostIP(split2[3]);
+                l.setSourceIP(split2[4]);
+
+                String[] split3 = splitLine[2].split("-");
+
+                switch (split3[0]) {
+                    case "DEBUG":
+                        l.setSeverity(Severity.DEBUG);
+                        break;
+                    case "INFORMATIONAL":
+                        l.setSeverity(Severity.INFORMATIONAL);
+                        break;
+                    case "NOTICE":
+                        l.setSeverity(Severity.NOTICE);
+                        break;
+                    case "WARNING":
+                        l.setSeverity(Severity.WARNING);
+                        break;
+                    case "ERROR":
+                        l.setSeverity(Severity.ERROR);
+                        break;
+                    case "CRITICAL":
+                        l.setSeverity(Severity.CRITICAL);
+                        break;
+                    case "ALERT":
+                        l.setSeverity(Severity.ALERT);
+                        break;
+                    case "EMERGENCY":
+                        l.setSeverity(Severity.EMERGENCY);
+                        break;
+                }
+                switch (split3[1]) {
+                    case "KERN":
+                        l.setFacility(Facility.KERN);
+                        break;
+                    case "USER":
+                        l.setFacility(Facility.USER);
+                        break;
+                    case "MAIL":
+                        l.setFacility(Facility.MAIL);
+                        break;
+                    case "DAEMON":
+                        l.setFacility(Facility.DAEMON);
+                        break;
+                    case "AUTH":
+                        l.setFacility(Facility.AUTH);
+                        break;
+                    case "SYSLOG":
+                        l.setFacility(Facility.SYSLOG);
+                        break;
+                    case "LPR":
+                        l.setFacility(Facility.LPR);
+                        break;
+                    case "NEWS":
+                        l.setFacility(Facility.NEWS);
+                        break;
+                    case "UUCP":
+                        l.setFacility(Facility.UUCP);
+                        break;
+                    case "CLOCK_DAEMON":
+                        l.setFacility(Facility.CLOCK_DAEMON);
+                        break;
+                    case "AUTHPRIV":
+                        l.setFacility(Facility.AUTHPRIV);
+                        break;
+                    case "FTP":
+                        l.setFacility(Facility.FTP);
+                        break;
+                    case "NTP":
+                        l.setFacility(Facility.NTP);
+                        break;
+                    case "LOGAUDIT":
+                        l.setFacility(Facility.LOGAUDIT);
+                        break;
+                    case "LOGALERT":
+                        l.setFacility(Facility.LOGALERT);
+                        break;
+                    case "CRON":
+                        l.setFacility(Facility.CRON);
+                        break;
+                    case "LOCAL0":
+                        l.setFacility(Facility.LOCAL0);
+                        break;
+                    case "LOCAL1":
+                        l.setFacility(Facility.LOCAL1);
+                        break;
+                    case "LOCAL2":
+                        l.setFacility(Facility.LOCAL2);
+                        break;
+                    case "LOCAL3":
+                        l.setFacility(Facility.LOCAL3);
+                        break;
+                    case "LOCAL4":
+                        l.setFacility(Facility.LOCAL4);
+                        break;
+                    case "LOCAL5":
+                        l.setFacility(Facility.LOCAL5);
+                        break;
+                    case "LOCAL6":
+                        l.setFacility(Facility.LOCAL6);
+                        break;
+                    case "LOCAL7":
+                        l.setFacility(Facility.LOCAL7);
+                        break;
+                }
+                l.setMessage(splitLine[3]);
+                logs.add(l);
+            }
+
+            br.close();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+
+
+        return logs;
     }
 }

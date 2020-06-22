@@ -23,6 +23,8 @@ public class ConfigProperties {
 
     private int batchTime;
 
+    private String simulatorLogName;
+
     public String getAgentMode() {
         return agentMode;
     }
@@ -61,5 +63,13 @@ public class ConfigProperties {
 
     public void setBatchTime(int batchTime) {
         this.batchTime = batchTime;
+    }
+
+    public String getSimulatorLogName() {
+        return simulatorLogName;
+    }
+
+    public void setSimulatorLogName(String simulatorLogName) {
+        this.simulatorLogName = simulatorLogName;
     }
 }
