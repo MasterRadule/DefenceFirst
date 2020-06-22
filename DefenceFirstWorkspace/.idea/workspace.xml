@@ -59,8 +59,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="55" column="29" selection-start-line="55" selection-start-column="29" selection-end-line="55" selection-end-column="29" />
+            <state relative-caret-position="382">
+              <caret line="90" column="17" selection-start-line="90" selection-start-column="17" selection-end-line="90" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -415,7 +415,7 @@
       <workItem from="1592763023472" duration="2695000" />
       <workItem from="1592768990623" duration="4772000" />
       <workItem from="1592832662393" duration="762000" />
-      <workItem from="1592849332659" duration="1942000" />
+      <workItem from="1592849332659" duration="3192000" />
     </task>
     <servers />
   </component>
@@ -452,7 +452,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61938000" />
+    <option name="totallyTimeSpent" value="63188000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -465,7 +465,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24694377" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -489,8 +488,8 @@
       <window_info anchor="bottom" id="Java Enterprise" order="11" weight="0.32922733" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="bottom" id="Version Control" order="13" weight="0.32922733" />
-      <window_info anchor="bottom" id="Run Dashboard" order="14" sideWeight="0.49816626" weight="0.32698768" />
-      <window_info active="true" anchor="bottom" id="Messages" order="15" visible="true" weight="0.32922733" />
+      <window_info active="true" anchor="bottom" id="Run Dashboard" order="14" sideWeight="0.49816626" visible="true" weight="0.45912653" />
+      <window_info anchor="bottom" id="Messages" order="15" weight="0.32922733" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -885,8 +884,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="55" column="29" selection-start-line="55" selection-start-column="29" selection-end-line="55" selection-end-column="29" />
+        <state relative-caret-position="382">
+          <caret line="90" column="17" selection-start-line="90" selection-start-column="17" selection-end-line="90" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

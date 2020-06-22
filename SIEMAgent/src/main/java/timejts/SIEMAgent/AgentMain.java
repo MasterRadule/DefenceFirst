@@ -54,6 +54,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
             case "Linux":
                 break;
             case "Simulator":
+                this.simulatorProcess();
                 break;
         }
 
@@ -87,7 +88,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         System.out.println("READ LOGS FROM: " + name);
         //String command = "powershell.exe Get-EventLog -LogName " + name + " | Select-Object -Property *";
         String command = "powershell.exe Get-EventLog -LogName " + name + " | Sort-Object -Property Index  | Select-Object -Property *";
-        if(!firstTime)
+        if(!this.firstTime)
             command = "powershell.exe Get-EventLog -LogName " + name +" | Where-object {$_.Index -gt '"+ this.lastIndex +"'} | Sort-Object -Propert Index | Select-Object -Property *";
         ArrayList<Log> logs = new ArrayList<>();
 
@@ -280,4 +281,13 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return l;
     }
 
+    private void simulatorProcess(){
+
+        if (properties.getRealTimeMode()) {
+
+        }
+        else {
+
+        }
+    }
 }
