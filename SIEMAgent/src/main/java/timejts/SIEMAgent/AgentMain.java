@@ -1,12 +1,12 @@
-package timejts.SIEMAgent.configurations;
+package timejts.SIEMAgent;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import timejts.SIEMAgent.configurations.ConfigProperties;
 import timejts.SIEMCentre.model.Facility;
 import timejts.SIEMCentre.model.Log;
 import timejts.SIEMCentre.model.Severity;
@@ -22,21 +22,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class TestClass  implements ApplicationListener<ApplicationReadyEvent> {
+public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
     @Qualifier("restTemplateWithStrategy")
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
-    @Value("${real.time.mode}")
-    private boolean realTimeMode;
-
-    @Value("${log.name}")
-    private String logName;
-
-    @Value("${batch.time}")
-    private int timeSleep;
-
+    @Autowired
+    private ConfigProperties properties;
+    private Boolean firstTime = true;
     private long skipChar = 0;
     private String lastIndex = "";
 
@@ -52,37 +46,38 @@ public class TestClass  implements ApplicationListener<ApplicationReadyEvent> {
     //@PostConstruct
    // @Override
 
-    private void process() {
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        switch (properties.getAgentMode()){
+            case "Windows":
+                this.windowsProcess();
+                break;
+            case "Linux":
+                break;
+            case "Simulator":
+                this.
+                break;
+        }
+
+    }
+
+    private void windowsProcess() {
         ArrayList<Log> logList = new ArrayList<>();
-        if (this.realTimeMode) {
-            //real time sistem
-            System.out.println(this.logName);
-            logList = readLogsPowerShell(this.logName, this.skipChar);
-            /*for(Log l : logList){
-                System.out.println("EventId: " + l.getId());
-                System.out.println("TimeStamp: " + l.getTimestamp());
-                System.out.println("Message: " + l.getMessage());
-            }*/
+        if (properties.getRealTimeMode()) {
+            System.out.println(properties.getLogName());
+            logList = readLogsPowerShell(properties.getLogName(), this.skipChar);
+            this.firstTime = false;
             while (true) {
-                if (readOnChanges(this.logName)) {
-                    logList = readLogsPowerShell(this.logName, this.skipChar);
-                   /* for(Log l : logList){
-                        System.out.println("EventId: " + l.getId());
-                        System.out.println("TimeStamp: " + l.getTimestamp());
-                        System.out.println("Message: " + l.getMessage());
-                    }*/
+                if (readOnChanges(properties.getLogName())) {
+                    logList = readLogsPowerShell(properties.getLogName(), this.skipChar);
                 }
             }
         } else {
             while (true) {
                 try {
-                    logList = readLogsPowerShell(this.logName, this.skipChar);
-                    /*for(Log l : logList){
-                        System.out.println("EventId: " + l.getId());
-                        System.out.println("TimeStamp: " + l.getTimestamp());
-                        System.out.println("Message: " + l.getMessage());
-                    }*/
-                    Thread.sleep(this.timeSleep);
+                    logList = readLogsPowerShell(properties.getLogName(), this.skipChar);
+                    this.firstTime = false;
+                    Thread.sleep(properties.getBatchTime());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -93,34 +88,26 @@ public class TestClass  implements ApplicationListener<ApplicationReadyEvent> {
     private ArrayList<Log> readLogsPowerShell(String name, long skip) {
         System.out.println("READ LOGS FROM: " + name);
         //String command = "powershell.exe Get-EventLog -LogName " + name + " | Select-Object -Property *";
-        String command = "powershell.exe Get-EventLog -LogName " + name + " | Sort-Object -Property Index | Select-Object -Property *";
-
+        String command = "powershell.exe Get-EventLog -LogName " + name + " | Sort-Object -Property Index  | Select-Object -Property *";
+        if(!firstTime)
+            command = "powershell.exe Get-EventLog -LogName " + name +" | Where-object {$_.Index -gt '"+ this.lastIndex +"'} | Sort-Object -Propert Index | Select-Object -Property *";
         ArrayList<Log> logs = new ArrayList<>();
 
         try {
             Process powerShell = Runtime.getRuntime().exec(command);
             powerShell.getOutputStream().close();
             InputStreamReader inputReader = new InputStreamReader(powerShell.getInputStream());
-            if (skip > 0)
-                inputReader.skip(skip);
             BufferedReader br = new BufferedReader(inputReader);
 
             String line;
             String lastName = "";
             Map<String, ArrayList<String>> event = new HashMap<>();
-            boolean start = false;
             while ((line = br.readLine()) != null) {
-                if (!start && !line.matches("EventID\\s*:.*")) { //find start of new log if skip
-                    continue;
-                } else {
-                    start = true;
-                }
-                skip += line.length();// count skip
                 line = line.trim();
                 if (line.equals("")) // blank line
                     continue;
 
-                if (line.matches("EventID\\s*:.*")) { //start of new log / save previous
+                if (line.matches("^EventID\\s*:.*")) { //start of new log / save previous
                     if (!event.isEmpty()) {
                         //System.out.println(event);
                         this.lastIndex = event.get("Index").get(0);
@@ -297,8 +284,4 @@ public class TestClass  implements ApplicationListener<ApplicationReadyEvent> {
         return l;
     }
 
-    @Override
-    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        this.process();
-    }
 }
