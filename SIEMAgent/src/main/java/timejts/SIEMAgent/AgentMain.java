@@ -31,7 +31,6 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     @Autowired
     private ConfigProperties properties;
     private Boolean firstTime = true;
-    private long skipChar = 0;
     private String lastIndex = "";
 
 
@@ -55,7 +54,6 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
             case "Linux":
                 break;
             case "Simulator":
-                this.
                 break;
         }
 
@@ -65,17 +63,17 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         ArrayList<Log> logList = new ArrayList<>();
         if (properties.getRealTimeMode()) {
             System.out.println(properties.getLogName());
-            logList = readLogsPowerShell(properties.getLogName(), this.skipChar);
+            logList = readLogsPowerShell(properties.getLogName());
             this.firstTime = false;
             while (true) {
                 if (readOnChanges(properties.getLogName())) {
-                    logList = readLogsPowerShell(properties.getLogName(), this.skipChar);
+                    logList = readLogsPowerShell(properties.getLogName());
                 }
             }
         } else {
             while (true) {
                 try {
-                    logList = readLogsPowerShell(properties.getLogName(), this.skipChar);
+                    logList = readLogsPowerShell(properties.getLogName());
                     this.firstTime = false;
                     Thread.sleep(properties.getBatchTime());
                 } catch (InterruptedException e) {
@@ -85,7 +83,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         }
     }
 
-    private ArrayList<Log> readLogsPowerShell(String name, long skip) {
+    private ArrayList<Log> readLogsPowerShell(String name) {
         System.out.println("READ LOGS FROM: " + name);
         //String command = "powershell.exe Get-EventLog -LogName " + name + " | Select-Object -Property *";
         String command = "powershell.exe Get-EventLog -LogName " + name + " | Sort-Object -Property Index  | Select-Object -Property *";
@@ -143,12 +141,10 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
 
 
             System.out.println("Last index was: " + this.lastIndex);
-            //System.out.println(skip);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.skipChar = skip;
         return logs;
     }
 

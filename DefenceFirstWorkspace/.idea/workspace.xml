@@ -37,15 +37,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8aad2c6d-856f-4e87-84b2-15470f7ec44c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hibernate_hibernate_validator_unknown.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/configurations/ConfigProperties.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/exceptions/ConfigException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMAgent/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/SiemAgentApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/SiemAgentApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/configurations/TestClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/../PKI/target/" />
     <ignored path="$PROJECT_DIR$/../Config-Server/target/" />
@@ -67,8 +59,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5419">
-              <caret line="284" column="5" selection-start-line="284" selection-start-column="5" selection-end-line="284" selection-end-column="5" />
+            <state relative-caret-position="322">
+              <caret line="55" column="29" selection-start-line="55" selection-start-column="29" selection-end-line="55" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -112,10 +104,10 @@
       <find>EventId</find>
       <find>getinput</find>
       <find>path</find>
-      <find>skip</find>
       <find>kurcina</find>
       <find>promenio sam index</find>
       <find>InstanceId         : 455</find>
+      <find>skip</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -423,7 +415,7 @@
       <workItem from="1592763023472" duration="2695000" />
       <workItem from="1592768990623" duration="4772000" />
       <workItem from="1592832662393" duration="762000" />
-      <workItem from="1592849332659" duration="1655000" />
+      <workItem from="1592849332659" duration="1942000" />
     </task>
     <servers />
   </component>
@@ -460,7 +452,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61651000" />
+    <option name="totallyTimeSpent" value="61938000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -497,8 +489,8 @@
       <window_info anchor="bottom" id="Java Enterprise" order="11" weight="0.32922733" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="bottom" id="Version Control" order="13" weight="0.32922733" />
-      <window_info active="true" anchor="bottom" id="Run Dashboard" order="14" sideWeight="0.49816626" visible="true" weight="0.34826428" />
-      <window_info anchor="bottom" id="Messages" order="15" weight="0.32922733" />
+      <window_info anchor="bottom" id="Run Dashboard" order="14" sideWeight="0.49816626" weight="0.32698768" />
+      <window_info active="true" anchor="bottom" id="Messages" order="15" visible="true" weight="0.32922733" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -893,8 +885,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5419">
-          <caret line="284" column="5" selection-start-line="284" selection-start-column="5" selection-end-line="284" selection-end-column="5" />
+        <state relative-caret-position="322">
+          <caret line="55" column="29" selection-start-line="55" selection-start-column="29" selection-end-line="55" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
