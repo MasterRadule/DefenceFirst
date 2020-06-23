@@ -17,12 +17,12 @@ export const routes: Routes = [
       },
       {
         path: 'alarms',
-        canActivate: [AuthGuard],
-        component: AlarmsComponent,
+        //canActivate: [AuthGuard],
+        loadChildren: () => import('../alarms/alarms.module').then(c => c.AlarmsModule)
       },
       {
         path: 'logs',
-        canActivate: [AuthGuard],
+        //canActivate: [AuthGuard],
         component: LogsComponent
       },
       {

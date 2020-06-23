@@ -27,6 +27,9 @@ public class TestClass {
     public void alarms() throws InterruptedException {
 
         System.out.println("Alarms creating");
+        ResponseEntity<String> response =
+                restTemplate.postForEntity("https://localhost:8082/api/Test", "Message", String.class);
+        System.out.println(response.getBody());
 
         /*######## EXCEEDED NUMBER OF REQUESTS  ########*/
         /*Log l1 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,
@@ -138,7 +141,7 @@ public class TestClass {
         System.out.println(response2.getBody());*/
     }
 
-    @PostConstruct
+    /*@PostConstruct
     public void logs() {
 
         System.out.println("Logs");
@@ -155,10 +158,10 @@ public class TestClass {
         /*ResponseEntity<Object> response =
                 restTemplate.getForEntity("https://localhost:8082/log/report/machine?startDate=2020-06-18T13:58:03.732+00:00" +
                         "&endDate=2020-06-18T19:01:11.728+00:00&system&machine=hostIP", Object.class);
-        System.out.println(response.getBody());*/
-    }
+        System.out.println(response.getBody());
+    }*/
 
-    @PostConstruct
+    /*@PostConstruct
     public void alarmsReport() {
         System.out.println("Alarms getting");
 
@@ -176,5 +179,5 @@ public class TestClass {
                 restTemplate.getForEntity("https://localhost:8082/alarm/report/alarm-type?startDate=2020-06-18T12:59:55.639+00:00" +
                         "&endDate=2020-06-19T07:06:04.032+00:00&severity&facility&alarmType=EXCEEDED_NUMBER_OF_REQUESTS", Object.class);
         System.out.println(response3.getBody());
-    }
+    }*/
 }

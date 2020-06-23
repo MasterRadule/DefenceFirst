@@ -3,25 +3,22 @@ import {CertificateListComponent} from '../certificates/certificate-list/certifi
 import {CertificatesComponent} from '../certificates/certificates.component';
 import {CertificateViewComponent} from '../certificates/certificate-view/certificate-view.component';
 import {AuthGuard} from '../guards/auth.guard';
+import {AlarmListComponent} from '../alarms/alarm-list/alarm-list.component';
+import {AlarmsComponent} from '../alarms/alarms.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: CertificatesComponent,
+    component: AlarmsComponent,
     children: [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'csrs'
-      },
-      {
-        path: ':tab-content/:serial-number',
-        component: CertificateViewComponent,
-        //canActivate: [AuthGuard]
+        redirectTo: 'rules'
       },
       {
         path: ':tab-content',
-        component: CertificateListComponent,
+        component: AlarmListComponent,
         //canActivate: [AuthGuard]
       }
     ]

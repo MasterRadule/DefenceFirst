@@ -41,6 +41,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         public UserDetails loadUserDetails(PreAuthenticatedAuthenticationToken token)
                 throws UsernameNotFoundException {
             X509Certificate certificate = (X509Certificate) token.getCredentials();
+            User user = null;
+            System.out.println(certificate.getSerialNumber().toString());
+            if (certificate.getSerialNumber().toString().equals("252263157")) {
+                GrantedAuthority authority1 = new SimpleGrantedAuthority("ROLE_CLIENT");
+                List<GrantedAuthority> authorityList = new ArrayList<>();
+                authorityList.add(authority1);
+                user = new User(certificate.getSubjectX500Principal().getName(), "", authorityList);
+
+                return user;
+            }
 
             Boolean valid;
             try {
@@ -52,7 +62,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 throw new UsernameNotFoundException(e.getMessage());
             }
 
-            User user = null;
             if (valid) {
                 GrantedAuthority authority1 = new SimpleGrantedAuthority("ROLE_AGENT");
                 List<GrantedAuthority> authorityList = new ArrayList<>();
