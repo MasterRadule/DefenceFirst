@@ -1,25 +1,28 @@
 package timejts.SIEMAgent;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import timejts.SIEMAgent.configurations.ConfigProperties;
 import timejts.SIEMCentre.model.Facility;
 import timejts.SIEMCentre.model.Log;
 import timejts.SIEMCentre.model.Severity;
 
+import javax.tools.Diagnostic;
+import javax.validation.Valid;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,54 +33,63 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     @Qualifier("restTemplateWithStrategy")
     private RestTemplate restTemplate;
 
-    @Autowired
-    private ConfigProperties properties;
-
     private Boolean firstTime = true;
     private String lastIndex = "";
     private long simulatorLineCounter = 0;
 
-   /* @PostConstruct
-    public void proba() {
-        ResponseEntity<String> response =
-                restTemplate.postForEntity("https://localhost:8082/Test", "Test connection", String.class);
+    private Thread osThread;
+    private Thread simulatorThread;
 
-        System.out.println(response.getBody());
-    }*/
+    @Value("${app.real-time-mode-os}")
+    private boolean osRealTimeMode;
+    @Value("${app.batch-time-os}")
+    private int batchTimeOs;
+    @Value("${app.regex-os}")
+    private String regexOs;
+    @Value("${app.log-name}")
+    private String logNameOs;
 
-    //@PostConstruct
-    // @Override
+    @Value("${app.real-time-mode-simulator}")
+    private boolean simulatorTimeMode;
+    @Value("${app.batch-time-simulator}")
+    private int batchTimeSimulator;
+    @Value("${app.regex-simulator}")
+    private String regexSimulator;
+    @Value("${app.simulator-log-directory}")
+    private String pathSimulator;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-        switch (properties.getAgentMode()) {
-            case "Windows":
-                this.simulatorProcess();
-                break;
-            case "Linux":
-                break;
+        if (SystemUtils.IS_OS_WINDOWS) {
+            //osThread = new Thread(this::windowsProcess);
+            //osThread.start();
+
+            simulatorThread = new Thread(this::simulatorProcess);
+            simulatorThread.start();
+        } else if (SystemUtils.IS_OS_LINUX) {
+
         }
 
     }
 
     private void windowsProcess() {
         ArrayList<Log> logList = new ArrayList<>();
-        if (properties.getRealTimeMode()) {
-            System.out.println(properties.getLogName());
-            logList = readLogsPowerShell(properties.getLogName());
+        if (this.osRealTimeMode) {
+            System.out.println(this.logNameOs);
+            logList = readLogsPowerShell(this.logNameOs);
             this.firstTime = false;
             while (true) {
-                if (readOnChanges(properties.getLogName())) {
-                    logList = readLogsPowerShell(properties.getLogName());
+                if (readOnChanges(this.logNameOs)) {
+                    logList = readLogsPowerShell(this.logNameOs);
                 }
             }
         } else {
-            logList = readLogsPowerShell(properties.getLogName());
+            logList = readLogsPowerShell(this.logNameOs);
             this.firstTime = false;
             while (true) {
                 try {
-                    logList = readLogsPowerShell(properties.getLogName());
-                    Thread.sleep(properties.getBatchTime());
+                    logList = readLogsPowerShell(this.logNameOs);
+                    Thread.sleep(this.batchTimeOs);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -284,13 +296,57 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
 
     private void simulatorProcess() {
         ArrayList<Log> logList = new ArrayList<>();
-        if (properties.getRealTimeMode()) {
-            logList = readSimulatorLog(properties.getSimulatorLogName());
+        String logName = "application_log-";//"application_log-2020-06-23.log";
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        logName = logName + sdf.format(d) + ".log";
+        if (this.simulatorTimeMode) {
+
+            logList = readSimulatorLog(this.pathSimulator + logName);
             while (true) {
-                logList = readSimulatorLog(properties.getSimulatorLogName());
-                // java watcher
+                WatchService watchService
+                        = null;
+                try {
+                    watchService = FileSystems.getDefault().newWatchService();
+
+                    Path path = Paths.get(this.pathSimulator);
+
+                    path.register(
+                            watchService,
+                            StandardWatchEventKinds.ENTRY_CREATE,
+                            StandardWatchEventKinds.ENTRY_DELETE,
+                            StandardWatchEventKinds.ENTRY_MODIFY);
+
+                    WatchKey key;
+                    while ((key = watchService.take()) != null) {
+                        for (WatchEvent<?> event : key.pollEvents()) {
+                            if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
+                                logList = readSimulatorLog(this.pathSimulator + logName);
+                                System.out.println("PROMENIO SAM");
+                            } else if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
+                                logName = event.context().toString();
+                                this.simulatorLineCounter = 0;
+                                logList = readSimulatorLog(this.pathSimulator + logName);
+                            }
+                        }
+                        key.reset();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
+            logList = readSimulatorLog(this.pathSimulator + logName);
+            while (true) {
+                logList = readSimulatorLog(this.pathSimulator + logName);
+                try {
+                    Thread.sleep(this.batchTimeSimulator);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
         }
     }
@@ -299,19 +355,23 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         ArrayList<Log> logs = new ArrayList<>();
 
         try {
-            BufferedReader br = Files.newBufferedReader(Paths.get("E:\\Fakultet\\DefenceFirst\\Simulator\\logs\\" + logName)); // ??? path
+            BufferedReader br = Files.newBufferedReader(Paths.get(logName));
             long counter = 0;
             String line;
             Log l;
+            boolean firstTime = false;
+            if (this.simulatorLineCounter == 0)
+                firstTime = true;
             while ((line = br.readLine()) != null) {
-                if (counter < this.simulatorLineCounter) {
+                if (counter < this.simulatorLineCounter && !firstTime) {
                     counter++;
                     continue;
                 }
 
                 l = new Log();
                 this.simulatorLineCounter++;
-                //System.out.println(line);
+                // System.out.println(simulatorLineCounter);
+                System.out.println(line);
 
                 //System.out.println(this.simulatorLineCounter);
                 String[] splitLine = line.split("\\s{5}");
