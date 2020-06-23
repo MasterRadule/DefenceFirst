@@ -116,7 +116,7 @@ class Context:
             os.mkdir(LOGS_PATH)
 
         fileHandler = logging.FileHandler(
-            os.path.join(LOGS_PATH, 'application_log-{}.log'.format(strftime('%Y-%M-%d'))))
+            os.path.join(LOGS_PATH, 'application_log-{}.log'.format(strftime('%Y-%m-%d'))))
         fileHandler.setFormatter(formatter)
 
         consoleHandler = logging.StreamHandler()
