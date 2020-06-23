@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import timejts.SIEMCentre.model.Facility;
@@ -62,8 +63,8 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
             osThread = new Thread(this::windowsProcess);
             osThread.start();
 
-            simulatorThread = new Thread(this::simulatorProcess);
-            simulatorThread.start();
+            //simulatorThread = new Thread(this::simulatorProcess);
+            //simulatorThread.start();
         } else if (SystemUtils.IS_OS_LINUX) {
 
         }
@@ -74,19 +75,23 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         ArrayList<Log> logList = new ArrayList<>();
         if (this.osRealTimeMode) {
             System.out.println(this.logNameOs);
-            logList = readLogsPowerShell(this.logNameOs);
+            logList = filterLogs(readLogsPowerShell(this.logNameOs), regexOs);
+            sendLogs(logList);
             this.firstTime = false;
             while (true) {
                 if (readOnChanges(this.logNameOs)) {
-                    logList = readLogsPowerShell(this.logNameOs);
+                    logList = filterLogs(readLogsPowerShell(this.logNameOs), regexOs);
+                    sendLogs(logList);
                 }
             }
         } else {
-            logList = readLogsPowerShell(this.logNameOs);
+            logList = filterLogs(readLogsPowerShell(this.logNameOs), regexOs);
+            sendLogs(logList);
             this.firstTime = false;
             while (true) {
                 try {
-                    logList = readLogsPowerShell(this.logNameOs);
+                    logList = filterLogs(readLogsPowerShell(this.logNameOs), regexOs);
+                    sendLogs(logList);
                     Thread.sleep(this.batchTimeOs);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -300,10 +305,10 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         logName = logName + sdf.format(d) + ".log";
         if (this.simulatorTimeMode) {
 
-            logList = readSimulatorLog(this.pathSimulator + logName);
+            logList = filterLogs(readSimulatorLog(this.pathSimulator + logName), regexSimulator);
+            sendLogs(logList);
+            WatchService watchService = null;
             while (true) {
-                WatchService watchService
-                        = null;
                 try {
                     watchService = FileSystems.getDefault().newWatchService();
 
@@ -312,19 +317,19 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
                     path.register(
                             watchService,
                             StandardWatchEventKinds.ENTRY_CREATE,
-                            StandardWatchEventKinds.ENTRY_DELETE,
                             StandardWatchEventKinds.ENTRY_MODIFY);
 
                     WatchKey key;
                     while ((key = watchService.take()) != null) {
                         for (WatchEvent<?> event : key.pollEvents()) {
                             if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
-                                logList = readSimulatorLog(this.pathSimulator + logName);
-                                System.out.println("PROMENIO SAM");
+                                logList = filterLogs(readSimulatorLog(this.pathSimulator + logName), regexSimulator);
+                                sendLogs(logList);
                             } else if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
                                 logName = event.context().toString();
                                 this.simulatorLineCounter = 0;
-                                logList = readSimulatorLog(this.pathSimulator + logName);
+                                logList = filterLogs(readSimulatorLog(this.pathSimulator + logName), regexSimulator);
+                                sendLogs(logList);
                             }
                         }
                         key.reset();
@@ -336,9 +341,11 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
                 }
             }
         } else {
-            logList = readSimulatorLog(this.pathSimulator + logName);
+            logList = filterLogs(readSimulatorLog(this.pathSimulator + logName), regexSimulator);
+            sendLogs(logList);
             while (true) {
-                logList = readSimulatorLog(this.pathSimulator + logName);
+                logList = filterLogs(readSimulatorLog(this.pathSimulator + logName), regexSimulator);
+                sendLogs(logList);
                 try {
                     Thread.sleep(this.batchTimeSimulator);
                 } catch (InterruptedException e) {
@@ -383,107 +390,8 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
                 l.setSourceIP(split2[4]);
 
                 String[] split3 = splitLine[2].split("-");
-
-                switch (split3[0]) {
-                    case "DEBUG":
-                        l.setSeverity(Severity.DEBUG);
-                        break;
-                    case "INFORMATIONAL":
-                        l.setSeverity(Severity.INFORMATIONAL);
-                        break;
-                    case "NOTICE":
-                        l.setSeverity(Severity.NOTICE);
-                        break;
-                    case "WARNING":
-                        l.setSeverity(Severity.WARNING);
-                        break;
-                    case "ERROR":
-                        l.setSeverity(Severity.ERROR);
-                        break;
-                    case "CRITICAL":
-                        l.setSeverity(Severity.CRITICAL);
-                        break;
-                    case "ALERT":
-                        l.setSeverity(Severity.ALERT);
-                        break;
-                    case "EMERGENCY":
-                        l.setSeverity(Severity.EMERGENCY);
-                        break;
-                }
-                switch (split3[1]) {
-                    case "KERN":
-                        l.setFacility(Facility.KERN);
-                        break;
-                    case "USER":
-                        l.setFacility(Facility.USER);
-                        break;
-                    case "MAIL":
-                        l.setFacility(Facility.MAIL);
-                        break;
-                    case "DAEMON":
-                        l.setFacility(Facility.DAEMON);
-                        break;
-                    case "AUTH":
-                        l.setFacility(Facility.AUTH);
-                        break;
-                    case "SYSLOG":
-                        l.setFacility(Facility.SYSLOG);
-                        break;
-                    case "LPR":
-                        l.setFacility(Facility.LPR);
-                        break;
-                    case "NEWS":
-                        l.setFacility(Facility.NEWS);
-                        break;
-                    case "UUCP":
-                        l.setFacility(Facility.UUCP);
-                        break;
-                    case "CLOCK_DAEMON":
-                        l.setFacility(Facility.CLOCK_DAEMON);
-                        break;
-                    case "AUTHPRIV":
-                        l.setFacility(Facility.AUTHPRIV);
-                        break;
-                    case "FTP":
-                        l.setFacility(Facility.FTP);
-                        break;
-                    case "NTP":
-                        l.setFacility(Facility.NTP);
-                        break;
-                    case "LOGAUDIT":
-                        l.setFacility(Facility.LOGAUDIT);
-                        break;
-                    case "LOGALERT":
-                        l.setFacility(Facility.LOGALERT);
-                        break;
-                    case "CRON":
-                        l.setFacility(Facility.CRON);
-                        break;
-                    case "LOCAL0":
-                        l.setFacility(Facility.LOCAL0);
-                        break;
-                    case "LOCAL1":
-                        l.setFacility(Facility.LOCAL1);
-                        break;
-                    case "LOCAL2":
-                        l.setFacility(Facility.LOCAL2);
-                        break;
-                    case "LOCAL3":
-                        l.setFacility(Facility.LOCAL3);
-                        break;
-                    case "LOCAL4":
-                        l.setFacility(Facility.LOCAL4);
-                        break;
-                    case "LOCAL5":
-                        l.setFacility(Facility.LOCAL5);
-                        break;
-                    case "LOCAL6":
-                        l.setFacility(Facility.LOCAL6);
-                        break;
-                    case "LOCAL7":
-                        l.setFacility(Facility.LOCAL7);
-                        break;
-                }
+                l.setSeverity(Severity.valueOf(split3[0]));
+                l.setFacility(Facility.valueOf(split3[1]));
                 l.setMessage(splitLine[3]);
                 logs.add(l);
             }
@@ -499,5 +407,22 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
 
 
         return logs;
+    }
+
+    private ArrayList<Log> filterLogs(ArrayList<Log> logs, String regex){
+        ArrayList<Log> filteredLogs = new ArrayList<>();
+        for(Log l: logs){
+            if(l.toString().matches(regex)){
+                filteredLogs.add(l);
+                System.out.println(l);
+            }
+        }
+        return filteredLogs;
+    }
+
+    private void sendLogs(ArrayList<Log> logs){
+        ResponseEntity<String> response =
+                this.restTemplate.postForEntity("https://localhost:8082/api/logs", logs, String.class);
+        System.out.println(response);
     }
 }
