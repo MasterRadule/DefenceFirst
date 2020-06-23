@@ -63,8 +63,8 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
             osThread = new Thread(this::windowsProcess);
             osThread.start();
 
-            //simulatorThread = new Thread(this::simulatorProcess);
-            //simulatorThread.start();
+            simulatorThread = new Thread(this::simulatorProcess);
+            simulatorThread.start();
         } else if (SystemUtils.IS_OS_LINUX) {
 
         }
