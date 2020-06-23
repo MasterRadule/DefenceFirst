@@ -36,19 +36,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8aad2c6d-856f-4e87-84b2-15470f7ec44c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_java_dev_jna_jna_4_5_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_java_dev_jna_jna_platform_4_5_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_logging_log4j_log4j_core_2_12_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_dblock_log4jna_log4jna_api_2_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_hibernate_hibernate_validator_unknown.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMAgent/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/SiemAgentApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/SiemAgentApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/configurations/ConfigProperties.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/resources/application.properties" afterDir="false" />
-    </list>
+    <list default="true" id="8aad2c6d-856f-4e87-84b2-15470f7ec44c" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/../PKI/target/" />
     <ignored path="$PROJECT_DIR$/../Config-Server/target/" />
     <ignored path="$PROJECT_DIR$/../Gateway/target/" />
@@ -69,8 +57,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6737">
-              <caret line="353" column="61" lean-forward="true" selection-start-line="353" selection-start-column="61" selection-end-line="353" selection-end-column="61" />
+            <state relative-caret-position="-212">
+              <caret line="304" column="12" selection-start-line="304" selection-start-column="12" selection-end-line="304" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1326#1352#1" expanded="true" />
@@ -82,84 +70,6 @@
                 <element signature="e#1747#1771#1" expanded="true" />
                 <element signature="e#1819#1851#1" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/nio/file/WatchEvent.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="94" column="12" selection-start-line="94" selection-start-column="12" selection-end-line="94" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../SIEMAgent/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="36" selection-start-line="36" selection-end-line="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../SIEMAgent/src/main/resources/application.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="8" selection-start-line="8" selection-end-line="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/jre/lib/rt.jar!/sun/nio/fs/WindowsPathParser.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="122">
-              <caret line="16" selection-start-line="16" selection-end-line="16" />
-              <folding>
-                <element signature="e#394#395#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/jre/lib/rt.jar!/sun/nio/fs/WindowsPath.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="122">
-              <caret line="45" selection-start-line="45" selection-end-line="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/jre/lib/rt.jar!/sun/nio/fs/WindowsFileSystem.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="122">
-              <caret line="173" selection-start-line="173" selection-end-line="173" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/nio/file/Paths.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="131">
-              <caret line="83" selection-start-line="83" selection-end-line="83" />
-              <folding>
-                <element signature="e#2741#2742#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/Thread.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="131">
-              <caret line="747" selection-start-line="747" selection-end-line="747" />
             </state>
           </provider>
         </entry>
@@ -309,7 +219,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1592917491138" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1592927169181" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../SIEMAgent" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -482,7 +392,7 @@
       <workItem from="1592849332659" duration="3192000" />
       <workItem from="1591707761097" duration="14000" />
       <workItem from="1592862405183" duration="4722000" />
-      <workItem from="1592911866380" duration="5617000" />
+      <workItem from="1592911866380" duration="7114000" />
     </task>
     <servers />
   </component>
@@ -519,7 +429,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74686000" />
+    <option name="totallyTimeSpent" value="76183000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -555,7 +465,7 @@
       <window_info anchor="bottom" id="Java Enterprise" order="11" weight="0.32922733" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="bottom" id="Version Control" order="13" weight="0.32922733" />
-      <window_info active="true" anchor="bottom" id="Run Dashboard" order="14" sideWeight="0.49816626" visible="true" weight="0.2956327" />
+      <window_info active="true" anchor="bottom" id="Run Dashboard" order="14" sideWeight="0.49816626" visible="true" weight="0.38969764" />
       <window_info anchor="bottom" id="Messages" order="15" weight="0.32922733" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -983,8 +893,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6737">
-          <caret line="353" column="61" lean-forward="true" selection-start-line="353" selection-start-column="61" selection-end-line="353" selection-end-column="61" />
+        <state relative-caret-position="-212">
+          <caret line="304" column="12" selection-start-line="304" selection-start-column="12" selection-end-line="304" selection-end-column="12" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1326#1352#1" expanded="true" />

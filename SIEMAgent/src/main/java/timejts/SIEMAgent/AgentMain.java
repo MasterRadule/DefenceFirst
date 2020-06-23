@@ -12,8 +12,6 @@ import timejts.SIEMCentre.model.Facility;
 import timejts.SIEMCentre.model.Log;
 import timejts.SIEMCentre.model.Severity;
 
-import javax.tools.Diagnostic;
-import javax.validation.Valid;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -61,8 +59,8 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         if (SystemUtils.IS_OS_WINDOWS) {
-            //osThread = new Thread(this::windowsProcess);
-            //osThread.start();
+            osThread = new Thread(this::windowsProcess);
+            osThread.start();
 
             simulatorThread = new Thread(this::simulatorProcess);
             simulatorThread.start();
@@ -371,7 +369,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
                 l = new Log();
                 this.simulatorLineCounter++;
                 // System.out.println(simulatorLineCounter);
-                System.out.println(line);
+                //System.out.println(line);
 
                 //System.out.println(this.simulatorLineCounter);
                 String[] splitLine = line.split("\\s{5}");
