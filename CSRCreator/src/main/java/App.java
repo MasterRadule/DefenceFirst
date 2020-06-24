@@ -166,11 +166,6 @@ public class App {
             connection.setDoOutput(true);
 
             connection.getOutputStream().write(csr.getEncoded());
-            //Send request
-            /*DataOutputStream wr = new DataOutputStream(
-                    connection.getOutputStream());
-            wr.write(csr.getEncoded());
-            wr.close();*/
 
             //Get Response
             InputStream is = connection.getInputStream();

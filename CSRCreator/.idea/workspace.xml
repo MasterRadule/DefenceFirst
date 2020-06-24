@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ff8904e4-2e38-40cf-b38f-13c8c7cdacbd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CSRCreator.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/App.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/csr-keystore.jks" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/csr.crt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../DefenceFirstWorkspace/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_10.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DefenceFirstWorkspace/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../DefenceFirstWorkspace/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/configurations/WebSecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/configurations/WebSecurityConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PKI/src/main/java/timejts/PKI/controllers/CertificateController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PKI/src/main/resources/static/keystore/truststore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/../PKI/src/main/resources/static/keystore/truststore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/App.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -43,8 +30,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="164">
-              <caret line="162" column="34" lean-forward="true" selection-start-line="162" selection-start-column="34" selection-end-line="162" selection-end-column="34" />
+            <state relative-caret-position="17">
+              <caret line="167" column="65" selection-start-line="167" selection-start-column="65" selection-end-line="167" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -174,15 +161,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1593004447266</updated>
-      <workItem from="1593004542337" duration="6700000" />
+      <workItem from="1593004542337" duration="6959000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6700000" />
+    <option name="totallyTimeSpent" value="6959000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Designer" />
       <window_info id="Image Layers" />
@@ -239,8 +227,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="162" column="34" lean-forward="true" selection-start-line="162" selection-start-column="34" selection-end-line="162" selection-end-column="34" />
+        <state relative-caret-position="17">
+          <caret line="167" column="65" selection-start-line="167" selection-start-column="65" selection-end-line="167" selection-end-column="65" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
