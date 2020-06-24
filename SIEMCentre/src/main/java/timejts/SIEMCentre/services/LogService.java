@@ -70,7 +70,7 @@ public class LogService {
             endDate = dates.getSecond();
         }
         return logRepository
-                .countBySystemEqualsAndTimestampBetween(reportLogsDTO.getMachine(), startDate, endDate);
+                .countBySystemEqualsAndTimestampBetween(reportLogsDTO.getSystem(), startDate, endDate);
     }
 
     public Long getReportByMachine(ReportLogsDTO reportLogsDTO) throws ParseException {

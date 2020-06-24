@@ -4,6 +4,7 @@
   <button routerLink="/dashboard/logs" mat-button>Logs</button>
   <button routerLink="/dashboard/alarms" mat-button>Alarms</button>
   <button routerLink="/dashboard/certificates" mat-button>Certificates</button>
+    <button routerLink="/dashboard/reports" mat-button>Reports</button>
   </span>
   <span fxLayoutAlign="right">
       <button *ngIf="authorizationService.isAuthenticated" (click)="authorizationService.logout()"

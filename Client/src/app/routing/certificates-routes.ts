@@ -17,12 +17,12 @@ export const routes: Routes = [
       {
         path: ':tab-content/:serial-number',
         component: CertificateViewComponent,
-        //canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
       },
       {
         path: ':tab-content',
         component: CertificateListComponent,
-        //canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
       }
     ]
   }

@@ -29,11 +29,7 @@ public class Utilities {
     public static Pair<Date, Date> parseDates(String startDateParam, String endDateParam) throws ParseException {
         Date startDate;
         Date endDate;
-        String startDateStr;
-        String endDateStr;
         if (!startDateParam.equals("") && !endDateParam.equals("")) {
-            //startDateStr = startDateParam.replace(" ", "+");
-            //endDateStr = endDateParam.replace(" ", "+");
             startDate = formatter.parse(startDateParam);
             endDate = formatter.parse(endDateParam);
 
