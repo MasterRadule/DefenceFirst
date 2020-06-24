@@ -60,20 +60,18 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         if (SystemUtils.IS_OS_WINDOWS) {
-            ArrayList<Log> logs = readLinuxLog(logNameOs);
-            System.out.println("CABAR");
-            //osThread = new Thread(this::windowsProcess);
-            //osThread.start();
+            osThread = new Thread(this::windowsProcess);
+            osThread.start();
 
-            //simulatorThread = new Thread(this::simulatorProcess);
-            //simulatorThread.start();
+            simulatorThread = new Thread(this::simulatorProcess);
+            simulatorThread.start();
         } else if (SystemUtils.IS_OS_LINUX) {
         }
 
     }
 
     private void windowsProcess() {
-        ArrayList<Log> logList = new ArrayList<>();
+        ArrayList<Log> logList;
         if (this.osRealTimeMode) {
             System.out.println(this.logNameOs);
             logList = filterLogs(readLogsPowerShell(this.logNameOs), regexOs);
@@ -299,7 +297,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     }
 
     private void simulatorProcess() {
-        ArrayList<Log> logList = new ArrayList<>();
+        ArrayList<Log> logList;
         String logName = "application_log-";//"application_log-2020-06-23.log";
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -422,6 +420,9 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     }
 
     private void sendLogs(ArrayList<Log> logs) {
+        if(logs.isEmpty()){
+            return;
+        }
         ResponseEntity<String> response =
                 this.restTemplate.postForEntity("https://localhost:8082/api/logs", logs, String.class);
         System.out.println(response);

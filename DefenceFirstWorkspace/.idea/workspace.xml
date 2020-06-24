@@ -37,8 +37,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8aad2c6d-856f-4e87-84b2-15470f7ec44c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SIEMAgent/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMAgent/src/main/resources/application.properties" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/../PKI/target/" />
     <ignored path="$PROJECT_DIR$/../Config-Server/target/" />
@@ -64,7 +64,7 @@
               <entry file="file://$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java">
                 <provider selected="true" editor-type-id="text-editor">
                   <state relative-caret-position="478">
-                    <caret line="445" selection-start-line="445" selection-end-line="445" />
+                    <caret line="446" selection-start-line="446" selection-end-line="446" />
                     <folding>
                       <element signature="imports" expanded="true" />
                       <element signature="e#17434#17435#0" expanded="true" />
@@ -84,8 +84,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="442" column="29" selection-start-line="442" selection-start-column="29" selection-end-line="442" selection-end-column="29" />
+            <state relative-caret-position="202">
+              <caret line="423" column="19" selection-start-line="423" selection-start-column="19" selection-end-line="423" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#17434#17435#0" expanded="true" />
@@ -274,7 +274,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1592994737779" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1592996062875" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../SIEMAgent" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -307,7 +307,7 @@
         </RuleState>
       </list>
     </option>
-    <option name="contentProportion" value="0.1573383" />
+    <option name="contentProportion" value="0.18594527" />
   </component>
   <component name="RunManager" selected="Spring Boot.ConfigServerApplication">
     <configuration default="true" type="CompoundRunConfigurationType">
@@ -484,7 +484,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="85559000" />
+    <option name="totallyTimeSpent" value="86767000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -521,7 +521,7 @@
       <window_info anchor="bottom" id="Java Enterprise" order="11" weight="0.32922733" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="bottom" id="Version Control" order="13" weight="0.32922733" />
-      <window_info active="true" anchor="bottom" id="Run Dashboard" order="14" sideWeight="0.49816626" visible="true" weight="0.3661814" />
+      <window_info active="true" anchor="bottom" id="Run Dashboard" order="14" sideWeight="0.49816626" visible="true" weight="0.37402016" />
       <window_info anchor="bottom" id="Messages" order="15" weight="0.32922733" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -683,18 +683,6 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="163" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1591120225759" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java</url>
-          <line>63</line>
-          <properties />
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/RoleClaimConverter.java">
@@ -1030,8 +1018,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../SIEMAgent/src/main/java/timejts/SIEMAgent/AgentMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="442" column="29" selection-start-line="442" selection-start-column="29" selection-end-line="442" selection-end-column="29" />
+        <state relative-caret-position="202">
+          <caret line="423" column="19" selection-start-line="423" selection-start-column="19" selection-end-line="423" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#17434#17435#0" expanded="true" />
