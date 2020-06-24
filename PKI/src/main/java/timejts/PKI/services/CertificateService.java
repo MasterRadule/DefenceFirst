@@ -470,7 +470,6 @@ public class CertificateService {
     public Boolean checkSignature(SignedLogsDTO signedLogsDTO, String serNum) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, SignatureException, InvalidKeyException {
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
 
-        // Check if subject already has valid certificate
         X509Certificate certificate = (X509Certificate) ks.getCertificate(serNum);
         if (certificate == null) {
             throw new NotExistingCertificateException("Certificate with given serial number does not exist");

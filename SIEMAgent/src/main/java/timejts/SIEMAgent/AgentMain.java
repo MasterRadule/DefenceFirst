@@ -1,5 +1,7 @@
 package timejts.SIEMAgent;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,11 +13,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import timejts.SIEMCentre.dto.SignedLogsDTO;
 import timejts.SIEMCentre.model.Facility;
 import timejts.SIEMCentre.model.Log;
 import timejts.SIEMCentre.model.Severity;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -445,22 +449,27 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     private void sendLogs(ArrayList<Log> logs) throws KeyStoreException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException, SignatureException, InvalidKeyException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("serialNumber", serialNumber);
-        SignedObject signedLogs = getSignedLogs(logs);
-        HttpEntity<SignedObject> entity = new HttpEntity<>(signedLogs, headers);
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<Log>>() {}.getType();
+        String json = gson.toJson(logs, type);
+        byte[] bytes = json.getBytes();
+
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
+
+        PrivateKey privKey = (PrivateKey) ks.getKey(keyAlias, keystorePassword.toCharArray());
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initSign(privKey);
+
+        signature.update(bytes);
+        byte[] digitalSignature = signature.sign();
+
+        SignedLogsDTO signedLogsDTO = new SignedLogsDTO(logs, digitalSignature);
+        HttpEntity<SignedLogsDTO> entity = new HttpEntity<>(signedLogsDTO, headers);
 
         ResponseEntity<String> response =
                 this.restTemplate.postForEntity("https://localhost:8082/api/log", entity, String.class);
-        System.out.println(response);
-    }
-
-    private SignedObject getSignedLogs(ArrayList<Log> logs) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, SignatureException, InvalidKeyException, UnrecoverableKeyException {
-        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-        ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
-        PrivateKey privKey = (PrivateKey) ks.getKey(keyAlias, keystorePassword.toCharArray());
-        Signature signature = Signature.getInstance(privKey.getAlgorithm());
-        signature.initSign(privKey);
-
-
-        return new SignedObject(logs, privKey, signature);
+        System.out.println(response.getBody());
     }
 }
