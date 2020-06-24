@@ -1,19 +1,26 @@
 package timejts.SIEMAgent.configurations;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import timejts.SIEMCentre.dto.AlarmDTO;
+import timejts.SIEMCentre.dto.SignedLogsDTO;
 import timejts.SIEMCentre.model.*;
 
 import javax.annotation.PostConstruct;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 @Component
@@ -23,13 +30,63 @@ public class TestClass {
     @Qualifier("restTemplateWithStrategy")
     RestTemplate restTemplate;
 
-    @PostConstruct
-    public void alarms() throws InterruptedException {
+    @Value("${serialNumber}")
+    private String serialNumber;
 
-        System.out.println("Alarms creating");
+    @Value("${server.ssl.keystore}")
+    private String keystorePath;
+
+    @Value("${server.ssl.key-store-password}")
+    private String keystorePassword;
+
+    @Value("${server.ssl.key-alias}")
+    private String keyAlias;
+
+    @PostConstruct
+    public void alarms() throws InterruptedException, KeyStoreException, IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, SignatureException, InvalidKeyException {
+
+        /*System.out.println("Alarms creating");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("serialNumber", serialNumber);
+
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
+
+        PrivateKey privKey = (PrivateKey) ks.getKey(keyAlias, keystorePassword.toCharArray());
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initSign(privKey);
+
+        Log l1 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,
+                Facility.AUTH, "message", "Application");
+        System.out.println(l1.getTimestamp());
+        Thread.sleep(2000);
+        Log l2 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,
+                Facility.AUTH, "message", "Application");
+        System.out.println(l2.getTimestamp());
+        ArrayList<Log> logs = new ArrayList<>();
+        logs.add(l1);
+        logs.add(l2);
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<Log>>() {}.getType();
+        String json = gson.toJson(logs, type);
+        byte[] bytes = json.getBytes();
+
+        signature.update(bytes);
+        byte[] digitalSignature = signature.sign();
+
+        SignedLogsDTO signedLogsDTO = new SignedLogsDTO(logs, digitalSignature);
+        HttpEntity<SignedLogsDTO> entity = new HttpEntity<>(signedLogsDTO, headers);
+
         ResponseEntity<String> response =
+                this.restTemplate.postForEntity("https://localhost:8082/api/log", entity, String.class);
+        System.out.println(response.getBody());*/
+
+
+        /*ResponseEntity<String> response =
                 restTemplate.postForEntity("https://localhost:8082/api/Test", "Message", String.class);
-        System.out.println(response.getBody());
+        System.out.println(response.getBody());*/
 
         /*######## EXCEEDED NUMBER OF REQUESTS  ########*/
         /*Log l1 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,

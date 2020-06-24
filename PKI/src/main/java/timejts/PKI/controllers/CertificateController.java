@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import timejts.PKI.dto.CACertificateCreationDTO;
 import timejts.PKI.dto.NonCACertificateCreationDTO;
 import timejts.PKI.services.CertificateService;
+import timejts.SIEMCentre.dto.SignedLogsDTO;
 
 import javax.validation.Valid;
 
@@ -123,6 +124,17 @@ public class CertificateController {
     public ResponseEntity<Object> validateCertificate(@RequestBody byte[] certificate) {
         try {
             return new ResponseEntity<>(certificateService.validateCertificate(certificate), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/check-signature")
+    @Secured("ROLE_VALIDATOR")
+    public ResponseEntity<Object> checkSignature(@RequestBody SignedLogsDTO signedLogsDTO,
+                                                 @RequestHeader("serialNumber") String serNum) {
+        try {
+            return new ResponseEntity<>(certificateService.checkSignature(signedLogsDTO, serNum), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

@@ -6,9 +6,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.util.Pair;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import timejts.SIEMCentre.dto.ReportLogsDTO;
 import timejts.SIEMCentre.dto.SearchLogsDTO;
+import timejts.SIEMCentre.dto.SignedLogsDTO;
+import timejts.SIEMCentre.exceptions.DigitalSignatureInvalidException;
 import timejts.SIEMCentre.model.Facility;
 import timejts.SIEMCentre.model.Log;
 import timejts.SIEMCentre.model.Severity;
@@ -25,13 +30,28 @@ public class LogService {
     @Autowired
     LogRepository logRepository;
 
-    public String saveLogs(ArrayList<Log> logs) {
+    @Autowired
+    RestTemplate restTemplate;
+
+    public String saveLogs(SignedLogsDTO signedLogsDTO, String serialNumber) throws DigitalSignatureInvalidException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("serialNumber", serialNumber);
+        HttpEntity<SignedLogsDTO> entity = new HttpEntity<>(signedLogsDTO, headers);
+
+        Boolean valid = restTemplate
+                .postForEntity("https://localhost:8443/api/certificates/check-signature", entity, Boolean.class)
+                .getBody();
+
+        if (!valid)
+            throw new DigitalSignatureInvalidException("Invalid signature");
+
+        ArrayList<Log> logs = signedLogsDTO.getLogs();
         logs.forEach(log -> {
             logRepository.save(log);
             AlarmService.kieSession.insert(log);
         });
 
-        return "Success";
+        return "Successfully added logs";
     }
 
     public Page<Log> getLogs(Pageable page) {
