@@ -8,3 +8,15 @@
 #logs-table table {
   width: 100%;
 }
+
+.mat-cell {
+  padding: 0 20px 0 0;
+}
+
+form {
+  margin-top:2%;
+}
+
+.searchButton {
+  height: 40px;
+}

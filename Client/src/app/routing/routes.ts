@@ -4,6 +4,7 @@ import {AlarmsComponent} from '../alarms/alarms.component';
 import {LogsComponent} from '../logs/logs.component';
 import {AuthGuard} from '../guards/auth.guard';
 import {CallbackComponent} from '../callback/callback.component';
+import {AlarmCreationComponent} from '../alarms/alarm-creation/alarm-creation.component';
 
 export const routes: Routes = [
   {

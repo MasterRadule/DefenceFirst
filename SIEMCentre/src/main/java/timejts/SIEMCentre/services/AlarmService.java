@@ -100,7 +100,7 @@ public class AlarmService {
     }
 
     private void generateAlarmRule(AlarmDTO alarmDTO) throws IOException, MavenInvocationException, InterruptedException {
-        String templatePath = null;
+        String templatePath;
         String drlPath = null;
         InputStream template = null;
         AlarmDataDTO dataDTO = null;
@@ -118,6 +118,8 @@ public class AlarmService {
                 templatePath = suspiciousBehaviourTemplate;
                 drlPath = suspiciousBehaviourDRLPath + suspiciousBehaviourCounter + ".drl";
                 template = new FileInputStream(templatePath);
+                alarmDTO.getAlarm().setMessageRegex1("\"" + alarmDTO.getAlarm().getMessageRegex1() + "\"");
+                alarmDTO.getAlarm().setMessageRegex2("\"" + alarmDTO.getAlarm().getMessageRegex2() + "\"");
                 dataDTO = new AlarmDataDTO(suspiciousBehaviourCounter, alarmDTO.getAlarm());
                 suspiciousBehaviourCounter++;
                 break;
@@ -132,6 +134,7 @@ public class AlarmService {
                 templatePath = maliciousTemplate;
                 drlPath = maliciousDRLPath + maliciousCounter + ".drl";
                 template = new FileInputStream(templatePath);
+                alarmDTO.getAlarm().setSourceIPRegex("\"" + alarmDTO.getAlarm().getSourceIPRegex() + "\"");
                 dataDTO = new AlarmDataDTO(maliciousCounter, alarmDTO.getAlarm());
                 maliciousCounter++;
                 break;
@@ -179,11 +182,6 @@ public class AlarmService {
         kieSession.fireAllRules();
 
         kieSession.getAgenda().getAgendaGroup("MAIN").setFocus();
-
-        for (QueryResultsRow queryResult : results) {
-            ra = (RaisedAlarm) queryResult.get("$a");
-            // TODO: 17.6.2020. Send notice through web socket
-        }
     }
 
     public Long getReportBySeverity(ReportAlarmsDTO reportAlarmsDTO) throws ParseException {

@@ -1,10 +1,7 @@
 import {Routes} from '@angular/router';
-import {CertificateListComponent} from '../certificates/certificate-list/certificate-list.component';
-import {CertificatesComponent} from '../certificates/certificates.component';
-import {CertificateViewComponent} from '../certificates/certificate-view/certificate-view.component';
-import {AuthGuard} from '../guards/auth.guard';
 import {AlarmListComponent} from '../alarms/alarm-list/alarm-list.component';
 import {AlarmsComponent} from '../alarms/alarms.component';
+import {AlarmCreationComponent} from '../alarms/alarm-creation/alarm-creation.component';
 
 export const routes: Routes = [
   {
@@ -15,6 +12,10 @@ export const routes: Routes = [
         path: '',
         pathMatch: 'full',
         redirectTo: 'rules'
+      },
+      {
+        path: 'create',
+        component: AlarmCreationComponent
       },
       {
         path: ':tab-content',

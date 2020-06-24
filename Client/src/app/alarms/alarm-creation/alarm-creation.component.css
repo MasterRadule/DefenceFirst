@@ -1,0 +1,14 @@
+.alarmButton {
+  height: 40px;
+}
+
+#alarms-content {
+  margin-top: 10%;
+  width: 70%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+mat-expansion-panel-header {
+  height: 70px !important;
+}

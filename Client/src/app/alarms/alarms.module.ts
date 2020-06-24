@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlarmsComponent } from './alarms.component';
 import {
-  MatButtonModule, MatDatepickerModule,
+  MatButtonModule, MatDatepickerModule, MatExpansionModule,
   MatIconModule, MatInputModule,
   MatListModule,
   MatPaginatorModule, MatSelectModule, MatSnackBarModule,
@@ -18,11 +18,12 @@ import {RouterModule} from '@angular/router';
 import { AlarmsTabsComponent } from './alarms-tabs/alarms-tabs.component';
 import {routes} from '../routing/alarms-routes';
 import { AlarmListComponent } from './alarm-list/alarm-list.component';
+import { AlarmCreationComponent } from './alarm-creation/alarm-creation.component';
 
 
 
 @NgModule({
-  declarations: [AlarmsComponent, AlarmsTabsComponent, AlarmListComponent],
+  declarations: [AlarmsComponent, AlarmsTabsComponent, AlarmListComponent, AlarmCreationComponent],
   imports: [
     CommonModule,
     MatListModule,
@@ -44,7 +45,8 @@ import { AlarmListComponent } from './alarm-list/alarm-list.component';
     MatDatepickerModule,
     MatMomentDateModule,
     MatSelectModule,
-    RouterModule
+    RouterModule,
+    MatExpansionModule
   ]
 })
 export class AlarmsModule { }
