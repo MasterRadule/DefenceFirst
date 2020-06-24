@@ -16,6 +16,7 @@ import {CallbackComponent} from './callback/callback.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonModule} from '@angular/material/button';
 import {AuthInterceptor} from './interceptors/auth-interceptor';
+import {ReportsModule} from './reports/reports.module';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import {AuthInterceptor} from './interceptors/auth-interceptor';
     CertificatesModule,
     HttpClientModule,
     LogsModule,
+    ReportsModule,
     MatProgressSpinnerModule,
     MatButtonModule
   ],

@@ -1,0 +1,8 @@
+<nav mat-tab-nav-bar>
+  <a mat-tab-link [routerLink]="['/dashboard/alarms/rules']"
+     [active]="this.router.url === '/dashboard/alarms/rules'">Created alarms</a>
+  <a mat-tab-link [routerLink]="['/dashboard/alarms/raised']"
+     [active]="this.router.url === '/dashboard/alarms/raised'">Raised alarms</a>
+  <a mat-tab-link [routerLink]="['/dashboard/alarms/create']"
+     [active]="this.router.url === '/dashboard/alarms/create'">Create alarm</a>
+</nav>

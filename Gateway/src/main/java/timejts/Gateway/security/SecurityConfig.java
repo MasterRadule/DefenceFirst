@@ -39,8 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/api/certificates/**").hasAuthority("SCOPE_Administrator")
-                .antMatchers("/api/**").authenticated()
+                .antMatchers("/api/certificates/**").authenticated()
+                .antMatchers("/api/alarm/**").permitAll()
                 .and()
                 .oauth2ResourceServer().jwt();
     }

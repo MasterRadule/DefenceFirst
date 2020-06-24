@@ -52,7 +52,7 @@ public class Utilities {
         } else {
             if (creationDTO.getStartDate().compareTo(creationDTO.getEndDate()) >= 0)
                 throw new InvalidCertificateDateException("Certificate start date must be after than expiration date");
-            return Pair.of(creationDTO, true);
+            return Pair.of(creationDTO, false);
         }
     }
 
@@ -152,14 +152,14 @@ public class Utilities {
             throws CertIOException {
         ArrayList<GeneralName> generalNames = new ArrayList<>();
         generalNames.add(new GeneralName(GeneralName.rfc822Name, subjEmail));
-        generalNames.add(new GeneralName(GeneralName.iPAddress, "127.0.0.1"));
+        generalNames.add(new GeneralName(GeneralName.dNSName, "localhost"));
         GeneralNames altNamesSeq = GeneralNames
                 .getInstance(new DERSequence(generalNames.toArray(new GeneralName[]{})));
         certGen.addExtension(SubjectAlternativeName, false, altNamesSeq);
 
         generalNames.clear();
         generalNames.add(new GeneralName(GeneralName.rfc822Name, issuerEmail));
-        generalNames.add(new GeneralName(GeneralName.iPAddress, "127.0.0.1"));
+        generalNames.add(new GeneralName(GeneralName.dNSName, "localhost"));
         altNamesSeq = GeneralNames
                 .getInstance(new DERSequence(generalNames.toArray(new GeneralName[]{})));
         certGen.addExtension(IssuerAlternativeName, false, altNamesSeq);

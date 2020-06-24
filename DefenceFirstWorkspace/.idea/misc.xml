@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/../Gateway/pom.xml" />
         <option value="$PROJECT_DIR$/../SIEMAgent/pom.xml" />
         <option value="$PROJECT_DIR$/../SIEMCentre/pom.xml" />
+        <option value="$PROJECT_DIR$/../SIEMCentreRules/pom.xml" />
       </list>
     </option>
   </component>

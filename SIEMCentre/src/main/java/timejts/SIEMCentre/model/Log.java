@@ -1,37 +1,52 @@
 package timejts.SIEMCentre.model;
 
+import org.kie.api.definition.type.Expires;
+import org.kie.api.definition.type.Role;
+import org.kie.api.definition.type.Timestamp;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 @Document(collection = "logs")
+@Role(Role.Type.EVENT)
+@Timestamp("timestamp")
+@Expires("10m")
 public class Log {
 
     @Id
     private BigInteger id;
 
+    @NotNull
     @Indexed
     private Date timestamp;
 
+    @NotBlank
     @Indexed
     private String hostIP;
 
+    @NotBlank
     private String sourceIP;
 
+    @NotNull
     @Indexed
     private Severity severity;
 
+    @NotNull
     @Indexed
     private Facility facility;
 
+    @NotBlank
     @Indexed
     private String system;
 
+    @NotBlank
     @Indexed
     private String hostname;
 

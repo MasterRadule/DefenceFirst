@@ -1,0 +1,202 @@
+<div id="content">
+  <mat-accordion>
+    <mat-expansion-panel (afterCollapse)="resetDTO()">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Logs reports
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-accordion>
+        <mat-expansion-panel (afterCollapse)="resetDTO()">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Reports by system
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+        <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.xs="column"
+             fxLayoutAlign="center">
+          <mat-form-field>
+            <input matInput [matDatepicker]="dp1" placeholder="Start date" disabled
+                   [(ngModel)]="reportLogsDTO.startDate" [max]="reportLogsDTO.endDate" name="startDate">
+            <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+            <mat-datepicker #dp1 disabled="false"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput [matDatepicker]="dp2" placeholder="End date" disabled
+                   [(ngModel)]="reportLogsDTO.endDate" [min]="reportLogsDTO.startDate" name="endDate">
+            <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+            <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>System</mat-label>
+            <input matInput type="text" [(ngModel)]="reportLogsDTO.system" name="system">
+          </mat-form-field>
+
+          <button type="submit" mat-raised-button color="primary" class="reportButton" (click)="getReportsBySystem()">Submit</button>
+        </div>
+
+        </mat-expansion-panel>
+
+        <mat-expansion-panel (afterCollapse)="resetDTO()">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Reports by machine
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.xs="column"
+               fxLayoutAlign="center">
+            <mat-form-field>
+              <input matInput [matDatepicker]="dp3" placeholder="Start date" disabled
+                     [(ngModel)]="reportLogsDTO.startDate" [max]="reportLogsDTO.endDate" name="startDate">
+              <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+              <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput [matDatepicker]="dp4" placeholder="End date" disabled
+                     [(ngModel)]="reportLogsDTO.endDate" [min]="reportLogsDTO.startDate" name="endDate">
+              <mat-datepicker-toggle matSuffix [for]="dp4"></mat-datepicker-toggle>
+              <mat-datepicker #dp4 disabled="false"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Machine</mat-label>
+              <input matInput type="text" [(ngModel)]="reportLogsDTO.machine" name="machine">
+            </mat-form-field>
+
+            <button type="submit" mat-raised-button color="primary" class="reportButton" (click)="getReportsByMachine()">Submit</button>
+          </div>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel (afterCollapse)="resetDTO()">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Alarms reports
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-accordion>
+        <mat-expansion-panel (afterCollapse)="resetDTO()">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Reports by severity
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.xs="column"
+               fxLayoutAlign="center">
+            <mat-form-field>
+              <input matInput [matDatepicker]="dp5" placeholder="Start date" disabled
+                     [(ngModel)]="reportAlarmsDTO.startDate" [max]="reportAlarmsDTO.endDate" name="startDate">
+              <mat-datepicker-toggle matSuffix [for]="dp5"></mat-datepicker-toggle>
+              <mat-datepicker #dp5 disabled="false"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput [matDatepicker]="dp6" placeholder="End date" disabled
+                     [(ngModel)]="reportAlarmsDTO.endDate" [min]="reportAlarmsDTO.startDate" name="endDate">
+              <mat-datepicker-toggle matSuffix [for]="dp6"></mat-datepicker-toggle>
+              <mat-datepicker #dp6 disabled="false"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Severity</mat-label>
+              <mat-select [(ngModel)]="this.reportAlarmsDTO.severity" name="severity" id="matSelect1">
+                <mat-option *ngFor="let severity of this.severities" [value]="severity">
+                  {{severity}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button type="submit" mat-raised-button color="primary" class="reportButton" (click)="getReportsBySeverity()">Submit</button>
+          </div>
+
+        </mat-expansion-panel>
+
+        <mat-expansion-panel (afterCollapse)="resetDTO()">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Reports by facility
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.xs="column"
+               fxLayoutAlign="center">
+            <mat-form-field>
+              <input matInput [matDatepicker]="dp7" placeholder="Start date" disabled
+                     [(ngModel)]="reportAlarmsDTO.startDate" [max]="reportAlarmsDTO.endDate" name="startDate">
+              <mat-datepicker-toggle matSuffix [for]="dp7"></mat-datepicker-toggle>
+              <mat-datepicker #dp7 disabled="false"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput [matDatepicker]="dp8" placeholder="End date" disabled
+                     [(ngModel)]="reportAlarmsDTO.endDate" [min]="reportAlarmsDTO.startDate" name="endDate">
+              <mat-datepicker-toggle matSuffix [for]="dp8"></mat-datepicker-toggle>
+              <mat-datepicker #dp8 disabled="false"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Facility</mat-label>
+              <mat-select [(ngModel)]="this.reportAlarmsDTO.facility" name="facility" id="matSelect2">
+                <mat-option *ngFor="let facility of this.facilities" [value]="facility">
+                  {{facility}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button type="submit" mat-raised-button color="primary" class="reportButton" (click)="getReportsByFacility()">Submit</button>
+          </div>
+
+        </mat-expansion-panel>
+
+        <mat-expansion-panel (afterCollapse)="resetDTO()">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Reports by alarm type
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.xs="column"
+               fxLayoutAlign="center">
+            <mat-form-field>
+              <input matInput [matDatepicker]="dp9" placeholder="Start date" disabled
+                     [(ngModel)]="reportAlarmsDTO.startDate" [max]="reportAlarmsDTO.endDate" name="startDate">
+              <mat-datepicker-toggle matSuffix [for]="dp9"></mat-datepicker-toggle>
+              <mat-datepicker #dp9 disabled="false"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput [matDatepicker]="dp10" placeholder="End date" disabled
+                     [(ngModel)]="reportAlarmsDTO.endDate" [min]="reportAlarmsDTO.startDate" name="endDate">
+              <mat-datepicker-toggle matSuffix [for]="dp10"></mat-datepicker-toggle>
+              <mat-datepicker #dp10 disabled="false"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Alarm type</mat-label>
+              <mat-select [(ngModel)]="this.reportAlarmsDTO.alarmType" name="alarmType" id="matSelect3">
+                <mat-option *ngFor="let alarmType of this.alarmTypes" [value]="alarmType">
+                  {{alarmType}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button type="submit" mat-raised-button color="primary" class="reportButton" (click)="getReportsByAlarmType()">Submit</button>
+          </div>
+
+        </mat-expansion-panel>
+
+      </mat-accordion>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
