@@ -1,5 +1,7 @@
 package timejts.PKI.services;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.cert.X509CertificateHolder;
@@ -24,11 +26,12 @@ import timejts.PKI.model.CertificateSigningRequest;
 import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
+import timejts.SIEMCentre.dto.SignedLogsDTO;
+import timejts.SIEMCentre.model.Log;
 
 import javax.mail.MessagingException;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.Certificate;
@@ -456,10 +459,34 @@ public class CertificateService {
             return "Certificate is revoked";
         }
 
-        return "Sertificate is good";
+        return "Certificate is good";
     }
 
     public List<CertificateDTO> getRevokedCertificates() {
-        return revokedCertificatesRepository.findAll().stream().map(r -> new CertificateDTO(r)).collect(Collectors.toList());
+        return revokedCertificatesRepository.findAll().stream().map(r -> new CertificateDTO(r))
+                .collect(Collectors.toList());
+    }
+
+    public Boolean checkSignature(SignedLogsDTO signedLogsDTO, String serNum) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, SignatureException, InvalidKeyException {
+        KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
+
+        // Check if subject already has valid certificate
+        X509Certificate certificate = (X509Certificate) ks.getCertificate(serNum);
+        if (certificate == null) {
+            throw new NotExistingCertificateException("Certificate with given serial number does not exist");
+        }
+
+        PublicKey publicKey = certificate.getPublicKey();
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initVerify(publicKey);
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<Log>>() {}.getType();
+        String json = gson.toJson(signedLogsDTO.getLogs(), type);
+        byte[] bytes = json.getBytes();
+
+        signature.update(bytes);
+
+        return signature.verify(signedLogsDTO.getSignedLogs());
     }
 }

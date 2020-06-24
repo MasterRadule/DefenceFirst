@@ -9,11 +9,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import timejts.SIEMCentre.dto.ReportLogsDTO;
 import timejts.SIEMCentre.dto.SearchLogsDTO;
+import timejts.SIEMCentre.dto.SignedLogsDTO;
 import timejts.SIEMCentre.model.Log;
 import timejts.SIEMCentre.services.LogService;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/log")
@@ -24,8 +22,13 @@ public class LogController {
 
     @PostMapping
     @Secured("ROLE_AGENT")
-    public ResponseEntity<String> sendLogs(@RequestBody @Valid ArrayList<Log> logs) {
-        return new ResponseEntity<>(logService.saveLogs(logs), HttpStatus.OK);
+    public ResponseEntity<String> sendLogs(@RequestBody SignedLogsDTO signedLogsDTO,
+                                           @RequestHeader("serialNumber") String serialNumber) {
+        try {
+            return new ResponseEntity<>(logService.saveLogs(signedLogsDTO, serialNumber), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping

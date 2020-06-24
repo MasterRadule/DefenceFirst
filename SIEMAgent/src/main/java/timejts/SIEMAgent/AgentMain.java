@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +20,8 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.*;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,10 +61,28 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     @Value("${app.simulator-log-directory}")
     private String pathSimulator;
 
+    @Value("${serialNumber}")
+    private String serialNumber;
+
+    @Value("${server.ssl.keystore}")
+    private String keystorePath;
+
+    @Value("${server.ssl.key-store-password}")
+    private String keystorePassword;
+
+    @Value("${server.ssl.key-alias}")
+    private String keyAlias;
+
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         if (SystemUtils.IS_OS_WINDOWS) {
-            osThread = new Thread(this::windowsProcess);
+            osThread = new Thread(() -> {
+                try {
+                    windowsProcess();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
             osThread.start();
 
             //simulatorThread = new Thread(this::simulatorProcess);
@@ -71,7 +93,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
 
     }
 
-    private void windowsProcess() {
+    private void windowsProcess() throws KeyStoreException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException, SignatureException, InvalidKeyException {
         ArrayList<Log> logList = new ArrayList<>();
         if (this.osRealTimeMode) {
             System.out.println(this.logNameOs);
@@ -297,7 +319,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return l;
     }
 
-    private void simulatorProcess() {
+    private void simulatorProcess() throws KeyStoreException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException, SignatureException, InvalidKeyException {
         ArrayList<Log> logList = new ArrayList<>();
         String logName = "application_log-";//"application_log-2020-06-23.log";
         Date d = new Date();
@@ -409,10 +431,10 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return logs;
     }
 
-    private ArrayList<Log> filterLogs(ArrayList<Log> logs, String regex){
+    private ArrayList<Log> filterLogs(ArrayList<Log> logs, String regex) {
         ArrayList<Log> filteredLogs = new ArrayList<>();
-        for(Log l: logs){
-            if(l.toString().matches(regex)){
+        for (Log l : logs) {
+            if (l.toString().matches(regex)) {
                 filteredLogs.add(l);
                 System.out.println(l);
             }
@@ -420,9 +442,25 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return filteredLogs;
     }
 
-    private void sendLogs(ArrayList<Log> logs){
+    private void sendLogs(ArrayList<Log> logs) throws KeyStoreException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException, SignatureException, InvalidKeyException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("serialNumber", serialNumber);
+        SignedObject signedLogs = getSignedLogs(logs);
+        HttpEntity<SignedObject> entity = new HttpEntity<>(signedLogs, headers);
+
         ResponseEntity<String> response =
-                this.restTemplate.postForEntity("https://localhost:8082/api/logs", logs, String.class);
+                this.restTemplate.postForEntity("https://localhost:8082/api/log", entity, String.class);
         System.out.println(response);
+    }
+
+    private SignedObject getSignedLogs(ArrayList<Log> logs) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, SignatureException, InvalidKeyException, UnrecoverableKeyException {
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
+        PrivateKey privKey = (PrivateKey) ks.getKey(keyAlias, keystorePassword.toCharArray());
+        Signature signature = Signature.getInstance(privKey.getAlgorithm());
+        signature.initSign(privKey);
+
+
+        return new SignedObject(logs, privKey, signature);
     }
 }
