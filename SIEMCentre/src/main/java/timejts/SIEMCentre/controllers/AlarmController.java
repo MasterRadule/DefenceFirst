@@ -5,12 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import timejts.SIEMCentre.dto.AlarmDTO;
 import timejts.SIEMCentre.dto.ReportAlarmsDTO;
 import timejts.SIEMCentre.model.Alarm;
 import timejts.SIEMCentre.model.RaisedAlarm;
 import timejts.SIEMCentre.services.AlarmService;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/alarm")
@@ -20,7 +23,8 @@ public class AlarmController {
     AlarmService alarmService;
 
     @PostMapping
-    public ResponseEntity<Object> createAlarm(@RequestBody AlarmDTO alarmDTO) {
+    @Secured("ROLE_CLIENT")
+    public ResponseEntity<Object> createAlarm(@RequestBody @Valid AlarmDTO alarmDTO) {
         try {
             return new ResponseEntity<>(alarmService.createAlarm(alarmDTO), HttpStatus.OK);
         } catch (Exception e) {
@@ -29,16 +33,19 @@ public class AlarmController {
     }
 
     @GetMapping
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Page<Alarm>> getAlarms(Pageable pageable) {
         return new ResponseEntity<>(alarmService.getAlarms(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/raised")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Page<RaisedAlarm>> getRaisedAlarms(Pageable pageable) {
         return new ResponseEntity<>(alarmService.getRaisedAlarms(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/report/severity")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> getReportBySeverity(ReportAlarmsDTO reportAlarmsDTO) {
         try {
             return new ResponseEntity<>(alarmService.getReportBySeverity(reportAlarmsDTO), HttpStatus.OK);
@@ -48,6 +55,7 @@ public class AlarmController {
     }
 
     @GetMapping("/report/facility")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> getReportByFacility(ReportAlarmsDTO reportAlarmsDTO) {
         try {
             return new ResponseEntity<>(alarmService.getReportByFacility(reportAlarmsDTO), HttpStatus.OK);
@@ -57,6 +65,7 @@ public class AlarmController {
     }
 
     @GetMapping("/report/alarm-type")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> getReportByAlarmType(ReportAlarmsDTO reportAlarmsDTO) {
         try {
             return new ResponseEntity<>(alarmService.getReportByAlarmType(reportAlarmsDTO), HttpStatus.OK);

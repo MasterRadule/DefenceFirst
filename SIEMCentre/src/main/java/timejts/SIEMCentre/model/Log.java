@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -20,23 +22,30 @@ public class Log {
     @Id
     private BigInteger id;
 
+    @NotNull
     @Indexed
     private Date timestamp;
 
+    @NotBlank
     @Indexed
     private String hostIP;
 
+    @NotBlank
     private String sourceIP;
 
+    @NotNull
     @Indexed
     private Severity severity;
 
+    @NotNull
     @Indexed
     private Facility facility;
 
+    @NotBlank
     @Indexed
     private String system;
 
+    @NotBlank
     @Indexed
     private String hostname;
 

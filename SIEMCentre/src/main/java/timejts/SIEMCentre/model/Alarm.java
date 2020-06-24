@@ -4,6 +4,7 @@ package timejts.SIEMCentre.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigInteger;
 
 @Document(collection = "alarms")
@@ -12,8 +13,10 @@ public class Alarm {
     @Id
     private BigInteger id;
 
+    @PositiveOrZero
     private int count;
 
+    @PositiveOrZero
     private int timespan;
 
     private String sourceIPRegex;
