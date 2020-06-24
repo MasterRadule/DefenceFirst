@@ -60,13 +60,14 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         if (SystemUtils.IS_OS_WINDOWS) {
-            osThread = new Thread(this::windowsProcess);
-            osThread.start();
+            ArrayList<Log> logs = readLinuxLog(logNameOs);
+            System.out.println("CABAR");
+            //osThread = new Thread(this::windowsProcess);
+            //osThread.start();
 
-            simulatorThread = new Thread(this::simulatorProcess);
-            simulatorThread.start();
+            //simulatorThread = new Thread(this::simulatorProcess);
+            //simulatorThread.start();
         } else if (SystemUtils.IS_OS_LINUX) {
-
         }
 
     }
@@ -409,10 +410,10 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return logs;
     }
 
-    private ArrayList<Log> filterLogs(ArrayList<Log> logs, String regex){
+    private ArrayList<Log> filterLogs(ArrayList<Log> logs, String regex) {
         ArrayList<Log> filteredLogs = new ArrayList<>();
-        for(Log l: logs){
-            if(l.toString().matches(regex)){
+        for (Log l : logs) {
+            if (l.toString().matches(regex)) {
                 filteredLogs.add(l);
                 System.out.println(l);
             }
@@ -420,9 +421,65 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return filteredLogs;
     }
 
-    private void sendLogs(ArrayList<Log> logs){
+    private void sendLogs(ArrayList<Log> logs) {
         ResponseEntity<String> response =
                 this.restTemplate.postForEntity("https://localhost:8082/api/logs", logs, String.class);
         System.out.println(response);
+    }
+
+    private ArrayList<Log> readLinuxLog(String path) {
+        ArrayList<Log> logs = new ArrayList<>();
+
+        try {
+            BufferedReader br = Files.newBufferedReader(Paths.get(path));
+            String line;
+            Log l;
+            StringBuilder sb;
+            Date d;
+            while ((line = br.readLine()) != null) {
+                //System.out.println(line);
+                line = line.trim();
+                if(line.equals("")){
+                    continue;
+                }
+                l = new Log();
+                String[] split = line.split(" ");
+
+                sb = new StringBuilder();
+                sb.append(split[0] + " ");
+                sb.append(split[1] + " ");
+                sb.append(split[2] + " ");
+                sb.append(split[3]);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+                d = sdf.parse(sb.toString()); // time
+                l.setTimestamp(d);
+
+                l.setHostname(split[4]);
+                sb = new StringBuilder();
+                for(int i = 5; i < split.length; i++){
+                    sb.append(split[i] + " ");
+                }
+                l.setMessage(sb.toString());
+                l.setHostIP(InetAddress.getLocalHost().getHostAddress());
+                l.setSourceIP(InetAddress.getLocalHost().getHostAddress());
+                l.setSystem(System.getProperty("os.name"));
+                l.setFacility(Facility.AUTH);
+                l.setSeverity(Severity.INFORMATIONAL);
+                logs.add(l);
+            }
+
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return logs;
+    }
+
+    private void linuxProcess(){
+        readLinuxLog(logNameOs);
     }
 }
