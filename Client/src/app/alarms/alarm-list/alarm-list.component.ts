@@ -15,11 +15,12 @@ export class AlarmListComponent implements OnInit {
   private alarms: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   displayedColumns: string[];
   private content: string;
+  private totalElements;
   private observer = {
     next: (alarms: Page) => {
       this.alarms.data = alarms.content;
+      this.totalElements = alarms.totalElements;
       this.changeDetectorRef.detectChanges();
-      this.alarms.paginator = this.paginator;
       this.alarms.sort = this.sort;
     },
     error: () => {
@@ -38,22 +39,28 @@ export class AlarmListComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
+        this.totalElements = 6;
+        this.paginator.pageIndex = 0;
+        this.paginator.pageSize = 6;
         this.content = params.get('tab-content');
         if (this.content === 'rules') {
           this.displayedColumns = ['count', 'timespan', 'sourceIPRegex', 'severity', 'facility', 'messageRegex1', 'messageRegex2'];
         } else {
           this.displayedColumns = ['time', 'alarmType', 'sourceIP', 'severity', 'facility', 'message1', 'message2'];
         }
-        this.getData();
+        this.getData(null);
       }
     );
   }
 
-  private getData() {
+  private getData($event) {
+    if ($event == null) {
+      this.paginator.pageSize = 6;
+    }
     if (this.content === 'rules') {
-      this.alarmsService.getAlarms().subscribe(this.observer);
+      this.alarmsService.getAlarms(this.paginator.pageIndex, this.paginator.pageSize).subscribe(this.observer);
     } else {
-      this.alarmsService.getRaisedAlarms().subscribe(this.observer);
+      this.alarmsService.getRaisedAlarms(this.paginator.pageIndex, this.paginator.pageSize).subscribe(this.observer);
     }
   }
 }

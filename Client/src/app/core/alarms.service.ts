@@ -9,12 +9,11 @@ export class AlarmsService {
   constructor(private http: HttpClient) {
   }
 
-  getAlarms() {
-    console.log("http");
-    return this.http.get('alarm?page=0&size=5');
+  getAlarms(page: number, size: number) {
+    return this.http.get(`alarm?page=${page}&size=${size}`);
   }
 
-  getRaisedAlarms() {
-    return this.http.get('alarm/raised?page=0&size=5');
+  getRaisedAlarms(page: number, size: number) {
+    return this.http.get(`alarm/raised?page=${page}&size=${size}`);
   }
 }

@@ -18,13 +18,14 @@ export class LogsComponent implements OnInit {
   displayedColumns: string[];
   private searchParameters: SearchLogsDTO;
   private activeSearchParameters: SearchLogsDTO;
+  private totalElements: number;
   private severities: string[];
   private facilities: string[];
   private observer = {
-    next: (logs: []) => {
-      this.logs.data = logs;
+    next: (logs: Page) => {
+      this.logs.data = logs.content;
+      this.totalElements = logs.totalElements;
       this.changeDetectorRef.detectChanges();
-      this.logs.paginator = this.paginator;
       this.logs.sort = this.sort;
     },
     error: () => {
@@ -47,37 +48,40 @@ export class LogsComponent implements OnInit {
       messageRegex: '',
       hostIPRegex: '',
       hostname: '',
-      startDate: null,
-      endDate: null,
-      severity: null,
-      facility: null
+      startDate: '',
+      endDate: '',
+      severity: 'NA',
+      facility: 'NA'
     };
     this.activeSearchParameters = {
       messageRegex: '',
       hostIPRegex: '',
       hostname: '',
-      startDate: null,
-      endDate: null,
-      severity: null,
-      facility: null
+      startDate: '',
+      endDate: '',
+      severity: 'NA',
+      facility: 'NA'
     };
   }
 
   ngOnInit() {
-    this.displayedColumns = ['timestamp', 'hostIP', 'sourceIP', 'severity', 'facility', 'system', 'hostname', 'message'];
-    this.getData();
+    this.displayedColumns = ['timestamp', 'hostIP', 'sourceIP', 'system', 'hostname', 'severity', 'facility', 'message'];
+    this.getData(null);
   }
 
-  private getData() {
-    this.logsService.searchLogs(this.searchParameters, 0, 5).subscribe(this.observer);
+  private getData($event) {
+    if ($event == null) {
+      this.paginator.pageSize = 6;
+    }
+    this.logsService.searchLogs(this.searchParameters, this.paginator.pageIndex, this.paginator.pageSize).subscribe(this.observer);
   }
 
   private onSubmit() {
     Object.assign(this.activeSearchParameters, this.searchParameters);
-    this.searchLogs(0, 5);
+    this.searchLogs();
   }
 
-  private searchLogs(page: number, size: number) {
+  private searchLogs() {
     const parameters: SearchLogsDTO = {
       messageRegex: this.activeSearchParameters.messageRegex,
       hostIPRegex: this.activeSearchParameters.hostIPRegex,
@@ -87,20 +91,20 @@ export class LogsComponent implements OnInit {
       severity: this.activeSearchParameters.severity,
       facility: this.activeSearchParameters.facility
     };
-    if (parameters.startDate !== '') {
-      parameters.startDate = moment(parameters.startDate).format('yyyy-MM-dd\'T\'HH:mm:ss.SSSXXX');
+    if (parameters.startDate === 'Invalid date') {
+      parameters.startDate = '';
     }
-    if (parameters.endDate !== '') {
-      parameters.endDate = moment(parameters.endDate).format('yyyy-MM-dd\'T\'HH:mm:ss.SSSXXX');
+    if (parameters.endDate === 'Invalid date') {
+      parameters.endDate = '';
     }
-    this.logsService.searchLogs(parameters, page, size).subscribe({
-      next: (result: Page) => {
-        this.logs.data = result.content;
-      },
-      error: (message: string) => {
-        this.snackbarService.displayMessage(JSON.parse(JSON.stringify(message)).error);
-      }
-    });
+    if (parameters.startDate !== '' && parameters.startDate !== null) {
+      parameters.startDate = moment(parameters.startDate).format('YYYY-MM-DD HH:mm:ss');
+    }
+    if (parameters.endDate !== '' && parameters.endDate !== null) {
+      parameters.endDate = moment(parameters.endDate).format('YYYY-MM-DD HH:mm:ss');
+    }
+    this.paginator.pageIndex = 0;
+    this.logsService.searchLogs(parameters, 0, 6).subscribe(this.observer);
   }
 
   private resetForm(form) {
@@ -109,12 +113,12 @@ export class LogsComponent implements OnInit {
       messageRegex: '',
       hostIPRegex: '',
       hostname: '',
-      startDate: null,
-      endDate: null,
-      severity: null,
-      facility: null
+      startDate: '',
+      endDate: '',
+      severity: 'NA',
+      facility: 'NA'
     };
     Object.assign(this.activeSearchParameters, this.searchParameters);
-    this.searchLogs(0, 5);
+    this.searchLogs();
   }
 }

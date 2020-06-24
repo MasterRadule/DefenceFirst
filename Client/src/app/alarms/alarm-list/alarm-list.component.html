@@ -43,7 +43,7 @@
     <ng-template #raised>
       <ng-container matColumnDef="time">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
-        <td mat-cell *matCellDef="let row">{{row.time|date : 'dd/MM/yyyy'}}</td>
+        <td mat-cell *matCellDef="let row">{{row.time|date : 'dd/MM/yyyy HH:mm'}}</td>
       </ng-container>
 
       <ng-container matColumnDef="alarmType">
@@ -82,5 +82,5 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
   </table>
-  <mat-paginator [pageSizeOptions]="[6]" [hidePageSize]="true"></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[6]" [hidePageSize]="true" (page)="getData($event)" [length]="totalElements"></mat-paginator>
 </div>

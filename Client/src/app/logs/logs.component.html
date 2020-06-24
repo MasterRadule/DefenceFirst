@@ -19,7 +19,7 @@
     <mat-form-field>
       <mat-label>Severity</mat-label>
       <mat-select [(ngModel)]="searchParameters.severity" name="severity" id="matSelect1">
-        <mat-option [value]="null">None</mat-option>
+        <mat-option [value]="'NA'">None</mat-option>
         <mat-option *ngFor="let severity of this.severities" [value]="severity">
           {{severity}}
         </mat-option>
@@ -29,7 +29,7 @@
     <mat-form-field>
       <mat-label>Facility</mat-label>
       <mat-select [(ngModel)]="searchParameters.facility" name="facility" id="matSelect2">
-        <mat-option [value]="null">None</mat-option>
+        <mat-option [value]="'NA'">None</mat-option>
         <mat-option *ngFor="let facility of this.facilities" [value]="facility">
           {{facility}}
         </mat-option>
@@ -102,5 +102,5 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
   </table>
-  <mat-paginator [pageSizeOptions]="[6]" [hidePageSize]="true"></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[6]" [hidePageSize]="true" (page)="getData($event)" [length]="totalElements"></mat-paginator>
 </div>

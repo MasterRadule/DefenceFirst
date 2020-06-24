@@ -86,11 +86,17 @@ public class AlarmService {
     }
 
     public Page<Alarm> getAlarms(Pageable pageable) {
-        return alarmRepository.findAllByOrderByTimespanDesc(pageable);
+        Page<Alarm> page = alarmRepository.findAllByOrderByTimespanDesc(pageable);
+        page.getContent().forEach(Utilities::preprocessAlarm);
+
+        return page;
     }
 
     public Page<RaisedAlarm> getRaisedAlarms(Pageable pageable) {
-        return raisedAlarmRepository.findAllByOrderByTimeDesc(pageable);
+        Page<RaisedAlarm> page = raisedAlarmRepository.findAllByOrderByTimeDesc(pageable);
+        page.getContent().forEach(Utilities::preprocessRaisedAlarm);
+
+        return page;
     }
 
     private void generateAlarmRule(AlarmDTO alarmDTO) throws IOException, MavenInvocationException, InterruptedException {

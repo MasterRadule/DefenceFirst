@@ -9,7 +9,9 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import timejts.SIEMCentre.dto.ReportLogsDTO;
 import timejts.SIEMCentre.dto.SearchLogsDTO;
+import timejts.SIEMCentre.model.Facility;
 import timejts.SIEMCentre.model.Log;
+import timejts.SIEMCentre.model.Severity;
 import timejts.SIEMCentre.repository.LogRepository;
 import timejts.SIEMCentre.utils.Utilities;
 
@@ -52,7 +54,8 @@ public class LogService {
                 .of(page.getPageNumber(), page.getPageSize(), Sort.by("timestamp").descending());
         return logRepository
                 .searchLogs(searchDTO.getMessageRegex(), searchDTO.getHostIPRegex(), searchDTO.getHostname(), startDate,
-                        endDate, searchDTO.getSeverity(), searchDTO.getFacility(), pageRequest);
+                        endDate, searchDTO.getSeverity() == Severity.NA ? null : searchDTO.getSeverity(), searchDTO
+                                .getFacility() == Facility.NA ? null : searchDTO.getFacility(), pageRequest);
     }
 
     public Long getReportBySystem(ReportLogsDTO reportLogsDTO) throws ParseException {
