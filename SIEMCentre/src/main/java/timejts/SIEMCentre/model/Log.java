@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -137,5 +138,19 @@ public class Log {
 
     public void setSystem(String system) {
         this.system = system;
+    }
+
+    @Override
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        StringBuilder sb = new StringBuilder();
+        sb.append(sdf.format(timestamp));
+        sb.append("     ");
+        sb.append(hostname + "-" + system + "-" + sourceIP);
+        sb.append("     ");
+        sb.append(severity + "-" + facility);
+        sb.append("     ");
+        sb.append(message);
+        return sb.toString();
     }
 }
