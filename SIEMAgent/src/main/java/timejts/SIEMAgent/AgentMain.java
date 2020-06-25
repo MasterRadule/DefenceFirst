@@ -250,7 +250,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
             e.printStackTrace();
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy. HH:mm:ss");
         try {
             l.setTimestamp(sdf.parse(log.get("TimeGenerated").get(0)));
         } catch (ParseException e) {
