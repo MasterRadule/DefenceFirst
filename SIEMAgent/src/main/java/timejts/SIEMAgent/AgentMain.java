@@ -1,23 +1,31 @@
 package timejts.SIEMAgent;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import timejts.SIEMCentre.dto.SignedLogsDTO;
 import timejts.SIEMCentre.model.Facility;
 import timejts.SIEMCentre.model.Log;
 import timejts.SIEMCentre.model.Severity;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.*;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,22 +67,42 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     @Value("${app.simulator-log-directory}")
     private String pathSimulator;
 
+    @Value("${serialNumber}")
+    private String serialNumber;
+
+    @Value("${server.ssl.keystore}")
+    private String keystorePath;
+
+    @Value("${server.ssl.key-store-password}")
+    private String keystorePassword;
+
+    @Value("${server.ssl.key-alias}")
+    private String keyAlias;
+
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         if (SystemUtils.IS_OS_WINDOWS) {
-           osThread = new Thread(this::windowsProcess);
-           osThread.start();
+            osThread = new Thread(() -> {
+                try {
+                    windowsProcess();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            osThread.start();
 
-           simulatorThread = new Thread(this::simulatorProcess);
-           simulatorThread.start();
+
+           //simulatorThread = new Thread(this::simulatorProcess);
+           //simulatorThread.start();
 
         } else if (SystemUtils.IS_OS_LINUX) {
         }
 
     }
 
-    private void windowsProcess() {
-        ArrayList<Log> logList;
+
+    private void windowsProcess() throws KeyStoreException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException, SignatureException, InvalidKeyException {
+        ArrayList<Log> logList = new ArrayList<>();
         if (this.osRealTimeMode) {
             System.out.println(this.logNameOs);
             logList = filterLogs(readLogsPowerShell(this.logNameOs), regexOs);
@@ -299,8 +327,9 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return l;
     }
 
-    private void simulatorProcess() {
-        ArrayList<Log> logList;
+
+    private void simulatorProcess() throws KeyStoreException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException, SignatureException, InvalidKeyException {
+        ArrayList<Log> logList = new ArrayList<>();
         String logName = "application_log-";//"application_log-2020-06-23.log";
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -422,13 +451,32 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return filteredLogs;
     }
 
-    private void sendLogs(ArrayList<Log> logs) {
-        if(logs.isEmpty()){
-            return;
-        }
+
+    private void sendLogs(ArrayList<Log> logs) throws KeyStoreException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException, SignatureException, InvalidKeyException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("serialNumber", serialNumber);
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<Log>>() {}.getType();
+        String json = gson.toJson(logs, type);
+        byte[] bytes = json.getBytes();
+
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        ks.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
+
+        PrivateKey privKey = (PrivateKey) ks.getKey(keyAlias, keystorePassword.toCharArray());
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initSign(privKey);
+
+        signature.update(bytes);
+        byte[] digitalSignature = signature.sign();
+
+        SignedLogsDTO signedLogsDTO = new SignedLogsDTO(logs, digitalSignature);
+        HttpEntity<SignedLogsDTO> entity = new HttpEntity<>(signedLogsDTO, headers);
+
         ResponseEntity<String> response =
-                this.restTemplate.postForEntity("https://localhost:8082/api/logs", logs, String.class);
-        System.out.println(response);
+                this.restTemplate.postForEntity("https://localhost:8082/api/log", entity, String.class);
+        System.out.println(response.getBody());
     }
 
     private ArrayList<Log> readLinuxLog(String path) {

@@ -10,14 +10,14 @@ public class SearchLogsDTO {
     private String messageRegex;
     private String hostname;
     private String hostIPRegex;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private Severity severity;
     private Facility facility;
 
     public SearchLogsDTO() {}
 
-    public SearchLogsDTO(String messageRegex, String hostname, String hostip, Date startDate, Date endDate,
+    public SearchLogsDTO(String messageRegex, String hostname, String hostip, String startDate, String endDate,
                             Severity severity, Facility facility) {
         super();
         this.messageRegex = messageRegex;
@@ -53,19 +53,19 @@ public class SearchLogsDTO {
         this.hostIPRegex = hostIPRegex;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 

@@ -1,25 +1,41 @@
 package timejts.PKI.services;
 
+import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
+import org.bouncycastle.openssl.jcajce.JcaPKCS8Generator;
+import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.bouncycastle.pkcs.PKCS10CertificationRequest;
+import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.PKCSException;
+import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
+import org.bouncycastle.util.io.pem.PemObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import timejts.PKI.dto.CreationDataDTO;
 import timejts.PKI.dto.NonCACertificateCreationDTO;
 import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.exceptions.*;
 import timejts.PKI.utils.Utilities;
 
+import javax.security.auth.x500.X500Principal;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -45,7 +61,7 @@ public class CertificateServiceTests {
                 "Beijing", "Beijing", "CN", "master.daca09@gmail.com");
         CACertificateCreationDTO caCreationDTO = new CACertificateCreationDTO(caDTO1, null);
         String ca1 = certificateService.createCACertificate(caCreationDTO);
-        System.out.println(ca1);
+        System.out.println(ca1);*/
 
         KeyPairGenerator keyGen1 = null;
         try {
@@ -67,18 +83,18 @@ public class CertificateServiceTests {
 
         // write PKCS8 to file
         String pkcs8Key = stringWriter.toString();
-        FileOutputStream fos = new FileOutputStream("agent.key");
+        FileOutputStream fos = new FileOutputStream("centre.key");
         fos.write(pkcs8Key.getBytes(StandardCharsets.UTF_8));
         fos.flush();
         fos.close();
 
         PKCS10CertificationRequestBuilder p10Builder = new JcaPKCS10CertificationRequestBuilder(
-                new X500Principal("CN=SIEMAgent1, OU=Beijing corp., O=Asia DefenceFirst, C=CN, L=Beijing," +
+                new X500Principal("CN=SIEMCentre1, OU=Beijing corp., O=Asia DefenceFirst, C=CN, L=Beijing," +
                         " ST=Beijing, EmailAddress=master.daca09@gmail.com"), publicKey1);
         JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
         ContentSigner signer = csBuilder.build(privateKey1);
         PKCS10CertificationRequest csr = p10Builder.build(signer);
-        certificateService.submitCSR(csr.getEncoded());*/
+        certificateService.submitCSR(csr.getEncoded());
 
         /*KeyPairGenerator keyGen2 = null;
         try {
@@ -114,8 +130,15 @@ public class CertificateServiceTests {
         certificateService.submitCSR(csr2.getEncoded());*/
 
         ArrayList<SubjectDTO> caDTO = certificateService.getCertificateSigningRequests();
+        LocalDateTime startLocalDate = new Date().toInstant().atZone(ZoneId.systemDefault())
+                .toLocalDateTime().plusMinutes(1);
+        Date startDate = Date.from(startLocalDate.atZone(ZoneId.systemDefault()).toInstant());
+        LocalDateTime endLocalDate = startDate.toInstant().atZone(ZoneId.systemDefault())
+                .toLocalDateTime().plusMonths(24);
+        Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
+        CreationDataDTO cdd = new CreationDataDTO("sha256WithRSAEncryption", startDate, endDate, true);
         NonCACertificateCreationDTO nonCADTO = new NonCACertificateCreationDTO(caDTO.get(0)
-                .getSerialNumber(), "15797428220941440972", null);
+                .getSerialNumber(), "15797428220941440972", cdd);
         certificateService.createNonCACertificate(nonCADTO);
     }
 

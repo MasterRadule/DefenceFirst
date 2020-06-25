@@ -1,0 +1,117 @@
+<div id="alarms-content">
+<mat-accordion>
+  <mat-expansion-panel (afterCollapse)="resetAlarm()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Exceeded number of requests alarm
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.xs="column"
+          fxLayoutAlign="center">
+      <mat-form-field>
+        <mat-label>Count</mat-label>
+        <input matInput type="number" [(ngModel)]="this.alarm.alarm.count" name="count" min="0">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Timespan</mat-label>
+        <input matInput type="number" [(ngModel)]="this.alarm.alarm.timespan" name="timespan" min="0">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Severity</mat-label>
+        <mat-select [(ngModel)]="this.alarm.alarm.severity" name="severity" id="matSelect1">
+          <mat-option *ngFor="let severity of this.severities" [value]="severity">
+            {{severity}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Facility</mat-label>
+        <mat-select [(ngModel)]="this.alarm.alarm.facility" name="facility" id="matSelect2">
+          <mat-option *ngFor="let facility of this.facilities" [value]="facility">
+            {{facility}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button type="button" mat-raised-button color="primary" class="alarmButton" (click)="createAlarm('EXCEEDED_NUMBER_OF_REQUESTS')">Create alarm</button>
+    </div>
+
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (afterCollapse)="resetAlarm()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Suspicious behaviour alarm
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.xs="column"
+         fxLayoutAlign="center">
+
+      <mat-form-field>
+        <mat-label>Timespan</mat-label>
+        <input matInput type="number" [(ngModel)]="this.alarm.alarm.timespan" name="timespan" min="0">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Message 1 regex</mat-label>
+        <input matInput type="text" [(ngModel)]="this.alarm.alarm.messageRegex1" name="messageRegex1">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Message 2 regex</mat-label>
+        <input matInput type="text" [(ngModel)]="this.alarm.alarm.messageRegex2" name="messageRegex2">
+      </mat-form-field>
+
+      <button type="button" mat-raised-button color="primary" class="alarmButton" (click)="createAlarm('SUSPICIOUS_BEHAVIOUR')">Create alarm</button>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (afterCollapse)="resetAlarm()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Severity alarm
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.xs="column"
+         fxLayoutAlign="center">
+
+      <mat-form-field>
+        <mat-label>Severity</mat-label>
+        <mat-select [(ngModel)]="this.alarm.alarm.severity" name="severity">
+          <mat-option *ngFor="let severity of this.severities" [value]="severity">
+            {{severity}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button type="button" mat-raised-button color="primary" class="alarmButton" (click)="createAlarm('SEVERITY_ALARM')">Create alarm</button>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (afterCollapse)="resetAlarm()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Malicious IP address alarm
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div fxLayout="row wrap" fxLayoutGap="2%" fxLayout.xs="column"
+         fxLayoutAlign="center">
+
+      <mat-form-field>
+        <mat-label>Source IP regex</mat-label>
+        <input matInput type="text" [(ngModel)]="this.alarm.alarm.sourceIPRegex" name="sourceIPRegex">
+      </mat-form-field>
+
+      <button type="button" mat-raised-button color="primary" class="alarmButton" (click)="createAlarm('MALICIOUS_IP_ADDRESS')">Create alarm</button>
+    </div>
+
+  </mat-expansion-panel>
+</mat-accordion>
+</div>

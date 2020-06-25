@@ -1,0 +1,14 @@
+.reportButton {
+  height: 40px;
+}
+
+#content {
+  margin-top: 7%;
+  width: 70%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+mat-expansion-panel-header {
+  height: 70px !important;
+}

@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/../PKI/PKI.iml" filepath="$PROJECT_DIR$/../PKI/PKI.iml" />
       <module fileurl="file://$PROJECT_DIR$/../SIEMAgent/SIEMAgent.iml" filepath="$PROJECT_DIR$/../SIEMAgent/SIEMAgent.iml" />
       <module fileurl="file://$PROJECT_DIR$/../SIEMCentre/SIEMCentre.iml" filepath="$PROJECT_DIR$/../SIEMCentre/SIEMCentre.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SIEMCentreRules/SIEMCentreRules.iml" filepath="$PROJECT_DIR$/../SIEMCentreRules/SIEMCentreRules.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Service-Registry/Service-Registry.iml" filepath="$PROJECT_DIR$/../Service-Registry/Service-Registry.iml" />
     </modules>
   </component>

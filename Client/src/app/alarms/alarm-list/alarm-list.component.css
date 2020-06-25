@@ -1,0 +1,10 @@
+#alarms-table {
+  margin-top: 2%;
+  width: 70%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#alarms-table table {
+  width: 100%;
+}

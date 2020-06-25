@@ -4,6 +4,8 @@ import {AlarmsComponent} from '../alarms/alarms.component';
 import {LogsComponent} from '../logs/logs.component';
 import {AuthGuard} from '../guards/auth.guard';
 import {CallbackComponent} from '../callback/callback.component';
+import {AlarmCreationComponent} from '../alarms/alarm-creation/alarm-creation.component';
+import {ReportsComponent} from '../reports/reports.component';
 
 export const routes: Routes = [
   {
@@ -18,12 +20,17 @@ export const routes: Routes = [
       {
         path: 'alarms',
         canActivate: [AuthGuard],
-        component: AlarmsComponent,
+        loadChildren: () => import('../alarms/alarms.module').then(c => c.AlarmsModule)
       },
       {
         path: 'logs',
         canActivate: [AuthGuard],
         component: LogsComponent
+      },
+      {
+        path: 'reports',
+        canActivate: [AuthGuard],
+        component: ReportsComponent
       },
       {
         path: 'certificates',

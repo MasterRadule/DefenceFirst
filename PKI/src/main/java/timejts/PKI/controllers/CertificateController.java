@@ -3,10 +3,12 @@ package timejts.PKI.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import timejts.PKI.dto.CACertificateCreationDTO;
 import timejts.PKI.dto.NonCACertificateCreationDTO;
 import timejts.PKI.services.CertificateService;
+import timejts.SIEMCentre.dto.SignedLogsDTO;
 
 import javax.validation.Valid;
 
@@ -18,6 +20,7 @@ public class CertificateController {
     CertificateService certificateService;
 
     @PostMapping("/csr")
+    @Secured("ROLE_CSR")
     public ResponseEntity<Object> submitCSR(@RequestBody byte[] csrData) {
         try {
             return new ResponseEntity<>(certificateService.submitCSR(csrData), HttpStatus.OK);
@@ -27,6 +30,7 @@ public class CertificateController {
     }
 
     @DeleteMapping("/csr/{serialNumber}")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> rejectCSR(@PathVariable(value = "serialNumber") String serialNumber) {
         try {
             return new ResponseEntity<>(certificateService.rejectCSR(serialNumber), HttpStatus.OK);
@@ -36,6 +40,7 @@ public class CertificateController {
     }
 
     @GetMapping("/csr/{serialNumber}")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> getCSR(@PathVariable(value = "serialNumber") String serialNumber) {
         try {
             return new ResponseEntity<>(certificateService.getCertificateSigningRequest(serialNumber), HttpStatus.OK);
@@ -45,6 +50,7 @@ public class CertificateController {
     }
 
     @PostMapping("/non-ca")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> createNonCACertificate(@Valid @RequestBody NonCACertificateCreationDTO creationDTO) {
         try {
             return new ResponseEntity<>(certificateService.createNonCACertificate(creationDTO), HttpStatus.CREATED);
@@ -54,6 +60,7 @@ public class CertificateController {
     }
 
     @PostMapping("/ca")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> createCACertificate(@Valid @RequestBody CACertificateCreationDTO creationDTO) {
         try {
             return new ResponseEntity<>(certificateService.createCACertificate(creationDTO), HttpStatus.CREATED);
@@ -63,6 +70,7 @@ public class CertificateController {
     }
 
     @GetMapping("/csr")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> getCertificateSigningRequests() {
         try {
             return new ResponseEntity<>(certificateService.getCertificateSigningRequests(), HttpStatus.OK);
@@ -72,6 +80,7 @@ public class CertificateController {
     }
 
     @GetMapping
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> getCertificates() {
         try {
             return new ResponseEntity<>(certificateService.getCertificates(false), HttpStatus.OK);
@@ -81,6 +90,7 @@ public class CertificateController {
     }
 
     @GetMapping("/ca")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> getCACertificates() {
         try {
             return new ResponseEntity<>(certificateService.getCertificates(true), HttpStatus.OK);
@@ -90,6 +100,7 @@ public class CertificateController {
     }
 
     @GetMapping("/{serialNumber}")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> getCertificate(@PathVariable(value = "serialNumber") String serialNumber) {
         try {
             return new ResponseEntity<>(certificateService.getCertificate(serialNumber), HttpStatus.OK);
@@ -99,6 +110,7 @@ public class CertificateController {
     }
 
     @PutMapping("/revoked")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> revokeCertificate(@RequestBody String serialNumber) {
         try {
             return new ResponseEntity<>(certificateService.revokeCertificate(serialNumber), HttpStatus.OK);
@@ -108,6 +120,7 @@ public class CertificateController {
     }
 
     @PostMapping("/validate")
+    @Secured("ROLE_VALIDATOR")
     public ResponseEntity<Object> validateCertificate(@RequestBody byte[] certificate) {
         try {
             return new ResponseEntity<>(certificateService.validateCertificate(certificate), HttpStatus.OK);
@@ -116,7 +129,19 @@ public class CertificateController {
         }
     }
 
+    @PostMapping("/check-signature")
+    @Secured("ROLE_VALIDATOR")
+    public ResponseEntity<Object> checkSignature(@RequestBody SignedLogsDTO signedLogsDTO,
+                                                 @RequestHeader("serialNumber") String serNum) {
+        try {
+            return new ResponseEntity<>(certificateService.checkSignature(signedLogsDTO, serNum), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/revoked")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> getRevokedCertificates() {
         try {
             return new ResponseEntity<>(certificateService.getRevokedCertificates(), HttpStatus.OK);
@@ -126,6 +151,7 @@ public class CertificateController {
     }
 
     @GetMapping("/revoked/{serialNumber}")
+    @Secured("ROLE_CLIENT")
     public ResponseEntity<Object> getCertificateStatus(@PathVariable(value = "serialNumber") String serialNumber) {
         try {
             return new ResponseEntity<>(certificateService.checkCertificateStatus(serialNumber, null), HttpStatus.OK);

@@ -1,1 +1,106 @@
-<p>logs works!</p>
+<div>
+  <form #searchForm="ngForm" (ngSubmit)="onSubmit()" fxLayout="row wrap" fxLayoutGap="2%" fxLayout.xs="column"
+        fxLayoutAlign="center">
+    <mat-form-field>
+      <mat-label>Message regex</mat-label>
+      <input id="searchInput" matInput type="text" [(ngModel)]="searchParameters.messageRegex" name="messageRegex">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Hostname</mat-label>
+      <input matInput type="text" [(ngModel)]="searchParameters.hostname" name="hostname">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Host IP regex</mat-label>
+      <input matInput type="text" [(ngModel)]="searchParameters.hostIPRegex" name="hostIPRegex">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Severity</mat-label>
+      <mat-select [(ngModel)]="searchParameters.severity" name="severity" id="matSelect1">
+        <mat-option [value]="'NA'">None</mat-option>
+        <mat-option *ngFor="let severity of this.severities" [value]="severity">
+          {{severity}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Facility</mat-label>
+      <mat-select [(ngModel)]="searchParameters.facility" name="facility" id="matSelect2">
+        <mat-option [value]="'NA'">None</mat-option>
+        <mat-option *ngFor="let facility of this.facilities" [value]="facility">
+          {{facility}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="dp1" placeholder="Start date" disabled
+             [(ngModel)]="searchParameters.startDate" [max]="searchParameters.endDate" name="startDate">
+      <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+      <mat-datepicker #dp1 disabled="false"></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [matDatepicker]="dp2" placeholder="End date" disabled
+             [(ngModel)]="searchParameters.endDate" [min]="searchParameters.startDate" name="endDate">
+      <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+      <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button color="primary" class="searchButton" id="buttonSearch">Search</button>
+    <button type="button" mat-raised-button color="primary" class="searchButton" (click)="resetForm(searchForm)" id="buttonReset">Reset</button>
+  </form>
+</div>
+
+<div class="mat-elevation-z8" id="logs-table">
+  <table mat-table [dataSource]="logs" matSort>
+
+    <ng-container matColumnDef="timestamp">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Timestamp</th>
+      <td mat-cell *matCellDef="let row">{{row.timestamp}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="hostIP">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Host IP</th>
+      <td mat-cell *matCellDef="let row">{{row.hostIP}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="sourceIP">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Source IP</th>
+      <td mat-cell *matCellDef="let row">{{row.sourceIP}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="severity">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Severity</th>
+      <td mat-cell *matCellDef="let row">{{row.severity}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="facility">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Facility</th>
+      <td mat-cell *matCellDef="let row">{{row.facility}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="system">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>System</th>
+      <td mat-cell *matCellDef="let row">{{row.system}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="hostname">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Hostname</th>
+      <td mat-cell *matCellDef="let row">{{row.hostname}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="message">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Message</th>
+      <td mat-cell *matCellDef="let row" [matTooltip]="row.message">{{row.message.substring(0, 20)}}</td>
+    </ng-container>
+
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+  </table>
+  <mat-paginator [pageSizeOptions]="[6]" [hidePageSize]="true" (page)="getData($event)" [length]="totalElements"></mat-paginator>
+</div>
