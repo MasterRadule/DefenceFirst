@@ -100,8 +100,11 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
             });
             simulatorThread.start();
 
-
-        } else if (SystemUtils.IS_OS_LINUX) {
+            /*try {
+                linuxProcess();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }*/
         }
 
     }
