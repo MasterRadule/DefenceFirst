@@ -181,13 +181,11 @@ public class CertificateService {
         // Send certificate on email address
         try {
             emailService.sendEmailWithCertificateAndCAs(email, certificateFile, caZipped);
-        } catch (MessagingException ignored) {
-            ignored.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
         }
 
         csrRepository.delete(csr);
-        certificateFile.delete();
-        caZipped.delete();
 
         return "Certificate for " + getCommonName(newCertificate) + " successfully created";
     }
