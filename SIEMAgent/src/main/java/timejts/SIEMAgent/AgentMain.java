@@ -91,11 +91,20 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
             });
             osThread.start();
 
+            simulatorThread = new Thread(() -> {
+                try {
+                    simulatorProcess();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            simulatorThread.start();
 
-           //simulatorThread = new Thread(this::simulatorProcess);
-           //simulatorThread.start();
-
-        } else if (SystemUtils.IS_OS_LINUX) {
+            /*try {
+                linuxProcess();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }*/
         }
 
     }
@@ -457,7 +466,8 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         headers.add("serialNumber", serialNumber);
 
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<Log>>() {}.getType();
+        Type type = new TypeToken<ArrayList<Log>>() {
+        }.getType();
         String json = gson.toJson(logs, type);
         byte[] bytes = json.getBytes();
 
@@ -493,13 +503,13 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
                 firstTimeLinux = true;
             while ((line = br.readLine()) != null) {
                 //System.out.println(line);
-                if(counter < this.linuxLineCounter && !firstTimeLinux){
-                    counter ++;
+                if (counter < this.linuxLineCounter && !firstTimeLinux) {
+                    counter++;
                     continue;
                 }
                 this.linuxLineCounter++;
                 line = line.trim();
-                if(line.equals("")){
+                if (line.equals("")) {
                     continue;
                 }
                 l = new Log();
@@ -517,7 +527,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
 
                 l.setHostname(split[4]);
                 sb = new StringBuilder();
-                for(int i = 5; i < split.length; i++){
+                for (int i = 5; i < split.length; i++) {
                     sb.append(split[i] + " ");
                 }
                 l.setMessage(sb.toString());
@@ -540,19 +550,17 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return logs;
     }
 
-    public void linuxProcess(){
+    public void linuxProcess() throws KeyStoreException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException, SignatureException, InvalidKeyException {
 
         ArrayList<Log> logs;
-        if(osRealTimeMode){
+        if (osRealTimeMode) {
             logs = filterLogs(readLinuxLog(logNameOs), regexOs);
-            for(Log l: logs){
-                System.out.println(l);
-            }
+            sendLogs(logs);
             WatchService watchService = null;
-            while (true){
+            while (true) {
                 try {
                     watchService = FileSystems.getDefault().newWatchService();
-                    File file = new File (logNameOs);
+                    File file = new File(logNameOs);
                     Path path = Paths.get(file.getParent());
 
                     path.register(
@@ -565,9 +573,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
                         for (WatchEvent<?> event : key.pollEvents()) {
                             if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
                                 logs = filterLogs(readLinuxLog(logNameOs), regexOs);
-                                for(Log l: logs){
-                                    System.out.println(l);
-                                }
+                                sendLogs(logs);
                             }
                         }
                         key.reset();
@@ -579,20 +585,14 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
                 }
             }
 
-        }
-
-        else{
+        } else {
             logs = filterLogs(readLinuxLog(logNameOs), regexOs);
-            for(Log l: logs){
-                System.out.println(l);
-            }
-            while(true){
+            sendLogs(logs);
+            while (true) {
                 try {
                     Thread.sleep(this.batchTimeOs);
                     logs = filterLogs(readLinuxLog(logNameOs), regexOs);
-                    for(Log l: logs){
-                        System.out.println(l);
-                    }
+                    sendLogs(logs);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
