@@ -37,14 +37,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8aad2c6d-856f-4e87-84b2-15470f7ec44c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_config_client_2_2_3_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_config_server_2_2_3_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_context_2_2_3_RELEASE.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/alarms/alarms-tabs/alarms-tabs.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/alarms/alarms-tabs/alarms-tabs.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/app/alarms/alarms-tabs/alarms-tabs.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/alarms/alarms-tabs/alarms-tabs.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_config_server_2_2_2_RELEASE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_commons_2_2_3_RELEASE.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/guards/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/guards/auth.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/routing/alarms-routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/routing/alarms-routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Client/src/app/routing/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/app/routing/routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/repository/LogRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/repository/LogRepository.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/../PKI/target/" />
@@ -79,11 +75,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/SecurityConfig.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="236">
-              <caret line="48" column="5" lean-forward="true" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+              <caret line="48" column="5" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/services/LogService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="261">
+              <caret line="75" column="21" lean-forward="true" selection-start-line="75" selection-start-column="21" selection-end-line="75" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/repository/LogRepository.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="128">
+              <caret line="27" column="78" lean-forward="true" selection-start-line="27" selection-start-column="78" selection-end-line="27" selection-end-column="78" />
             </state>
           </provider>
         </entry>
@@ -92,7 +106,7 @@
         <entry file="file://$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/services/AlarmService.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="212">
-              <caret line="160" lean-forward="true" selection-start-line="160" selection-end-line="160" />
+              <caret line="160" selection-start-line="160" selection-end-line="160" />
             </state>
           </provider>
         </entry>
@@ -155,6 +169,7 @@
         <option value="$PROJECT_DIR$/../SIEMCentreRules/src/main/resources/rules/pravila.drl" />
         <option value="$PROJECT_DIR$/../SIEMCentreRules/src/main/java/timejts/SIEMCentreRules/App.java" />
         <option value="$PROJECT_DIR$/../SIEMCentreRules/src/main/resources/rules/rules.drl" />
+        <option value="$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/repository/LogRepository.java" />
       </list>
     </option>
   </component>
@@ -165,7 +180,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1386" />
@@ -214,6 +229,45 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="Gateway" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SIEMCentre" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SIEMCentre" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SIEMCentre" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SIEMCentre" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SIEMCentre" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="SIEMCentre" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DefenceFirstWorkspace" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SIEMCentre" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="SIEMCentre" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -243,6 +297,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -429,7 +484,7 @@
       <workItem from="1592976498094" duration="30545000" />
       <workItem from="1593032334518" duration="1948000" />
       <workItem from="1593069438957" duration="2196000" />
-      <workItem from="1593073791010" duration="8257000" />
+      <workItem from="1593073791010" duration="10413000" />
     </task>
     <servers />
   </component>
@@ -466,7 +521,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8257000" />
+    <option name="totallyTimeSpent" value="10413000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -478,7 +533,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Designer" />
       <window_info id="Image Layers" />
@@ -763,14 +819,28 @@
     <entry file="file://$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/services/AlarmService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="212">
-          <caret line="160" lean-forward="true" selection-start-line="160" selection-end-line="160" />
+          <caret line="160" selection-start-line="160" selection-end-line="160" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../Gateway/src/main/java/timejts/Gateway/security/SecurityConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="236">
-          <caret line="48" column="5" lean-forward="true" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+          <caret line="48" column="5" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/services/LogService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="75" column="21" lean-forward="true" selection-start-line="75" selection-start-column="21" selection-end-line="75" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../SIEMCentre/src/main/java/timejts/SIEMCentre/repository/LogRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="27" column="78" lean-forward="true" selection-start-line="27" selection-start-column="78" selection-end-line="27" selection-end-column="78" />
         </state>
       </provider>
     </entry>
