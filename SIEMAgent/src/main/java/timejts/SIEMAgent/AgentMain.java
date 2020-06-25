@@ -39,6 +39,8 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     private Thread osThread;
     private Thread simulatorThread;
 
+    private long linuxLineCounter = 0;
+
     @Value("${app.real-time-mode-os}")
     private boolean osRealTimeMode;
     @Value("${app.batch-time-os}")
@@ -60,11 +62,12 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
         if (SystemUtils.IS_OS_WINDOWS) {
-            osThread = new Thread(this::windowsProcess);
-            osThread.start();
+           osThread = new Thread(this::windowsProcess);
+           osThread.start();
 
-            simulatorThread = new Thread(this::simulatorProcess);
-            simulatorThread.start();
+           simulatorThread = new Thread(this::simulatorProcess);
+           simulatorThread.start();
+
         } else if (SystemUtils.IS_OS_LINUX) {
         }
 
@@ -413,7 +416,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         for (Log l : logs) {
             if (l.toString().matches(regex)) {
                 filteredLogs.add(l);
-                System.out.println(l);
+                //System.out.println(l);
             }
         }
         return filteredLogs;
@@ -430,20 +433,29 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
 
     private ArrayList<Log> readLinuxLog(String path) {
         ArrayList<Log> logs = new ArrayList<>();
-
+        long counter = 0;
+        boolean firstTimeLinux = false;
         try {
             BufferedReader br = Files.newBufferedReader(Paths.get(path));
             String line;
             Log l;
             StringBuilder sb;
             Date d;
+            if (this.linuxLineCounter == 0)
+                firstTimeLinux = true;
             while ((line = br.readLine()) != null) {
                 //System.out.println(line);
+                if(counter < this.linuxLineCounter && !firstTimeLinux){
+                    counter ++;
+                    continue;
+                }
+                this.linuxLineCounter++;
                 line = line.trim();
                 if(line.equals("")){
                     continue;
                 }
                 l = new Log();
+
                 String[] split = line.split(" ");
 
                 sb = new StringBuilder();
@@ -480,7 +492,64 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return logs;
     }
 
-    private void linuxProcess(){
-        readLinuxLog(logNameOs);
+    public void linuxProcess(){
+
+        ArrayList<Log> logs;
+        if(osRealTimeMode){
+            logs = filterLogs(readLinuxLog(logNameOs), regexOs);
+            for(Log l: logs){
+                System.out.println(l);
+            }
+            WatchService watchService = null;
+            while (true){
+                try {
+                    watchService = FileSystems.getDefault().newWatchService();
+                    File file = new File (logNameOs);
+                    Path path = Paths.get(file.getParent());
+
+                    path.register(
+                            watchService,
+                            StandardWatchEventKinds.ENTRY_CREATE,
+                            StandardWatchEventKinds.ENTRY_MODIFY);
+
+                    WatchKey key;
+                    while ((key = watchService.take()) != null) {
+                        for (WatchEvent<?> event : key.pollEvents()) {
+                            if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
+                                logs = filterLogs(readLinuxLog(logNameOs), regexOs);
+                                for(Log l: logs){
+                                    System.out.println(l);
+                                }
+                            }
+                        }
+                        key.reset();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        else{
+            logs = filterLogs(readLinuxLog(logNameOs), regexOs);
+            for(Log l: logs){
+                System.out.println(l);
+            }
+            while(true){
+                try {
+                    Thread.sleep(this.batchTimeOs);
+                    logs = filterLogs(readLinuxLog(logNameOs), regexOs);
+                    for(Log l: logs){
+                        System.out.println(l);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
     }
 }
