@@ -47,6 +47,8 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
     private Thread osThread;
     private Thread simulatorThread;
 
+    private long linuxLineCounter = 0;
+
     @Value("${app.real-time-mode-os}")
     private boolean osRealTimeMode;
     @Value("${app.batch-time-os}")
@@ -89,13 +91,15 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
             });
             osThread.start();
 
-            //simulatorThread = new Thread(this::simulatorProcess);
-            //simulatorThread.start();
-        } else if (SystemUtils.IS_OS_LINUX) {
 
+           //simulatorThread = new Thread(this::simulatorProcess);
+           //simulatorThread.start();
+
+        } else if (SystemUtils.IS_OS_LINUX) {
         }
 
     }
+
 
     private void windowsProcess() throws KeyStoreException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException, SignatureException, InvalidKeyException {
         ArrayList<Log> logList = new ArrayList<>();
@@ -323,6 +327,7 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         return l;
     }
 
+
     private void simulatorProcess() throws KeyStoreException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException, SignatureException, InvalidKeyException {
         ArrayList<Log> logList = new ArrayList<>();
         String logName = "application_log-";//"application_log-2020-06-23.log";
@@ -440,11 +445,12 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         for (Log l : logs) {
             if (l.toString().matches(regex)) {
                 filteredLogs.add(l);
-                System.out.println(l);
+                //System.out.println(l);
             }
         }
         return filteredLogs;
     }
+
 
     private void sendLogs(ArrayList<Log> logs) throws KeyStoreException, CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, IOException, SignatureException, InvalidKeyException {
         HttpHeaders headers = new HttpHeaders();
@@ -471,5 +477,127 @@ public class AgentMain implements ApplicationListener<ApplicationReadyEvent> {
         ResponseEntity<String> response =
                 this.restTemplate.postForEntity("https://localhost:8082/api/log", entity, String.class);
         System.out.println(response.getBody());
+    }
+
+    private ArrayList<Log> readLinuxLog(String path) {
+        ArrayList<Log> logs = new ArrayList<>();
+        long counter = 0;
+        boolean firstTimeLinux = false;
+        try {
+            BufferedReader br = Files.newBufferedReader(Paths.get(path));
+            String line;
+            Log l;
+            StringBuilder sb;
+            Date d;
+            if (this.linuxLineCounter == 0)
+                firstTimeLinux = true;
+            while ((line = br.readLine()) != null) {
+                //System.out.println(line);
+                if(counter < this.linuxLineCounter && !firstTimeLinux){
+                    counter ++;
+                    continue;
+                }
+                this.linuxLineCounter++;
+                line = line.trim();
+                if(line.equals("")){
+                    continue;
+                }
+                l = new Log();
+
+                String[] split = line.split(" ");
+
+                sb = new StringBuilder();
+                sb.append(split[0] + " ");
+                sb.append(split[1] + " ");
+                sb.append(split[2] + " ");
+                sb.append(split[3]);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+                d = sdf.parse(sb.toString()); // time
+                l.setTimestamp(d);
+
+                l.setHostname(split[4]);
+                sb = new StringBuilder();
+                for(int i = 5; i < split.length; i++){
+                    sb.append(split[i] + " ");
+                }
+                l.setMessage(sb.toString());
+                l.setHostIP(InetAddress.getLocalHost().getHostAddress());
+                l.setSourceIP(InetAddress.getLocalHost().getHostAddress());
+                l.setSystem(System.getProperty("os.name"));
+                l.setFacility(Facility.AUTH);
+                l.setSeverity(Severity.INFORMATIONAL);
+                logs.add(l);
+            }
+
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return logs;
+    }
+
+    public void linuxProcess(){
+
+        ArrayList<Log> logs;
+        if(osRealTimeMode){
+            logs = filterLogs(readLinuxLog(logNameOs), regexOs);
+            for(Log l: logs){
+                System.out.println(l);
+            }
+            WatchService watchService = null;
+            while (true){
+                try {
+                    watchService = FileSystems.getDefault().newWatchService();
+                    File file = new File (logNameOs);
+                    Path path = Paths.get(file.getParent());
+
+                    path.register(
+                            watchService,
+                            StandardWatchEventKinds.ENTRY_CREATE,
+                            StandardWatchEventKinds.ENTRY_MODIFY);
+
+                    WatchKey key;
+                    while ((key = watchService.take()) != null) {
+                        for (WatchEvent<?> event : key.pollEvents()) {
+                            if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
+                                logs = filterLogs(readLinuxLog(logNameOs), regexOs);
+                                for(Log l: logs){
+                                    System.out.println(l);
+                                }
+                            }
+                        }
+                        key.reset();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        else{
+            logs = filterLogs(readLinuxLog(logNameOs), regexOs);
+            for(Log l: logs){
+                System.out.println(l);
+            }
+            while(true){
+                try {
+                    Thread.sleep(this.batchTimeOs);
+                    logs = filterLogs(readLinuxLog(logNameOs), regexOs);
+                    for(Log l: logs){
+                        System.out.println(l);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
     }
 }
