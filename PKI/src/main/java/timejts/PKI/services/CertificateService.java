@@ -181,12 +181,11 @@ public class CertificateService {
         // Send certificate on email address
         try {
             emailService.sendEmailWithCertificateAndCAs(email, certificateFile, caZipped);
-        } catch (MessagingException ignored) {
+        } catch (MessagingException e) {
+            e.printStackTrace();
         }
 
         csrRepository.delete(csr);
-        certificateFile.delete();
-        caZipped.delete();
 
         return "Certificate for " + getCommonName(newCertificate) + " successfully created";
     }
@@ -480,7 +479,8 @@ public class CertificateService {
         signature.initVerify(publicKey);
 
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<Log>>() {}.getType();
+        Type type = new TypeToken<ArrayList<Log>>() {
+        }.getType();
         String json = gson.toJson(signedLogsDTO.getLogs(), type);
         byte[] bytes = json.getBytes();
 

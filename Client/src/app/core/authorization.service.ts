@@ -4,6 +4,9 @@ import {Router} from '@angular/router';
 import * as auth0 from 'auth0-js';
 import {BehaviorSubject, bindNodeCallback} from 'rxjs';
 import {SnackbarService} from './snackbar.service';
+import * as jwt_decode from 'jwt-decode';
+import {filter, mergeMap} from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +62,10 @@ export class AuthorizationService {
 
   get isAuthenticated(): boolean {
     return JSON.parse(localStorage.getItem(this.authFlag));
+  }
+
+  get role() {
+    return jwt_decode(this.token$.getValue())['https://localhost:4200/roles'][0];
   }
 
   renewAuth() {

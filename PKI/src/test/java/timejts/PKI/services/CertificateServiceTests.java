@@ -89,7 +89,7 @@ public class CertificateServiceTests {
         fos.close();
 
         PKCS10CertificationRequestBuilder p10Builder = new JcaPKCS10CertificationRequestBuilder(
-                new X500Principal("CN=SIEMCentre1, OU=Beijing corp., O=Asia DefenceFirst, C=CN, L=Beijing," +
+                new X500Principal("CN=Proba, OU=Beijing corp., O=Asia DefenceFirst, C=CN, L=Beijing," +
                         " ST=Beijing, EmailAddress=master.daca09@gmail.com"), publicKey1);
         JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
         ContentSigner signer = csBuilder.build(privateKey1);
@@ -130,15 +130,15 @@ public class CertificateServiceTests {
         certificateService.submitCSR(csr2.getEncoded());*/
 
         ArrayList<SubjectDTO> caDTO = certificateService.getCertificateSigningRequests();
-        LocalDateTime startLocalDate = new Date().toInstant().atZone(ZoneId.systemDefault())
+        /*LocalDateTime startLocalDate = new Date().toInstant().atZone(ZoneId.systemDefault())
                 .toLocalDateTime().plusMinutes(1);
         Date startDate = Date.from(startLocalDate.atZone(ZoneId.systemDefault()).toInstant());
         LocalDateTime endLocalDate = startDate.toInstant().atZone(ZoneId.systemDefault())
                 .toLocalDateTime().plusMonths(24);
         Date endDate = Date.from(endLocalDate.atZone(ZoneId.systemDefault()).toInstant());
-        CreationDataDTO cdd = new CreationDataDTO("sha256WithRSAEncryption", startDate, endDate, true);
+        CreationDataDTO cdd = new CreationDataDTO("sha256WithRSAEncryption", startDate, endDate, true);*/
         NonCACertificateCreationDTO nonCADTO = new NonCACertificateCreationDTO(caDTO.get(0)
-                .getSerialNumber(), "15797428220941440972", cdd);
+                .getSerialNumber(), "15797428220941440972", null);
         certificateService.createNonCACertificate(nonCADTO);
     }
 

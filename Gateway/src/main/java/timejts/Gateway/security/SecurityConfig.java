@@ -3,6 +3,7 @@ package timejts.Gateway.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -39,8 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/api/certificates/**").authenticated()
-                .antMatchers("/api/alarm/**").permitAll()
+                .antMatchers("/api/certificates/**").hasAuthority("SCOPE_Administrator")
+                .antMatchers(HttpMethod.POST, "/api/alarm").hasAuthority("SCOPE_Administrator")
+                .antMatchers("/api/alarm/raised").hasAuthority("SCOPE_Administrator")
+                .antMatchers("**").authenticated()
                 .and()
                 .oauth2ResourceServer().jwt();
     }

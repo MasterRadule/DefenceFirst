@@ -17,12 +17,12 @@ export const routes: Routes = [
       {
         path: 'create',
         component: AlarmCreationComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
       },
       {
         path: ':tab-content',
         component: AlarmListComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
       }
     ]
   }
