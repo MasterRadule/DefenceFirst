@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
+import {AuthorizationService} from '../../core/authorization.service';
 
 @Component({
   selector: 'app-alarms-tabs',
@@ -8,7 +9,7 @@ import {Router} from '@angular/router';
 })
 export class AlarmsTabsComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService: AuthorizationService) { }
 
   ngOnInit() {
   }

@@ -20,8 +20,8 @@ public interface LogRepository extends MongoRepository<Log, BigInteger> {
     Long countByHostIPEqualsAndTimestampBetween(String machine, Date startDate, Date endDate);
 
     @Query("{$and:[" +
-            "{$or:[{$expr: {$eq: [?0, '']}}, {'message':{$regex:?0,$options:'i'}}]}, " +
-            "{$or:[{$expr: {$eq: [?1, '']}}, {'hostIP':{$regex:?1,$options:'i'}}]}, " +
+            "{$or:[{$expr: {$eq: [?0, '']}}, {'message':{$regex:?0,$options:'s'}}]}, " +
+            "{$or:[{$expr: {$eq: [?1, '']}}, {'hostIP':{$regex:?1,$options:'s'}}]}, " +
             "{$or:[{$expr: {$eq: [?2, '']}}, {'hostname':{ $eq: ?2 }}]}, " +
             "{$or:[{$expr: {$eq: [?3, null]}}, {'timestamp':{$gt:?3}}]}, " +
             "{$or:[{$expr: {$eq: [?4, null]}}, {'timestamp':{$lt:?4}}]}, " +

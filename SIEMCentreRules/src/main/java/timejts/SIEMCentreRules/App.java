@@ -19,7 +19,7 @@ public class App {
         Log l1 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,
                 Facility.AUTH, "message", "Application");
         Thread.sleep(1000);
-        Log l2 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.INFORMATIONAL,
+        Log l2 = new Log(new Date(), "hostname", "hostIP", "hostIP", Severity.ERROR,
                 Facility.AUTH, "message", "Application");
 
         kieSession.insert(l1);
