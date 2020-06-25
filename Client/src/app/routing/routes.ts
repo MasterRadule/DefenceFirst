@@ -34,6 +34,9 @@ export const routes: Routes = [
       },
       {
         path: 'certificates',
+        data: {
+          role: 'Administrator'
+        },
         loadChildren: () => import('../certificates/certificates.module').then(c => c.CertificatesModule)
       }
     ]

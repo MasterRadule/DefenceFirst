@@ -4,8 +4,8 @@ import {Router} from '@angular/router';
 import * as auth0 from 'auth0-js';
 import {BehaviorSubject, bindNodeCallback} from 'rxjs';
 import {SnackbarService} from './snackbar.service';
-import * as jwt_decode from "jwt-decode";
-import {filter, mergeMap} from "rxjs/operators";
+import * as jwt_decode from 'jwt-decode';
+import {filter, mergeMap} from 'rxjs/operators';
 
 
 @Injectable({
