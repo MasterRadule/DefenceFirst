@@ -2,7 +2,7 @@
 
 Military monitoring system.
 
-Project for course "Informational systems security" at Faculty of Technical Sciences, University of Novi Sad.
+Project for course "E-Business Systems Security" at Faculty of Technical Sciences, University of Novi Sad.
 
 Team members:
 - Danijel Radulović, SW-23/2016
