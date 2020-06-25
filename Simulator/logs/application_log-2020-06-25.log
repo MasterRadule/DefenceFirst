@@ -1,0 +1,468 @@
+2020-06-25 17:15:08     defence-first.de-Application-87.236.11.212-163.189.141.53     INFORMATIONAL-USER     Requested resource document.xml 200 
+2020-06-25 17:15:09     defence-first.de-Application-87.236.11.212-123.197.235.233     INFORMATIONAL-USER     Successful authorization on username "user4" 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:10     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:11     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:12     defence-first.de-Application-87.236.11.212-213.166.160.236     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:13     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Successful authorization on username "user5" 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:14     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Successful authorization on username "user5" 
+2020-06-25 17:15:15     defence-first.de-Application-87.236.11.212-213.166.160.236     INFORMATIONAL-USER     Successful authorization on username "user3" 
+2020-06-25 17:15:16     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:17     defence-first.de-Application-87.236.11.212-213.166.160.236     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:18     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-163.189.141.53     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-204.164.10.7     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-213.166.160.236     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-123.197.235.233     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.rs-Application-78.218.236.218-77.28.21.14     CRITICAL-USER     Requested resource index.html 503 
+2020-06-25 17:15:19     defence-first.de-Application-87.236.11.212-123.197.235.233     INFORMATIONAL-USER     Requested resource document.xml 200 
+2020-06-25 17:15:20     defence-first.de-Application-87.236.11.212-213.166.160.236     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:21     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:22     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:23     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:24     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:25     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource document.xml 200 
+2020-06-25 17:15:26     defence-first.de-Application-87.236.11.212-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:26     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:27     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:27     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource document.xml 200 
+2020-06-25 17:15:28     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:28     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:29     defence-first.de-Application-87.236.11.212-204.164.10.7     INFORMATIONAL-USER     Requested resource document.xml 200 
+2020-06-25 17:15:29     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:30     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:30     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:31     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:31     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:32     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:32     defence-first.de-Application-87.236.11.212-123.197.235.233     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:33     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:33     defence-first.de-Application-87.236.11.212-204.164.10.7     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:34     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:34     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:35     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:35     defence-first.de-Application-87.236.11.212-123.197.235.233     INFORMATIONAL-USER     Requested resource document.xml 200 
+2020-06-25 17:15:36     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:36     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:37     defence-first.de-Application-87.236.11.212-204.164.10.7     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:37     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:38     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:38     defence-first.de-Application-87.236.11.212-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:39     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:39     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:40     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:40     defence-first.de-Application-87.236.11.212-123.197.235.233     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:41     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:41     defence-first.de-Application-87.236.11.212-163.189.141.53     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:42     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:42     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:43     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:43     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:44     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:44     defence-first.de-Application-87.236.11.212-123.197.235.233     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:45     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:45     defence-first.de-Application-87.236.11.212-163.189.141.53     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:46     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:46     defence-first.de-Application-87.236.11.212-163.189.141.53     INFORMATIONAL-USER     Requested resource document.xml 200 
+2020-06-25 17:15:47     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:47     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:48     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:48     defence-first.de-Application-87.236.11.212-204.164.10.7     INFORMATIONAL-USER     Requested resource document.xml 200 
+2020-06-25 17:15:49     defence-first.de-Application-87.236.11.212-204.164.10.7     INFORMATIONAL-USER     Successful authorization on username "user2" 
+2020-06-25 17:15:50     defence-first.de-Application-87.236.11.212-213.166.160.236     INFORMATIONAL-USER     Requested resource document.xml 200 
+2020-06-25 17:15:51     defence-first.de-Application-87.236.11.212-213.166.160.236     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:52     defence-first.de-Application-87.236.11.212-123.197.235.233     INFORMATIONAL-USER     Requested resource index.html 200 
+2020-06-25 17:15:53     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:53     defence-first.de-Application-87.236.11.212-123.197.235.233     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:54     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:54     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:55     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:55     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:56     defence-first.de-Application-87.236.11.212-204.164.10.7     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:15:56     defence-first.de-Application-87.236.11.212-163.189.141.53     NOTICE-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:57     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:57     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:58     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:58     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:59     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:15:59     defence-first.de-Application-87.236.11.212-163.189.141.53     INFORMATIONAL-USER     Requested resource document.xml 200 
+2020-06-25 17:16:00     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:16:00     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:16:01     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:16:01     defence-first.de-Application-87.236.11.212-204.164.10.7     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:16:02     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:16:02     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:16:03     defence-first.de-Application-87.236.11.212-77.28.21.14     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:16:03     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:16:04     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:16:04     defence-first.de-Application-87.236.11.212-123.197.235.233     INFORMATIONAL-USER     Requested resource dashboard.html 200 
+2020-06-25 17:16:05     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 
+2020-06-25 17:16:05     defence-first.de-Application-87.236.11.212-163.189.141.53     WARNING-AUTH     Failed authorization on username "user1" 

@@ -152,8 +152,6 @@ public class AlarmService {
     @Scheduled(fixedRate = 2000, initialDelay = 10000)
     private void checkForAlarms() {
         System.out.println("checkForAlarms");
-        QueryResults results = kieSession.getQueryResults("Get logs");
-        System.out.println("Num of logs: " + results.size());
         System.out.println("Fact count:" + kieSession.getFactCount());
         kieSession.getAgenda().getAgendaGroup("MAIN").setFocus();
         kieSession.fireAllRules();
@@ -162,8 +160,6 @@ public class AlarmService {
     @Scheduled(fixedRate = 3000, initialDelay = 10000)
     private void getRaisedAlarmsFromSession() {
         System.out.println("getRaisedAlarmsFromSession");
-        QueryResults results3 = kieSession.getQueryResults("Get logs");
-        System.out.println("Num of logs: " + results3.size());
         System.out.println("Fact count:" + kieSession.getFactCount());
 
         QueryResults results = kieSession.getQueryResults("Get new raised alarms");
