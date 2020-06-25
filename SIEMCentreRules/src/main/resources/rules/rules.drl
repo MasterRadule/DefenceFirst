@@ -2,7 +2,11 @@ package rules;
 dialect  "mvel"
 
 import timejts.SIEMCentre.model.Log;
-import timejts.SIEMCentre.model.RaisedAlarm;
+import timejts.SIEMCentre.model.RaisedAlarm
+import java.util.Date
+import timejts.SIEMCentre.model.AlarmType;
+import timejts.SIEMCentre.model.Severity;
+import timejts.SIEMCentre.model.Facility;
 
 query "Get new raised alarms"
     $a: RaisedAlarm(raised == false)
@@ -21,4 +25,78 @@ rule "Raise alarm"
         modify($a){
             setRaised(true)
         }
+end
+
+rule "Exceeded number of requests"
+    when
+        $log: Log(severity == Severity.INFORMATIONAL, facility == Facility.USER, $severity: severity, $facility: facility)
+        Number(intValue >= 15) from accumulate(
+           $l: Log(
+               this != $log,
+               this after[0s, 10s] $log,
+               severity == Severity.INFORMATIONAL,
+               facility == Facility.USER
+           ),
+           count($l)
+        )
+    then
+        System.out.print(drools.getRule().getName());
+        RaisedAlarm raisedAlarm = new RaisedAlarm();
+        raisedAlarm.setTime(new Date());
+        raisedAlarm.setAlarmType(AlarmType.EXCEEDED_NUMBER_OF_REQUESTS);
+        raisedAlarm.setSeverity(Severity.INFORMATIONAL);
+        raisedAlarm.setFacility(Facility.USER);
+        insert(raisedAlarm);
+end
+
+rule "Suspicious behaviour"
+    when
+        $l1: Log(message matches ".+200")
+        $l2: Log(this after[0s, 5s] $l1, message matches ".+503")
+    then
+        RaisedAlarm raisedAlarm = new RaisedAlarm();
+        raisedAlarm.setTime(new Date());
+        raisedAlarm.setAlarmType(AlarmType.SUSPICIOUS_BEHAVIOUR);
+        raisedAlarm.setMessage1(".+200");
+        raisedAlarm.setMessage2(".+503");
+        insert(raisedAlarm);
+end
+
+rule "Severity ERROR"
+    when
+        $l: Log(severity == Severity.ERROR)
+    then
+        RaisedAlarm raisedAlarm = new RaisedAlarm();
+        raisedAlarm.setTime(new Date());
+        raisedAlarm.setAlarmType(AlarmType.SEVERITY_ALARM);
+        raisedAlarm.setSeverity(Severity.ERROR);
+        insert(raisedAlarm);
+end
+
+rule "Malicious IP address"
+    when
+        Number(intValue >= 1) from accumulate(
+           $l: Log(
+               sourceIP matches "87.236.11.212"
+           ) over window:time(60s),
+           count($l)
+        )
+    then
+        RaisedAlarm raisedAlarm = new RaisedAlarm();
+        raisedAlarm.setTime(new Date());
+        raisedAlarm.setAlarmType(AlarmType.MALICIOUS_IP_ADDRESS);
+        raisedAlarm.setSourceIP("87.236.11.212");
+        insert(raisedAlarm);
+end
+
+rule "Brute force attack"
+    when
+        $l: Log(severity == Severity.WARNING, facility == Facility.AUTH)
+    then
+        RaisedAlarm raisedAlarm = new RaisedAlarm();
+        raisedAlarm.setTime(new Date());
+        raisedAlarm.setAlarmType(AlarmType.SUSPICIOUS_BEHAVIOUR);
+        raisedAlarm.setSeverity(Severity.WARNING);
+        raisedAlarm.setFacility(Facility.AUTH);
+        insert(raisedAlarm);
 end
