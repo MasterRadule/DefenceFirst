@@ -18,7 +18,7 @@ import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.springframework.data.util.Pair;
 import timejts.PKI.dto.CreationDataDTO;
 import timejts.PKI.dto.SubjectDTO;
-import timejts.PKI.exceptions.CANotValidException;
+import timejts.PKI.exceptions.InvalidCACertificateException;
 import timejts.PKI.exceptions.InvalidCertificateDateException;
 
 import java.io.*;
@@ -69,12 +69,12 @@ public class Utilities {
         return builder.build();
     }
 
-    public static void checkCAEndDate(Date notAfter) throws CANotValidException {
+    public static void checkCAEndDate(Date notAfter) throws InvalidCACertificateException {
         LocalDate todayDate = Instant.ofEpochMilli(new Date().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate endDate = Instant.ofEpochMilli(notAfter.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
         long monthsBetween = ChronoUnit.MONTHS.between(todayDate, endDate);
         if (monthsBetween <= 3)
-            throw new CANotValidException("CA certificate will have been invalid in less than 3 months");
+            throw new InvalidCACertificateException("CA certificate will have been invalid in less than 3 months");
     }
 
     public static void checkCertificateDates(Date startDate, Date endDate, Date caEndDate) throws InvalidCertificateDateException {

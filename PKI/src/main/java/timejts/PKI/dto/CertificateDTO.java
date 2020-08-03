@@ -22,7 +22,7 @@ public class CertificateDTO {
         this.ca = ca;
     }
 
-    public CertificateDTO(RevokedCertificate r){
+    public CertificateDTO(RevokedCertificate r) {
         this.serialNumber = r.getId();
         this.commonName = r.getCommonName();
         this.startDate = r.getStartDate();

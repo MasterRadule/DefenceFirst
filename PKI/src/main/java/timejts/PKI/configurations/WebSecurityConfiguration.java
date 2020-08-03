@@ -1,5 +1,6 @@
 package timejts.PKI.configurations;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +24,12 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    @Value("${certificates.serialNumber.client}")
+    private String clientCertificateSerNum;
+
+    @Value("${certificates.serialNumber.csr-creator}")
+    private String csrCreatorSerNum;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
@@ -41,28 +48,21 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         public UserDetails loadUserDetails(PreAuthenticatedAuthenticationToken token)
                 throws UsernameNotFoundException {
             X509Certificate certificate = (X509Certificate) token.getCredentials();
-            User user;
-            System.out.println(certificate.getSerialNumber().toString());
-            if (certificate.getSerialNumber().toString().equals("252263157")) {
-                GrantedAuthority authority1 = new SimpleGrantedAuthority("ROLE_CLIENT");
-                List<GrantedAuthority> authorityList = new ArrayList<>();
-                authorityList.add(authority1);
-                user = new User(certificate.getSubjectX500Principal().getName(), "", authorityList);
-            }
-            else if (certificate.getSerialNumber().toString().equals("801900629")) {
-                GrantedAuthority authority1 = new SimpleGrantedAuthority("ROLE_CSR");
-                List<GrantedAuthority> authorityList = new ArrayList<>();
-                authorityList.add(authority1);
-                user = new User(certificate.getSubjectX500Principal().getName(), "", authorityList);
-            }
-            else {
-                GrantedAuthority authority1 = new SimpleGrantedAuthority("ROLE_VALIDATOR");
-                List<GrantedAuthority> authorityList = new ArrayList<>();
-                authorityList.add(authority1);
-                user = new User(certificate.getSubjectX500Principal().getName(), "", authorityList);
+            String authority = "ROLE_VALIDATOR";
+            String serialNumber = certificate.getSerialNumber().toString();
+
+            if (serialNumber.equals(clientCertificateSerNum)) {
+                authority = "ROLE_CLIENT";
+            } else if (serialNumber.equals(csrCreatorSerNum)) {
+                authority = "ROLE_CSR";
             }
 
-            return user;
+            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(authority);
+            List<GrantedAuthority> authorityList = new ArrayList<GrantedAuthority>() {{
+                add(grantedAuthority);
+            }};
+
+            return new User(certificate.getSubjectX500Principal().getName(), "", authorityList);
         }
     }
 }

@@ -16,26 +16,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import timejts.PKI.dto.CreationDataDTO;
 import timejts.PKI.dto.NonCACertificateCreationDTO;
 import timejts.PKI.dto.SubjectDTO;
 import timejts.PKI.exceptions.*;
-import timejts.PKI.utils.Utilities;
 
 import javax.security.auth.x500.X500Principal;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -52,8 +44,8 @@ public class CertificateServiceTests {
 
     @Test
     void generateCertificate() throws OperatorCreationException, UnrecoverableEntryException, NoSuchAlgorithmException,
-            KeyStoreException, CertificateException, IOException, DigitalSignatureInvalidException, InvalidKeyException,
-            PKCSException, CSRDoesNotExistException, CANotValidException, CACertificateDoesNotExistException,
+            KeyStoreException, CertificateException, IOException, InvalidDigitalSignatureException, InvalidKeyException,
+            PKCSException, CSRDoesNotExistException, InvalidCACertificateException, CACertificateDoesNotExistException,
             ValidCertificateAlreadyExistsException, InvalidCertificateDateException {
 
         /*SubjectDTO caDTO1 = new SubjectDTO(null, "Asia Chamber",
@@ -140,30 +132,5 @@ public class CertificateServiceTests {
         NonCACertificateCreationDTO nonCADTO = new NonCACertificateCreationDTO(caDTO.get(0)
                 .getSerialNumber(), "15797428220941440972", null);
         certificateService.createNonCACertificate(nonCADTO);
-    }
-
-    @Test
-    void validateCertificateCorrectCertificate() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, CertificateRevokedException, CorruptedCertificateException, NotExistingCertificateException, SignatureException, NoSuchProviderException, InvalidKeyException {
-        KeyStore ks = Utilities.loadKeyStore(keystorePath, keystorePassword);
-        X509Certificate cert = (X509Certificate) ks.getCertificate("29265996049563850812855439007");
-        boolean result = certificateService.validateCertificate(cert.getEncoded());
-    }
-
-    @Test
-    void validaCertificateCorruptedCertificate() {
-        String serverCertFile = "src/test/resources/examples/29265996049563850812855439007.pem";
-        CertificateFactory certFactory;
-        FileInputStream inStream;
-        try {
-            certFactory = CertificateFactory
-                    .getInstance("X.509");
-            inStream = new FileInputStream(serverCertFile);
-            X509Certificate cer = (X509Certificate) certFactory.generateCertificate(inStream);
-            System.out.println(cer.getIssuerX500Principal().getName());
-            boolean result = certificateService.validateCertificate(cer.getEncoded());
-            inStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

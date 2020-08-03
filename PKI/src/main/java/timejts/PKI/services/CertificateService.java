@@ -23,6 +23,7 @@ import timejts.PKI.dto.*;
 import timejts.PKI.exceptions.CertificateRevokedException;
 import timejts.PKI.exceptions.*;
 import timejts.PKI.model.CertificateSigningRequest;
+import timejts.PKI.model.CertificateStatus;
 import timejts.PKI.model.RevokedCertificate;
 import timejts.PKI.repository.CertificateSigningRequestRepository;
 import timejts.PKI.repository.RevokedCertificatesRepository;
@@ -30,7 +31,9 @@ import timejts.SIEMCentre.dto.SignedLogsDTO;
 import timejts.SIEMCentre.model.Log;
 
 import javax.mail.MessagingException;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.security.*;
@@ -74,9 +77,9 @@ public class CertificateService {
     private CertificateSigningRequestRepository csrRepository;
 
     public String createNonCACertificate(NonCACertificateCreationDTO creationDTO) throws IOException, CertificateException,
-            NoSuchAlgorithmException, CANotValidException, InvalidKeyException, UnrecoverableEntryException,
-            CSRDoesNotExistException, CACertificateDoesNotExistException, ValidCertificateAlreadyExistsException,
-            OperatorCreationException, KeyStoreException, InvalidCertificateDateException {
+            NoSuchAlgorithmException, InvalidCACertificateException, InvalidKeyException, UnrecoverableEntryException,
+            CSRDoesNotExistException, ValidCertificateAlreadyExistsException,
+            OperatorCreationException, KeyStoreException, InvalidCertificateDateException, CertificateDoesNotExistException {
 
         Pair<CreationDataDTO, Boolean> data = processData(creationDTO.getCreationData());
 
@@ -95,9 +98,9 @@ public class CertificateService {
 
     private String createNonCACertificate(String serialNumber, String caSerialNumber, CreationDataDTO creationData,
                                           boolean defaultExtensions) throws KeyStoreException, IOException,
-            CertificateException, CANotValidException, UnrecoverableEntryException, NoSuchAlgorithmException,
+            CertificateException, InvalidCACertificateException, UnrecoverableEntryException, NoSuchAlgorithmException,
             OperatorCreationException, ValidCertificateAlreadyExistsException, CSRDoesNotExistException,
-            InvalidKeyException, CACertificateDoesNotExistException, InvalidCertificateDateException {
+            InvalidKeyException, InvalidCertificateDateException, CertificateDoesNotExistException {
 
         // Load keystore
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
@@ -114,7 +117,7 @@ public class CertificateService {
         builder = builder.setProvider(bcp);
         certificate = (X509Certificate) ks.getCertificate(caSerialNumber);
         if (certificate == null) {
-            throw new CACertificateDoesNotExistException("CA certificate with given serial number does not exist");
+            throw new CertificateDoesNotExistException("CA certificate with given serial number does not exist");
         }
         certificate.checkValidity();
         checkCAEndDate(certificate.getNotAfter());
@@ -259,14 +262,14 @@ public class CertificateService {
     }
 
     public String submitCSR(byte[] csrData) throws IOException, NoSuchAlgorithmException, InvalidKeyException,
-            OperatorCreationException, PKCSException, DigitalSignatureInvalidException {
+            OperatorCreationException, PKCSException, InvalidDigitalSignatureException {
 
         JcaPKCS10CertificationRequest csr = new JcaPKCS10CertificationRequest(csrData);
         BouncyCastleProvider bcp = new BouncyCastleProvider();
         boolean signatureValid = csr.isSignatureValid(new JcaContentVerifierProviderBuilder()
                 .setProvider(bcp).build(csr.getPublicKey()));
         if (!signatureValid)
-            throw new DigitalSignatureInvalidException("Digital signature check failed");
+            throw new InvalidDigitalSignatureException("Digital signature check failed");
 
         CertificateSigningRequest csrObj = new CertificateSigningRequest(null, csr.getEncoded());
         csrRepository.save(csrObj);
@@ -318,11 +321,11 @@ public class CertificateService {
         return certificates;
     }
 
-    public CertificateDetailsDTO getCertificate(String serialNumber) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException {
+    public CertificateDetailsDTO getCertificate(String serialNumber) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, CertificateDoesNotExistException {
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
         X509Certificate certificate = (X509Certificate) ks.getCertificate(serialNumber);
         if (certificate == null)
-            throw new NotExistingCertificateException("Certificate with serial number" + serialNumber + " doesn't exist");
+            throw new CertificateDoesNotExistException("Certificate with serial number" + serialNumber + " doesn't exist");
 
         SubjectDTO subjData = new SubjectDTO(serialNumber, new JcaX509CertificateHolder(certificate)
                 .getSubject(), root, rootEmail);
@@ -331,10 +334,10 @@ public class CertificateService {
                 .getNotAfter(), getIssuerCommonName(certificate), ks.getCertificateChain(serialNumber) != null);
     }
 
-    public String revokeCertificate(String serialNumber) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, NotExistingCertificateException, CertificateAlreadyRevokedException, InvalidRevocationException {
+    public String revokeCertificate(String serialNumber) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, CertificateDoesNotExistException, InvalidRevocationException, CertificateRevokedException {
         Optional<RevokedCertificate> r = revokedCertificatesRepository.findById(serialNumber);
         if (r.isPresent()) {
-            throw new CertificateAlreadyRevokedException("Certificate with serial number " + serialNumber + " is already revoked");
+            throw new CertificateRevokedException("Certificate with serial number " + serialNumber + " is already revoked");
         }
 
         // Load keystore
@@ -342,7 +345,7 @@ public class CertificateService {
 
         X509Certificate certificate = (X509Certificate) ks.getCertificate(serialNumber);
         if (certificate == null) {
-            throw new NotExistingCertificateException("Certificate with serial number" + serialNumber + " doesn't exist");
+            throw new CertificateDoesNotExistException("Certificate with serial number" + serialNumber + " doesn't exist");
         }
         if (ks.getCertificateChain(serialNumber) != null) {
             throw new InvalidRevocationException("Root and CA certificates can not be revoked");
@@ -368,7 +371,7 @@ public class CertificateService {
         return "Certificate signing request successfully rejected";
     }
 
-    private void saveRevokedCertificate(X509Certificate certificate) throws CertificateNotYetValidException, CertificateExpiredException, CertificateEncodingException {
+    private void saveRevokedCertificate(X509Certificate certificate) throws CertificateEncodingException {
         String id = certificate.getSerialNumber().toString();
         String commonName = getCommonName(certificate);
         Date startDate = certificate.getNotBefore();
@@ -390,7 +393,7 @@ public class CertificateService {
         return serialNumber;
     }
 
-    public boolean validateCertificate(byte[] certificateEncoded) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, CertificateRevokedException, CorruptedCertificateException, InvalidKeyException, NoSuchProviderException, SignatureException {
+    public boolean validateCertificate(byte[] certificateEncoded) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, CertificateDoesNotExistException, CertificateRevokedException, CorruptedCertificateException, InvalidKeyException, NoSuchProviderException, SignatureException {
 
         // Decode certificate
         ByteArrayInputStream inputStream = new ByteArrayInputStream(certificateEncoded);
@@ -405,16 +408,16 @@ public class CertificateService {
         X509Certificate certificateFromKS = (X509Certificate) ks
                 .getCertificate(certificate.getSerialNumber().toString());
         if (certificateFromKS == null) {
-            throw new NotExistingCertificateException("Certificate doesn't exist");
+            throw new CertificateDoesNotExistException("Certificate doesn't exist");
         }
 
-        //check if certificate from database is equal with given certificate
+        //check if certificate from keystore is equal with given certificate
         if (!certificateFromKS.equals(certificate)) {
             throw new CorruptedCertificateException("Certificate is corrupted");
         }
 
         //check certificate revoke status
-        if (checkCertificateStatus(certificate.getSerialNumber().toString(), ks).equals("Certificate is revoked")) {
+        if (checkCertificateStatus(certificate.getSerialNumber().toString(), ks) == CertificateStatus.REVOKED) {
             throw new CertificateRevokedException("Certificate is revoked");
         }
 
@@ -430,7 +433,7 @@ public class CertificateService {
 
             child.checkValidity();
             child.verify(parent.getPublicKey());
-            if (checkCertificateStatus(child.getSerialNumber().toString(), ks).equals("Certificate is revoked")) {
+            if (checkCertificateStatus(child.getSerialNumber().toString(), ks) == CertificateStatus.REVOKED) {
                 throw new CertificateRevokedException("Certificate is revoked");
             }
         }
@@ -443,35 +446,35 @@ public class CertificateService {
         return true;
     }
 
-    public String checkCertificateStatus(String serialNumber, KeyStore ks) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
+    public CertificateStatus checkCertificateStatus(String serialNumber, KeyStore ks) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
         if (ks == null) {
             ks = loadKeyStore(keystorePath, keystorePassword);
             X509Certificate cert = (X509Certificate) ks.getCertificate(serialNumber);
             if (cert == null) {
-                return "Unknown certificate";
+                return CertificateStatus.UNKNOWN;
             }
         }
 
         Optional<RevokedCertificate> r = revokedCertificatesRepository
                 .findById(serialNumber);
         if (r.isPresent()) {
-            return "Certificate is revoked";
+            return CertificateStatus.REVOKED;
         }
 
-        return "Certificate is good";
+        return CertificateStatus.VALID;
     }
 
     public List<CertificateDTO> getRevokedCertificates() {
-        return revokedCertificatesRepository.findAll().stream().map(r -> new CertificateDTO(r))
+        return revokedCertificatesRepository.findAll().stream().map(CertificateDTO::new)
                 .collect(Collectors.toList());
     }
 
-    public Boolean checkSignature(SignedLogsDTO signedLogsDTO, String serNum) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, NotExistingCertificateException, SignatureException, InvalidKeyException {
+    public Boolean checkSignature(SignedLogsDTO signedLogsDTO, String serNum) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, CertificateDoesNotExistException, SignatureException, InvalidKeyException {
         KeyStore ks = loadKeyStore(keystorePath, keystorePassword);
 
         X509Certificate certificate = (X509Certificate) ks.getCertificate(serNum);
         if (certificate == null) {
-            throw new NotExistingCertificateException("Certificate with given serial number does not exist");
+            throw new CertificateDoesNotExistException("Certificate with given serial number does not exist");
         }
 
         PublicKey publicKey = certificate.getPublicKey();
